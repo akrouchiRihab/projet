@@ -1,0 +1,157 @@
+*{
+    margin: 0;
+    padding: 0;
+    outline: none;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+  }
+  body{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    /*background: linear-gradient(-135deg, #c850c0, #4158d0);*/
+    background-color: #efefef;
+  }
+   h1{
+    text-align: center;
+    
+   
+
+}
+  .wrapper{
+    width: 400px;
+    background: #fff;
+    padding: 30px;
+    box-shadow: 0px 0px 10px rgba(0,0,0,0.1);
+    border-radius: 5px;
+  }
+  .wrapper .input-data{
+    height: 40px;
+    width: 100%;
+    position: relative;
+    margin:30px 0;
+  }
+  .wrapper .input-data input{
+    height: 100%;
+    width: 100%;
+    border: none;
+    font-size: 15px;
+    border-bottom: 2px solid silver;
+  }
+  .input-data input:focus ~ label,
+  .input-data input:valid ~ label{
+    transform: translateY(-20px);
+    font-size: 15px;
+    color: #4158d0;
+  }
+  .wrapper .input-data label{
+    position: absolute;
+    bottom: 10px;
+    left: 0;
+    color: grey;
+    pointer-events: none;
+    transition: all 0.3s ease;
+  }
+  .input-data .underline{
+    position: absolute;
+    height: 2px;
+    width: 100%;
+    bottom: 0;
+  }
+  .input-data .underline:before{
+    position: absolute;
+    content: "";
+    height: 100%;
+    width: 100%;
+    background: #4158d0;
+    transform: scaleX(0);
+    transform-origin: center;
+    transition: transform 0.3s ease;
+  }
+  .input-data input:focus ~ .underline:before,
+  .input-data input:valid ~ .underline:before{
+    transform: scaleX(1);
+  }
+  
+
+  .pass a{ 
+    margin:-5px 0 20px 5px;
+    color:#a6a6a6;
+    cursor: pointer;
+
+}
+
+.pass a:hover{
+    text-decoration: underline;
+}
+input[type="submit"]{
+    width:100%;
+    height:50px;
+    border:1px solid;
+    background: #8254f7;
+    border-radius: 25px;
+    font-size: 18px;
+    color: #e9f4fb;
+    font-weight: bold;
+    cursor: pointer;
+    outline: none;
+    margin-top:20px;
+}
+
+input[type="submit"]:hover{
+    border-color:#3e1f92 ;
+    transition: 0.5s;
+}
+.signin_lnk{
+    margin:30px 0;
+    text-align: center;
+    font-size: 16px;
+    color:#666666;
+
+}
+
+.signin_lnk a{
+  color:#4158d0;
+  text-decoration: none;
+
+}
+.signin_lnk a:hover{
+  
+  text-decoration: underline;
+}
+
+.icon{
+  margin-right: 2px;
+  
+}
+
+.input-data span i {
+  color:seagreen;
+  position:relative;
+  left:140px;
+}
+#submit-error{
+  color:red;
+  position: relative;
+  font-weight: 500;
+  top:5px;
+  left:70px;
+}
+
+.input-data span{
+  color:red;
+  position: relative;
+  font-weight: 500;
+  top:-30px;
+  left:180px;
+}
+
+.form-error{
+  color:red;
+  text-align: center;
+}
+.form-success{
+  color:green;
+  text-align: center;
+}
