@@ -96,8 +96,11 @@ $result=[];
   <form action="includes/search.inc.php" method="post">
       <div class="form-div">
         <label for="departure">Départ:</label>
-        <input type="text" name="depart" id="depart">
+        <div class="geolocation-container">
+        <input type="text" name="depart" id="geolocalisation">
+        <button type="button" onclick="obtenirGeolocalisation()">Mettre à jour</button>
       </div>
+         </div>
         
       <div class="form-div">
         <label for="destination">Destination:</label>
@@ -175,6 +178,7 @@ $result=[];
   <!--end footer-->
 
   <script src="js/homepage.js"></script>
+  <script src="js/geo.js"></script>
   
   
  
