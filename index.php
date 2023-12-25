@@ -78,9 +78,9 @@ $result=[];
         <?php }
         ?>
         <?php 
-         if(isset($_SESSION["user_id"])){ ?>
-             <a href="" class="proposer_btn" >proposer un trajet</a>
-        <a href="" class="reserver_btn"  >réserver un trajet</a>
+         if(isset($_SESSION["user_id"])){//role ? ?>
+             <a href="login.php" class="proposer_btn" >proposer un trajet</a>
+        <a href="login.php" class="reserver_btn"  >réserver un trajet</a>
         <?php }
         ?>
         
@@ -89,8 +89,8 @@ $result=[];
     </div>
   </div>
   <!-- end header-->
-
-  <!-- start search form -->
+<!--
+   //start search form 
   <div class="search-div">
     <h1>rechercher un trajet</h1>
   <form action="includes/search.inc.php" method="post">
@@ -120,7 +120,7 @@ $result=[];
         output_ride($result);
       ?>
   </div>
-
+         -->
   <!-- start about section-->
 
   <div class="container about animate-on-visit" data-aos="fadeInLeft" data-aos-once="true" id="about">
