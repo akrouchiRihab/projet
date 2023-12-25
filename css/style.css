@@ -28,6 +28,9 @@ body{
    /* overflow-y: scroll;*/
     
 }
+.client{
+    background-image: none;
+}
 
 
 /* Hide the default scrollbar */

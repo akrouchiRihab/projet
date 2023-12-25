@@ -31,7 +31,7 @@ $result=[];
 
 </head>
 
-<body>
+<body class="client" >
 
   
   <!-- start header-->
@@ -68,77 +68,45 @@ $result=[];
 
     </header>
     <div class="container">
-      <div class="col-2">
-        <h1><span>Trouvez</span> votre trajet en quelques clics <br>ou proposez votre propre <br>trajet dès maintenant!</h1>
-        <!--<p>Des innovations technologiques pour stimuler<br> votre croissance et votre efficacité</p> -->
-        <?php 
-         if(!isset($_SESSION["user_id"])){ ?>
-             <a href="signin.php" class="signin_btn" id="signInLink" onclick="signIn()">S'inscrire</a>
-        <a href="login.php" class="login_btn" id="loginLink" onclick="login()">Se connecter</a>
-        <?php }
-        ?>
-        <?php 
-         if(isset($_SESSION["user_id"])){//role ? ?>
-             <a href="login.php" class="proposer_btn" >proposer un trajet</a>
-        <a href="login.php" class="reserver_btn"  >réserver un trajet</a>
-        <?php }
-        ?>
-        
-      </div>
-     
+      
+  <style>
+
+        .square {
+            align-items: center;
+            border-radius: 10px;
+            width: 500px;
+            height: 300px;
+            border-color: gray;
+            box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.1);
+            background-color: whitesmoke; /* Couleur de fond des carrés */
+            margin: 10px; /* Marge entre les carrés */
+        }
+    </style>
+  
+    <div class="container">
+        <h1>Trajets</h1>
+        <div class="square">départ:
+            <br>
+la destination:
+<br>
+l'heure de départ:
+<br>
+le conducteur  :
+<br></div>
+        <div class="square"></div>
+        <div class="square"></div>
+        <div class="square"></div>
+        <div class="square"></div>
+        <div class="square"></div>
+        <!-- Ajoutez plus de carrés si nécessaire -->
+    </div>
+
+
     </div>
   </div>
   <!-- end header-->
-<!--
-   //start search form 
-  <div class="search-div">
-    <h1>rechercher un trajet</h1>
-  <form action="includes/search.inc.php" method="post">
-      <div class="form-div">
-        <label for="departure">Départ:</label>
-        <div class="geolocation-container">
-        <input type="text" name="depart" id="geolocalisation">
-        <button type="button" onclick="obtenirGeolocalisation()">Mettre à jour</button>
-      </div>
-         </div>
-        
-      <div class="form-div">
-        <label for="destination">Destination:</label>
-        <input type="text" name="destination" id="destination">
-      </div>
 
-      <div class="form-div">
-        <label for="departure_time">temps de départ:</label>
-        <input type="datetime-local" name="departure_time" id="departure_time">
-      </div>
-      
-      <button type="submit" class="search_btn" name="btn" value="rechercher">Rechercher</button>
-
-     
-    </form>
-    <?php 
-        output_ride($result);
-      ?>
-  </div>
-         -->
-  <!-- start about section-->
-
-  <div class="container about animate-on-visit" data-aos="fadeInLeft" data-aos-once="true" id="about">
-    <div class="about-sec">
-
-      <h3>
-        AHR a à cœur de <br>
-        de contribuer au développement <br>numérique de l’Algérie et de l’Afrique
-      </h3>
-      <p>nous sommes passionnés par la technologie
-        et nous souhaitons partager avec vous notre vision d'un avenir 
-        où le covoiturage devient une solution incontournable pour des
-         déplacements plus durables et économiques.</p>
-    </div>
-    <div class="about-sec">
-      <img src="images/carp.jpg" class="about-img">
-    </div>
-  </div>
+ 
 
   <!--end about section-->
   
