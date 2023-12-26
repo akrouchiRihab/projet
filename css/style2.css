@@ -60,7 +60,7 @@ body::-webkit-scrollbar {
 
 
 .main{
-    min-height: 100vh;
+    min-height: auto;
     
 }
 
@@ -386,8 +386,8 @@ footer{
 .liste p {
     display: inline-block;
 }
+
 .div-content {
-    background-image: url(../images/download.jpeg);
     display: inline-block;
     flex-direction: column;
     background-color: #f5f5f5;
@@ -434,3 +434,4 @@ footer{
 .station h2:last-child {
     margin-right: 0; /* Aucun espacement à droite pour le dernier élément h2 */
 }
+/* Add this CSS to your existing styles or create a new CSS file */

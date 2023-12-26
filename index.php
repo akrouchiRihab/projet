@@ -79,7 +79,7 @@ $result=[];
         ?>
         <?php 
          if(isset($_SESSION["user_id"])){//role ? ?>
-             <a href="login.php" class="proposer_btn" >proposer un trajet</a>
+             <a href="pages/listecond.php" class="proposer_btn" >proposer un trajet</a>
         <a href="login.php" class="reserver_btn"  >réserver un trajet</a>
         <?php }
         ?>
