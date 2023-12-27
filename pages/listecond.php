@@ -169,17 +169,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 .station h2 {
     font-size: 18px;
     font-weight: bold;
-    margin-right: 10px; /* Espacement entre la ville et le prix */
+    margin-right: 10px; 
 }
 
-.station p:last-child {
-    margin-right: 0; /* Aucun espacement à droite pour le dernier élément p */
-}
-
-.station h2:last-child {
-    margin-right: 0; /* Aucun espacement à droite pour le dernier élément h2 */
-}
-/* Add this CSS to your existing styles or create a new CSS file */
 
     </style>
 </head>
@@ -220,12 +212,12 @@ if ($result->num_rows > 0) {
         echo '<div class="station">';
         echo '<p style="font-weight: bold; text-align: center;">' . $row["DepartureTime"] . '</p>';
         echo '<br/>';
-        echo '<a style="font-size: 20px; display: inline-block;" class="fas fa-map-marker-alt"></a>     <p style=" display: inline-block;">' . $row["DepartureLocation"] . '</p>';
+        echo '<span style="color: black; text-decoration: none; font-size: 20px; display: inline-block;" class="fas fa-map-marker-alt"></span>     <p style=" display: inline-block;">' . $row["DepartureLocation"] . '</p>';
         if ($row["price"] !== "") {
             echo '<p style=" font-weight: bold; margin-left: 85% ; display: inline-block;" class="price" style="margin-left: 250px;">' . $row["price"] . '</p>';
         }
         echo '<br/>';
-        echo '<a style="font-size: 20px; display: inline-block;" class="fas fa-flag"></a>     <p style=" display: inline-block;"> ' . $row["Destination"] . '</p>';
+        echo '<span style="color: black; text-decoration: none; font-size: 20px; display: inline-block;" class="fas fa-flag"></span>     <p style=" display: inline-block;"> ' . $row["Destination"] . '</p>';
         echo '<p style="display: inline-block; font-size: 30px; margin-left: 80%;">' . $row["AvailableSeats"] . '</p><img style="display: inline-block;  width: 7%; height:7%;" src="../images/car-seat.png"/>';
         echo '</div>';
         echo '</a>';
@@ -233,7 +225,6 @@ if ($result->num_rows > 0) {
 } else {
     echo "0 results";
 }
-
 ?>
       
 </div>
