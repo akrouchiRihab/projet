@@ -4,7 +4,7 @@ require_once 'includes/login_view.inc.php';
 require_once 'includes/search_view.inc.php';
 require_once 'includes/search_model.inc.php';
 require_once 'includes/dbh.inc.php';
-
+ 
 
 $result=[];
 
