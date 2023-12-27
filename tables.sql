@@ -7,6 +7,7 @@ CREATE TABLE Users (
     LastName VARCHAR(50),
     phonenumber VARCHAR(10),
     Email VARCHAR(100) UNIQUE,
+    role varchar (255),
     Password VARCHAR(255) -- Hashed password
 );
 
