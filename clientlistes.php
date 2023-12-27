@@ -3,6 +3,8 @@ require_once 'includes/config_session.inc.php';
 require_once 'includes/login_view.inc.php';
 require_once 'includes/search_view.inc.php';
 require_once 'includes/search_model.inc.php';
+require_once 'includes/dbh.inc.php';
+
 
 $result=[];
 
@@ -82,17 +84,44 @@ $result=[];
             margin: 10px; /* Marge entre les carrés */
         }
     </style>
-  
+  <?php  
+   $rideId = 1; // Remplacez 1 par l'ID du trajet que vous souhaitez afficher
+   $sql = "SELECT DepartureLocation, Destination, DepartureTime, DriverID FROM Rides WHERE RideID = :rideId";
+
+   // Préparation de la requête
+   $stmt = $pdo->prepare($sql);
+   $stmt->bindParam(':rideId', $rideId, PDO::PARAM_INT);
+
+   // Exécution de la requête
+   $stmt->execute();
+
+   // Récupération des résultats
+   $row = $stmt->fetch(PDO::FETCH_ASSOC);
+
+   if ($row) {
+       // Afficher les données
+       echo "<p>Départ: " . $row["DepartureLocation"] . "</p>";
+       echo "<p>Destination: " . $row["Destination"] . "</p>";
+       echo "<p>Heure de départ: " . $row["DepartureTime"] . "</p>";
+       echo "<p>Conducteur: " . $row["Driver"] . "</p>";
+   }
+  ?>
     <div class="container">
         <h1>Trajets</h1>
-        <div class="square">départ:
-            <br>
-la destination:
-<br>
-l'heure de départ:
-<br>
-le conducteur  :
-<br></div>
+        <div class="square">
+    <form id="rideForm">
+        Départ: <input type="text" name="departure_location" required>
+        <br>
+        Destination: <input type="text" name="destination" required>
+        <br>
+        Heure de départ: <input type="datetime-local" name="departure_time" required>
+        <br>
+        Conducteur: <input type="text" name="driver" required>
+        <br>
+        <button type="button" onclick="submitForm()">Soumettre</button>
+    </form>
+</div>
+
         <div class="square"></div>
         <div class="square"></div>
         <div class="square"></div>
