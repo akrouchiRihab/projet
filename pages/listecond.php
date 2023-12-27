@@ -31,7 +31,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
    
     <script src="https://cdn.jsdelivr.net/npm/smooth-scroll@16.1.3/dist/smooth-scroll.polyfills.min.js"></script>
-  
+    <script src='https://kit.fontawesome.com/a076d05399.js' crossorigin='anonymous'></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
   
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -45,7 +45,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     min-height: auto;
     
 }
- .modal {
+.modal {
     display: none;
     position: fixed;
     z-index: 1;
@@ -54,19 +54,21 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     width: 100%;
     height: 100%;
     overflow: auto;
-    background-color: rgba(0,0,0,0.4);
+    background-color: rgba(0, 0, 0, 0.4);
 }
 
 .modal-content {
     background-color: #fefefe;
-    margin: 10% auto;
-    padding: 20px;
+    margin: 3% auto;
+    padding: 25px;
     border: 1px solid #888;
-    width: 80%;
+    width: 60%;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border-radius: 4px;
 }
 
 .close {
-    color: #aaa;
+    color: #aaaaaa;
     float: right;
     font-size: 28px;
     font-weight: bold;
@@ -74,10 +76,110 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 .close:hover,
 .close:focus {
-    color: black;
+    color: #000;
     text-decoration: none;
     cursor: pointer;
 }
+
+.modal-content form label {
+    justify-content: center;
+    align-items: center;
+    font-size: 16px;
+    font-weight: bold;
+    margin-bottom: 5px;
+    display: inline-block;
+    width: 35%;
+}
+
+.modal-content form input {
+    align-items: center;
+    font-size: 16px;
+    padding: 8px;
+    margin-bottom: 15px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    display: inline-block;
+    width: 50%;
+}
+.modal-content form input[type="submit"] {
+    background-color: #4CAF50;
+    color: white;
+    cursor: pointer;
+    align-items: center;
+    justify-content: center;
+    margin-left: 35%;
+    width:30%;
+}
+
+.modal-content form input[type="submit"]:hover {
+    background-color: #45a049;
+}
+/* Style the button that opens the modal */
+.modal button {
+    background-color: #3e1f92;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+    text-align: center;
+    display: inline-block;
+    font-size: 15px;
+    margin: 4px 2px;
+    transition: 0.3s;
+    border-radius: 4px;
+}
+
+/* Change the background color of the button on hover */
+.modal button:hover {
+    background-color: #3e1f91;
+}
+
+.div-content {
+    display: inline-block;
+    background-color: #f5f5f5;
+    padding: 20px;
+    width: 500px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    margin: 10px;
+}
+
+.station,
+.passenger {
+    display: inline-block;
+    margin: 10px 0;
+}
+
+.station h2,
+.passenger h2 {
+    font-size: 18px;
+    font-weight: bold;
+    margin-right: 10px; /* Ajouter une marge à droite */
+}
+
+.station p,
+.passenger p {
+    font-size: 16px;
+    color: #333;
+}
+.station p {
+    font-size: 16px;
+    margin-right: 10px; /* Espacement entre le temps et la ville */
+}
+
+.station h2 {
+    font-size: 18px;
+    font-weight: bold;
+    margin-right: 10px; /* Espacement entre la ville et le prix */
+}
+
+.station p:last-child {
+    margin-right: 0; /* Aucun espacement à droite pour le dernier élément p */
+}
+
+.station h2:last-child {
+    margin-right: 0; /* Aucun espacement à droite pour le dernier élément h2 */
+}
+/* Add this CSS to your existing styles or create a new CSS file */
 
     </style>
 </head>
@@ -114,15 +216,17 @@ $result = $conn->query($sql);
 if ($result->num_rows > 0) {
     // Output data of each row
     while ($row = $result->fetch_assoc()) {
-        echo '<a href="plan_route.php?RideID=' . urlencode($row["RideID"]) . '">';
+        echo '<a style=" height:auto;" href="plan_route.php?RideID=' . urlencode($row["RideID"]) . '">';
         echo '<div class="station">';
-        echo '<p>Depart: ' . $row["DepartureLocation"] . '</p>';
-        echo '<p>Destination: ' . $row["Destination"] . '</p>';
-        echo '<p>Date/Heure: ' . $row["DepartureTime"] . '</p>';
-        echo '<p>Nombre de places: ' . $row["AvailableSeats"] . '</p>';
+        echo '<p style="font-weight: bold; text-align: center;">' . $row["DepartureTime"] . '</p>';
+        echo '<br/>';
+        echo '<a style="font-size: 20px; display: inline-block;" class="fas fa-map-marker-alt"></a>     <p style=" display: inline-block;">' . $row["DepartureLocation"] . '</p>';
         if ($row["price"] !== "") {
-            echo '<p style="margin-left: 250px;">Prix: ' . $row["price"] . '</p>';
+            echo '<p style=" font-weight: bold; margin-left: 85% ; display: inline-block;" class="price" style="margin-left: 250px;">' . $row["price"] . '</p>';
         }
+        echo '<br/>';
+        echo '<a style="font-size: 20px; display: inline-block;" class="fas fa-flag"></a>     <p style=" display: inline-block;"> ' . $row["Destination"] . '</p>';
+        echo '<p style="display: inline-block; font-size: 30px; margin-left: 80%;">' . $row["AvailableSeats"] . '</p><img style="display: inline-block;  width: 7%; height:7%;" src="../images/car-seat.png"/>';
         echo '</div>';
         echo '</a>';
     }
@@ -139,21 +243,22 @@ if ($result->num_rows > 0) {
     <div class="modal-content">
         <span class="close">&times;</span>
         <form id="proposalForm" method="post" action="submit_proposal.php">
-            <label for="DepartureLocation">Lien de départ:</label>
-            <input type="text" name="DepartureLocation" required>
-
-            <label for="Destination">Destination:</label>
-            <input type="text" name="Destination" required>
-
-            <label for="DepartureTime">Date et Heure:</label>
+            <label for="DepartureLocation">Lien de départ</label>
+            <input class="input1" placeholder="D'où partez-vous ?"  type="text" name="DepartureLocation" required><button><a alt="votre location" class='fas fa-map-marker-alt'></a></button>
+            <br/>
+            
+            <label for="Destination">Destination</label>
+            <input  placeholder="Où allez-vous?" type="text" name="Destination" required>
+            <br/>
+            <label for="DepartureTime">Date et Heure</label>
             <input type="datetime-local" name="DepartureTime" required>
-
-            <label for="AvailableSeats">Nombre de places disponibles:</label>
-            <input type="number" name="AvailableSeats" required>
-
-            <label for="price">Prix par place:</label>
-            <input type="text" name="price" required>
-
+            <br/>
+            <label for="AvailableSeats">Nombre de places </label>
+            <input placeholder="Combien de passagers pouvez-vous accepter ?" type="number" name="AvailableSeats" required>
+            <br/>
+            <label for="price">Prix </label>
+            <input placeholder="Fixez votre prix par place"  type="text" name="price" required>
+            <br/><br/>
             <input type="submit" value="Proposer">
         </form>
     </div>
