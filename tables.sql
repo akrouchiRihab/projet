@@ -15,21 +15,21 @@ CREATE TABLE Users (
 
 -- Rides table
 CREATE TABLE Rides (
-    RideID INT PRIMARY KEY AUTO_INCREMENT,
-    DriverID ,
+    RideID INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
+    DriverID INT NOT NULL,
     DepartureLocation VARCHAR(100),
     Destination VARCHAR(100),
     DepartureTime DATETIME,
     AvailableSeats INT,
-    FOREIGN KEY (DriverID) REFERENCES Users(UserID)
+    FOREIGN KEY (DriverID) REFERENCES Users(UserID) 
 );
 
 -- RideProposals table
 CREATE TABLE RideProposals (
-    ProposalID INT PRIMARY KEY AUTO_INCREMENT,
-    ProposerID INT,
-    RideID INT,
+    ProposalID INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
+    ProposerID INT NOT NULL,
+    RideID INT NOT NULL,
     Status VARCHAR(20), -- e.g., 'Pending', 'Approved', 'Rejected'
-    FOREIGN KEY (ProposerID) REFERENCES Users(UserID),
+    FOREIGN KEY (ProposerID) REFERENCES Users(UserID) ,
     FOREIGN KEY (RideID) REFERENCES Rides(RideID)
 );
