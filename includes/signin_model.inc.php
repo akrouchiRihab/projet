@@ -27,8 +27,8 @@ function get_email(object $pdo, string $email)
 
 
 
-function set_user($pdo,$email, $firstname ,$lastname,$pwd,$phone){
-    $query = "INSERT INTO users (FirstName,Lastname,phonenumber,Email,Password) VALUES (:Firstname ,:Lastname,:phonenumber,:Email,:Password);";
+function set_user($pdo,$email, $firstname ,$lastname,$pwd,$phone,$role){
+    $query = "INSERT INTO users (FirstName,Lastname,phonenumber,Email,Role,Password) VALUES (:Firstname ,:Lastname,:phonenumber,:Email,:Role,:Password);";
    $statement = $pdo->prepare($query);
 
    $hashedPassword = password_hash($pwd, PASSWORD_DEFAULT);
@@ -37,6 +37,7 @@ function set_user($pdo,$email, $firstname ,$lastname,$pwd,$phone){
    $statement->bindParam(':Lastname', $lastname);
    $statement->bindParam(':phonenumber', $phone);
    $statement->bindParam(':Email', $email);
+   $statement->bindParam(':Role', $role);
    $statement->bindParam(':Password', $hashedPassword);
    $statement->execute();
 }

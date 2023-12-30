@@ -7,9 +7,11 @@ var pwderror = document.getElementById('pwd-error');
 var userlabel=document.getElementById('username-label');
 var userplabel=document.getElementById('userp-label');
 var emaillabel=document.getElementById('email-label');
+var phoneerror = document.getElementById('phone-error');
 var pwdlabel=document.getElementById('pwd-label');
 var cpwdlabel=document.getElementById('cpwd-label');
 var submiterror = document.getElementById('submit-error');
+
 function validateusername(){
     
     userlabel.style.bottom="30px";
@@ -40,24 +42,25 @@ function validateuserp(){
 }
 function validatePhoneNumber() {
     var phoneNumber = document.getElementById('phone').value;
-    var errorSpan = document.getElementById('phone-error');
+    
 
     // Supprime les espaces, parenthèses, tirets et points du numéro de téléphone
     var cleanedPhoneNumber = phoneNumber.replace(/[\s()-.]/g, '');
 
     // Vérifie si le numéro de téléphone contient uniquement des chiffres
     if (!/^\d+$/.test(cleanedPhoneNumber)) {
-        errorSpan.innerHTML = "Le numéro de téléphone invalid";
+        phoneerror.innerHTML = "Le numéro de téléphone invalid";
     } else if (!/^0[567]/.test(cleanedPhoneNumber)) {
         // Vérifie si le numéro commence par 07, 06, ou 05
-        errorSpan.innerHTML = "Le numéro de téléphone invalid";
+        phoneerror.innerHTML = "Le numéro de téléphone invalid";
     }else if (cleanedPhoneNumber.length !== 10) {
         // Vérifie si le numéro de téléphone a une longueur valide (par exemple, 10 chiffres pour un numéro de téléphone standard)
-        errorSpan.innerHTML = "Le numéro de téléphone invalid";
-    }  else {
-        // Réinitialise le message d'erreur s'il n'y a pas d'erreur
-        errorSpan.innerHTML = "";
-    }
+        phoneerror.innerHTML = "Le numéro de téléphone invalid";
+    } 
+       else{ // Réinitialise le message d'erreur s'il n'y a pas d'erreur
+        phoneerror.innerHTML = '<i class="fa-solid fa-circle-check"></i>';
+        return true;
+       }
 }
 
 
