@@ -58,35 +58,62 @@ if (isset($_GET['RideID'])) {
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <link rel="stylesheet" href="../css/edit_trip.css">
     <title>Modifier le Trajet</title>
 </head>
 <body>
+<div class="main">
+        <header>
+            <div class="container">
+                <a href="#"><img class="logo" src="../images/logo2.png"></a>
+                <nav class="navigation">
+                    <ul>
+                        <li class="nav1"><a href="listecond.php">listes trajets</a></li>
+                        <li class="nav1"><a href="reservation.php">Voir Réservations</a></li>
+                        <li>
+                            <?php if(isset($_SESSION["user_id"])){ ?>
+                            <form action="../includes/logout.inc.php" method="post">
+                                <button class="logout-icon"><i class="fa-solid fa-right-from-bracket"></i></button>
+                            </form>
+                            <?php } ?>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        </header>
+    </div>
+    <div class="div-container">
     <h1>Modifier le Trajet</h1>
 
     <form method="post" action="edit_trip.php">
         <input type="hidden" name="RideID" value="<?php echo $RideID; ?>">
-        
-        <label for="DepartureLocation">Lieu de départ:</label>
+        <label for="DepartureLocation">Lieu de départ</label><br>
         <input type="text" name="DepartureLocation" value="<?php echo $DepartureLocation; ?>" required>
-
-        <label for="Destination">Destination:</label>
+        <br>
+        <label for="Destination">Destination</label><br>
         <input type="text" name="Destination" value="<?php echo $Destination; ?>" required>
-
-        <label for="DepartureTime">Date et Heure:</label>
-        <input type="datetime-local" name="DepartureTime" value="<?php echo $DepartureTime; ?>" required>
-
-        <label for="AvailableSeats">Nombre de places disponibles:</label>
+        <br>
+        <label for="DepartureTime">Date et Heure</label><br>
+        <input placeholder="Quand partez-vous ?" class="flatpickr" type="datetime-local" name="DepartureTime" value="<?php echo $DepartureTime; ?>" required>
+        <br/>
+        <label for="AvailableSeats">Nombre de places disponibles</label><br>
         <input type="number" name="AvailableSeats" value="<?php echo $AvailableSeats; ?>" required>
-
-        <label for="price">Prix par place:</label>
+        <br>
+        <label for="price">Prix par place</label><br>
         <input type="text" name="price" value="<?php echo $price; ?>" required>
-
+        <br>
         <button type="submit">Enregistrer les Modifications</button>
     </form>
-
-    <br>
-
-    <a href="plan_route.php?RideID=<?php echo urlencode($RideID); ?>">Retour aux Détails du Trajet</a>
+</div>
 </body>
+<script>
+        flatpickr(".flatpickr", {
+            enableTime: true,
+            dateFormat: "Y-m-d H:i",
+            // Ajoutez d'autres options selon vos besoins
+        });
+    </script>
 </html>
 

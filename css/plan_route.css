@@ -147,12 +147,14 @@ nav{
   
 /*end header*/
 .div-container{
-    margin-left: 20%;
-    margin-right: 20%;
+    display: inline-block;
+    margin-left: 5%;
+    margin-bottom: 5%;
+    width: 40%;
+    height: 20%;
 }
 .titre{
     text-align: center;
-    margin-top: 5%;
     margin-bottom: 5%;
 }
 .infos{

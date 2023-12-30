@@ -50,7 +50,7 @@ if (isset($_GET['RideID'])) {
     exit();
 }
 ?>
-
+<?php include('map.php'); ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -59,6 +59,7 @@ if (isset($_GET['RideID'])) {
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css" integrity="sha256-kLaT2GOSpHechhsozzB+flnD+zUyjE2LlfWPgU04xyI=" crossorigin="" />
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDfYaBDnZ6vo0t_f8ACEzHhJirgcMfwpyI&callback=initMap" async defer></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -105,7 +106,10 @@ if (isset($_GET['RideID'])) {
                 <i class="fa fa-trash-o" aria-hidden="true"></i> Annuler votre trajet
             </a>
         </div>
+        <div></div>
+        <div></div>
     </div>
+    <div id="map" style="z-index: -5; display: inline-block; height: 400px; width: 50%; margin-top: 1%;"></div>
     <div class="modal" id="deleteModal">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -164,6 +168,34 @@ if (isset($_GET['RideID'])) {
             window.open(mapUrl, '_blank');
         }
     </script>
+    
+   <!-- Remplacez le script Google Maps par le script Leaflet -->
+   <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js" integrity="sha256-WBkoXOwTeyKclOHuWtc+i2uENFpDZ9YPdf5Hf+D7ewM=" crossorigin=""></script>
 
+<script>
+    function initMap() {
+        var myLatLng;
+
+        // Check if userCoordinates is not empty
+        if (Object.keys(userCoordinates).length !== 0) {
+            myLatLng = [userCoordinates.lat, userCoordinates.lng];
+        }
+
+        // Utiliser Leaflet pour créer une carte
+        var map = L.map('map').setView(myLatLng, 15);
+
+        // Ajouter une couche OpenStreetMap à la carte
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '© OpenStreetMap contributors'
+        }).addTo(map);
+
+        // Ajouter un marqueur à la position de l'utilisateur
+        if (myLatLng) {
+            L.marker(myLatLng).addTo(map)
+                .bindPopup('User Location')
+                .openPopup();
+        }
+    }
+</script>
 </body>
 </html>
