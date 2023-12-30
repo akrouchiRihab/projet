@@ -44,6 +44,16 @@
                <label id="phone-label"><i class="fa-solid fa-phone iconemail"></i>numéro de téléphone</label>
                <span id="phone-error"></span>
             </div>
+
+            <div class="selection">
+            <label for="role" class="role-label">Role:</label>
+               <select id="role" name="role" class="role-select"required>
+                  <option value="driver">Driver</option>
+                  <option value="passenger">Passenger</option>
+               </select>
+            </div>
+              
+            
           <div class="input-data">
             <input type="password" name="pwd" id="pwd" autocomplete="off" onkeyup="validatepwd()" >
             <div class="underline"></div>

@@ -9,7 +9,7 @@ CREATE TABLE Users (
     LastName VARCHAR(50),
     phonenumber VARCHAR(10),
     Email VARCHAR(100) UNIQUE,
-    Role ENUM('driver', 'user'),
+    Role ENUM('driver', 'passenger') NOT NULL,
     Password VARCHAR(255) -- Hashed password
 );
 

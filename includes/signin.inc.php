@@ -8,6 +8,7 @@ if($_SERVER["REQUEST_METHOD"]==="POST"){
    $phone = $_POST["phone"];
    $pwd = $_POST["pwd"];
    $cpwd = $_POST["cpwd"];
+   $role = $_POST["role"];
 
      try{
          require_once 'dbh.inc.php';
@@ -17,7 +18,7 @@ if($_SERVER["REQUEST_METHOD"]==="POST"){
          // ERROR HANDLERS
          $errors = [];
 
-         if ( is_input_empty($firstname,$lastname,$email,$pwd,$cpwd,$phone)){
+         if ( is_input_empty($firstname,$lastname,$email,$pwd,$cpwd,$phone,$role)){
             $errors["empty_input"] = "fill in all fields!";
          }
          if ( is_email_invalid ($email)){
@@ -43,13 +44,20 @@ if($_SERVER["REQUEST_METHOD"]==="POST"){
            die();
          }
         
-         create_user($pdo,$email, $firstname ,$lastname,$pwd,$phone);
+         create_user($pdo,$email, $firstname ,$lastname,$pwd,$phone,$role);
          
          $pdo=null;
          $stmt=null;
-         header("Location:../index.php?signin=success");
+         if ($role === 'driver') {
+            header('Location: ../pages/listecond.php');
+            exit();
+        } elseif ($role === 'passenger') {
+            header('Location: ../clientlistes.php');
+            exit();
+        }
+        
          die();
-
+      
 
      }catch(PDOException $e){
         die("Query failed: " .$e->getMessage());

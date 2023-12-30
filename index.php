@@ -4,7 +4,7 @@ require_once 'includes/login_view.inc.php';
 require_once 'includes/search_view.inc.php';
 require_once 'includes/search_model.inc.php';
 
-$result=[];
+
 
 ?>
 <!DOCTYPE html>
@@ -116,9 +116,7 @@ $result=[];
 
      
     </form>
-    <?php 
-        output_ride($result);
-      ?>
+  
   </div>
          -->
   <!-- start about section-->
