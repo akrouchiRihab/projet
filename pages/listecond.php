@@ -28,12 +28,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-   
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">  
     <script src="https://cdn.jsdelivr.net/npm/smooth-scroll@16.1.3/dist/smooth-scroll.polyfills.min.js"></script>
     <script src='https://kit.fontawesome.com/a076d05399.js' crossorigin='anonymous'></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
-  
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="../css/style2.css">
     <title>Conducteur</title>
@@ -135,25 +135,27 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 }
 
 .div-content {
-    display: inline-block;
-    background-color: #f5f5f5;
-    padding: 20px;
-    width: 500px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    margin: 10px;
+    font-size: 0; /* Fix pour éliminer l'espace blanc entre les éléments inline-block */
 }
 
-.station,
-.passenger {
+.station {
     display: inline-block;
-    margin: 10px 0;
+    width: 48%; /* Ajuste la largeur pour deux éléments par ligne */
+    margin-bottom: 20px;
+    margin-right: 20px;
+    background-color: #f5f5f5;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 10px;
+    box-sizing: border-box;
+    vertical-align: top; /* Ajuste l'alignement vertical au sommet */
+    font-size: 16px; /* Réinitialise la taille de la police après le fix de font-size: 0; */
 }
 
 .station h2,
 .passenger h2 {
     font-size: 18px;
     font-weight: bold;
-    margin-right: 10px; /* Ajouter une marge à droite */
+    margin-right: 10px;
 }
 
 .station p,
@@ -161,16 +163,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     font-size: 16px;
     color: #333;
 }
+
 .station p {
     font-size: 16px;
-    margin-right: 10px; /* Espacement entre le temps et la ville */
+    margin-right: 10px;
 }
 
 .station h2 {
     font-size: 18px;
     font-weight: bold;
-    margin-right: 10px; 
+    margin-right: 10px;
 }
+
 
 
     </style>
@@ -234,16 +238,20 @@ if ($result->num_rows > 0) {
     <div class="modal-content">
         <span class="close">&times;</span>
         <form id="proposalForm" method="post" action="submit_proposal.php">
-            <label for="DepartureLocation">Lien de départ</label>
-            <input class="input1" placeholder="D'où partez-vous ?"  type="text" name="DepartureLocation" required><button><a alt="votre location" class='fas fa-map-marker-alt'></a></button>
+        <label for="DepartureLocation">Lieu de départ</label>
+<input type="text" id="departureInput" placeholder="Saisissez le lieu de départ" />
+<input type="hidden" name="DepartureLocation" id="departureLocation" required>
+<br/>
+
+<label for="Destination">Destination</label>
+<input type="text" id="destinationInput" placeholder="Saisissez la destination" />
+<input type="hidden" name="Destination" id="destinationLocation" required>
+<br/>
+
+            <label for="DepartureTime">Date et Heure</label>
+            <input placeholder="Quand partez-vous ?" class="flatpickr" type="datetime-local" name="DepartureTime" required>
             <br/>
             
-            <label for="Destination">Destination</label>
-            <input  placeholder="Où allez-vous?" type="text" name="Destination" required>
-            <br/>
-            <label for="DepartureTime">Date et Heure</label>
-            <input type="datetime-local" name="DepartureTime" required>
-            <br/>
             <label for="AvailableSeats">Nombre de places </label>
             <input placeholder="Combien de passagers pouvez-vous accepter ?" type="number" name="AvailableSeats" required>
             <br/>
@@ -271,5 +279,12 @@ if ($result->num_rows > 0) {
             modal.style.display = "none";
         }
     }
+</script>
+<script>
+        flatpickr(".flatpickr", {
+            enableTime: true,
+            dateFormat: "Y-m-d H:i",
+            // Ajoutez d'autres options selon vos besoins
+        });
 </script>
 </html>
