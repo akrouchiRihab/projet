@@ -89,6 +89,7 @@
 
 </body>
 </html>
+//code marche pour la distance (aproxemite) //
 /*    
 <!DOCTYPE html>
 <html lang="en">
@@ -151,7 +152,8 @@
     var trips = [
     { destination: 'Paris', currentLocation: 'London', availableSeats: 3, startLat: 48.8566, startLon: 2.3522 },
     { destination: 'Berlin, Allemagne', currentLocation: 'Amsterdam', availableSeats: 2, startLat: 50.5200, startLon: 8.4050 },
-    { destination: 'Berlin, Allemagne', currentLocation: 'Barcelona', availableSeats: 4, startLat: 52.5200, startLon: 13.4050 }
+    { destination: 'Berlin, Allemagne', currentLocation: 'Barcelona', availableSeats: 4, startLat: 52.5200, startLon: 13.4050 },
+    { destination: 'sorbonne', currentLocation: 'London', availableSeats: 3, startLat: 48.8566, startLon: 2.3522 },
     // Add more trips as needed
 ];
    

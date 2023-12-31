@@ -1,0 +1,538 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+   <head>
+      <meta charset="utf-8">
+      <meta content="width=device-width, initial-scale=1.0" name="viewport">
+      <title>Dashboard - Admin </title>
+      <meta name="robots" content="noindex, nofollow">
+      <meta content="" name="description">
+      <meta content="" name="keywords">
+
+      <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+      
+      <link href="../styles/navbar.css" rel="stylesheet" type="text/css">
+    <link href="../styles/footer.css" rel="stylesheet" type="text/css">
+   
+    
+    <link href="../bootstrap/css/all.min.css" rel="stylesheet">
+    <link href="../bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <script src="../bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="../bootstrap/js/all.min.js"></script>
+      <link href="../assets/img/favicon.png" rel="icon">
+      <link href="../assets/img/apple-touch-icon.png" rel="apple-touch-icon">
+      <link href="https://fonts.gstatic.com" rel="preconnect">
+      <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
+    
+      <link href="../assets/css/bootstrap-icons.css" rel="stylesheet">
+      <link href="../assets/css/boxicons.min.css" rel="stylesheet">
+      <link href="../assets/css/quill.snow.css" rel="stylesheet">
+      <link href="../assets/css/quill.bubble.css" rel="stylesheet">
+      <link href="../assets/css/remixicon.css" rel="stylesheet">
+      <link href="../assets/css/simple-datatables.css" rel="stylesheet">
+      <link href="../assets/css/style.css" rel="stylesheet">
+      <link href="../assets/fonts/bootstrap-icons.woff2" rel="stylesheet">
+   </head>
+   <style>
+      .canvas{
+         max-width:100%;
+         height:500px;
+      }
+   </style>
+   <body  style="    background: #34495e;">
+    <nav class="navbar navbar-expand-md  container-fluid">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="#">
+          <img src="/IMG/logona.jpg" alt="Logo" width="30" height="30">
+        </a>
+    
+    
+        <button id="navbar-toggler" class="navbar-toggler" type="button" data-bs-toggle="offcanvas"
+          data-bs-target="#offcanvasNav" aria-controls="offcanvasNav" aria-expanded="false" aria-label="Toggle navigation"
+          style="border-radius: 20px;">
+          <i class="fa-solid fa-bars"></i>
+        </button>
+    
+        <!--  the navbar elements -->
+        <div class="offcanvas offcanvas-end" style="width:60%; height:80%;" tabindex="-1" id="offcanvasNav"
+          aria-labelldby="offcanvasNavLabel">
+          <div class="offcanvas-header">
+            <a id="offcanvas-title" class="offcanvas-title navbar-brand " id="offcanvasNavLabel" href="#">
+              Dcar
+            </a>
+            <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+          </div>
+    
+          <div class="offcanvas-body">
+    
+            <ul id="control-ul" class="navbar-nav ms-auto ">
+              <li class="nav-item me-2">
+                <a class="nav-link  " aria-current="page" href="#">Home</a>
+              </li>
+              <li class="nav-item me-2">
+                <a class="nav-link " href="/announces">Anounces</a>
+              </li>
+    
+              <li class="nav-item me-2">
+                <a class="nav-link " href="#">About Us</a>
+              </li>
+              <li class="nav-item me-2">
+                <a class="nav-link " href="#">Contact Us</a>
+              </li>
+              <% if (isloggedin === "true") { %>
+                <!---->
+                 
+                  <li class="nav-item dropdown" >
+                    <a  id="inscrire"
+                    style=" width:10rem; border-style:solid;border-color: var(--bs-btn-active-border-color);color:#fff;"class="btn rounded-pill main-btn dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                      Profile
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown" style="right:2%;left:5%">
+                      <li><a class="dropdown-item" href="/profile">Profile</a></li>
+                      <li><a class="dropdown-item" href="/parametres">Parametres</a></li>
+                      <% if (isadmin) { %>
+                        <li><a class="dropdown-item" href="/index">Dashboard</a></li>
+                        <li><a class="dropdown-item" href="/gerer-site-web">Gerer le site web</a></li>
+                      <% } %>
+                      <li><hr class="dropdown-divider"></li>
+                      <li><a class="dropdown-item" href="/logout">Logout</a></li>
+                    </ul>
+                  </li>
+                  <% } else { %>
+                    <li class="nav-item ">
+                      <a id="inscrire" class=" btn rounded-pill main-btn "
+                        style="border-style:solid;border-color: var(--bs-btn-active-border-color);color:#fff;" href="login">
+                        Login/Register
+                      </a>
+                    </li>
+                    <% } %>
+    
+            </ul>
+            <div id="social-navbar" class="icons m-0">
+    
+              <a href="#" class="fs-5 d-flex align-items-center justify-content-center">
+                <span class="fab fa-facebook-f"></span>
+              </a>
+    
+    
+              <a href="#" class="fs-5 d-flex align-items-center justify-content-center">
+                <span class="fab fa-twitter"></span>
+              </a>
+    
+    
+              <a href="#" class="fs-5 d-flex align-items-center justify-content-center">
+                <span class="fab fa-instagram"></span>
+              </a>
+    
+              <a href="#" class="fs-5 d-flex align-items-center justify-content-center">
+                <span class="fab fa-whatsapp"></span>
+              </a>
+              <a href="#" class="fs-5 d-flex align-items-center justify-content-center">
+                <span class="fab fa-telegram-plane"></span>
+              </a>
+            </div>
+          </div>
+    
+    
+        </div>
+      </div>
+    
+    </nav>
+
+         <section class="section dashboard container mt-5">
+           
+             
+                  <div class="row">
+                     <div class="col-xl-4 col-md-4">
+                        <div class="card info-card sales-card">
+                           <div class="filter">
+                              <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
+                              <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+                                 <li class="dropdown-header text-start">
+                                    <h6>Filter</h6>
+                                 </li>
+                                 <li><a class="dropdown-item" href="#">Today</a></li>
+                                 <li><a class="dropdown-item" href="#">This Month</a></li>
+                                 <li><a class="dropdown-item" href="#">This Year</a></li>
+                              </ul>
+                           </div>
+                           <div class="card-body">
+                              <h5 class="card-title">Nombre d'annonces</span></h5>
+                              <div class="d-flex align-items-center">
+                                 <div class="card-icon rounded-circle d-flex align-items-center justify-content-center"> <i class="bi bi-cart"></i></div>
+                                 <div class="ps-3">
+                                    <h6>nombre_announces</h6>
+                                    <span class="text-success small pt-1 fw-bold">(Depuis le lancement de site)</span>
+                                    <!--<span class="text-success small pt-1 fw-bold">12%</span> <span class="text-muted small pt-2 ps-1">increase</span>-->
+                                 </div>
+                              </div>
+                           </div>
+                        </div>
+                     </div>
+                                       
+                        <div class="col-xl-4 col-md-4">
+                        <div class="card info-card revenue-card">
+                           <div class="filter">
+                              <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
+                              <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+                                 <li class="dropdown-header text-start">
+                                    <h6>Filter</h6>
+                                 </li>
+                                 <li><a class="dropdown-item" href="#">Today</a></li>
+                                 <li><a class="dropdown-item" href="#">This Month</a></li>
+                                 <li><a class="dropdown-item" href="#">This Year</a></li>
+                              </ul>
+                           </div>
+                           <div class="card-body">
+                              <h5 class="card-title">Nombre de postes</span></h5>
+                              <div class="d-flex align-items-center">
+                                 <div class="card-icon rounded-circle d-flex align-items-center justify-content-center"> <i class="bi bi-currency-dollar"></i></div>
+                                 <div class="ps-3">
+                                    <h6>$3,264</h6>
+                                    <span class="text-success small pt-1 fw-bold">08%</span> <span class="text-muted small pt-2 ps-1">increase</span>
+                                 </div>
+                              </div>
+                           </div>
+                        </div>
+                     </div>
+                     
+                     <div class="col-xl-4 col-md-4">
+                        <div class="card info-card customers-card">
+                           <div class="filter">
+                              <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
+                              <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+                                 <li class="dropdown-header text-start">
+                                    <h6>Filter</h6>
+                                 </li>
+                                 <li><a class="dropdown-item" href="#">Today</a></li>
+                                 <li><a class="dropdown-item" href="#">This Month</a></li>
+                                 <li><a class="dropdown-item" href="#">This Year</a></li>
+                              </ul>
+                           </div>
+                           <div class="card-body">
+                              <h5 class="card-title">Nombre des utilisateurs</span></h5>
+                              <div class="d-flex align-items-center">
+                                 <div class="card-icon rounded-circle d-flex align-items-center justify-content-center"> <i class="bi bi-people"></i></div>
+                                 <div class="ps-3">
+                                    <h6> nombre_utilisateurs </h6>
+                                    <span class="text-success small pt-1 fw-bold">(Depuis le lancement de site)</span>
+                                 </div>
+                              </div>
+                           </div>
+                        </div>
+                    
+                     </div>
+                     </div>
+                     <div class="row" style="height:100%;">
+                     <div class="col-sm-12 col-lg-8">
+                        <div class="card" style="height:100%;">
+                           <div class="filter">
+                              <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
+                              <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+                                 <li class="dropdown-header text-start">
+                                    <h6>Filter</h6>
+                                 </li>
+                                 <li><a class="dropdown-item" href="#">Today</a></li>
+                                 <li><a class="dropdown-item" href="#">This Month</a></li>
+                                 <li><a class="dropdown-item" href="#">This Year</a></li>
+                              </ul>
+                           </div>
+                           <div class="row" style="height:100%;">
+                           <div class="card-body">
+                              <h5 class="card-title">Reports <span>/Today</span></h5>
+                              <canvas class="canvas" id="lineChart" style="height:63%;"></canvas>
+                              
+                           </div>
+                        </div>
+                
+                    
+                  </div>
+               </div>
+               <div class="col-lg-4 mt-5">
+                  <div class="card">
+                     <div class="filter">
+                        <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
+                        <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+                           <li class="dropdown-header text-start">
+                              <h6>Filter</h6>
+                           </li>
+                           <li><a class="dropdown-item" href="#">Today</a></li>
+                           <li><a class="dropdown-item" href="#">This Month</a></li>
+                           <li><a class="dropdown-item" href="#">This Year</a></li>
+                        </ul>
+                     </div>
+                     <div class="card-body">
+                        <h5 class="card-title">Recent Activity <span>| Today</span></h5>
+                        <div class="activity">
+                           <div class="activity-item d-flex">
+                              <div class="activite-label"></div>
+                              
+                              <i class='bi bi-circle-fill activity-badge text-success align-self-start'></i>
+                             
+                           <i class='bi bi-circle-fill activity-badge text-danger align-self-start'></i>
+                             
+                          
+                              <div class="activity-content">Nombre total des J'adores</div>
+                           </div>
+                           <div class="activity-item d-flex">
+                              <div class="activite-label"></div>
+                              
+                              <i class='bi bi-circle-fill activity-badge text-success align-self-start'></i>
+                             
+                               <i class='bi bi-circle-fill activity-badge text-danger align-self-start'></i>
+                             
+                             
+                              <div class="activity-content">Nombre total des Commentaires</div>
+                           </div>
+                           <!--<div class="activity-item d-flex">
+                              <div class="activite-label">2 hrs</div>
+                              <i class='bi bi-circle-fill activity-badge text-primary align-self-start'></i>
+                              <div class="activity-content"> Voluptates corrupti molestias voluptatem</div>
+                           </div>
+                           <div class="activity-item d-flex">
+                              <div class="activite-label">1 day</div>
+                              <i class='bi bi-circle-fill activity-badge text-info align-self-start'></i>
+                              <div class="activity-content"> Tempore autem saepe <a href="#" class="fw-bold text-dark">occaecati voluptatem</a> tempore</div>
+                           </div>
+                           <div class="activity-item d-flex">
+                              <div class="activite-label">2 days</div>
+                              <i class='bi bi-circle-fill activity-badge text-warning align-self-start'></i>
+                              <div class="activity-content"> Est sit eum reiciendis exercitationem</div>
+                           </div>
+                           <div class="activity-item d-flex">
+                              <div class="activite-label">4 weeks</div>
+                              <i class='bi bi-circle-fill activity-badge text-muted align-self-start'></i>
+                              <div class="activity-content"> Dicta dolorem harum nulla eius. Ut quidem quidem sit quas</div>
+                           </div>-->
+                        </div>
+                     </div>
+                  </div>
+                 
+                  
+                  <div class="card">
+                     <div class="filter">
+                        <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
+                        <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+                           <li class="dropdown-header text-start">
+                              <h6>Filter</h6>
+                           </li>
+                           <li><a class="dropdown-item" href="#">Today</a></li>
+                           <li><a class="dropdown-item" href="#">This Month</a></li>
+                           <li><a class="dropdown-item" href="#">This Year</a></li>
+                        </ul>
+                     </div>
+                     <div class="card-body pb-0">
+                        <h5 class="card-title">Website Traffic <span>| Today</span></h5>
+                      <canvas class="canvas" id="doughnutChart" style="color:red;padding:20px"></canvas>
+                  </div>
+                  
+                     </div>
+                  
+               </div>
+               </div>
+              
+
+              
+               <div class="card-body mt-5" style="background-color:#fff">
+                  <h5 class="card-title">Recent Sales <span>| Today</span></h5>
+                 
+                     <div class="dataTable-search" style="display:flex;justify-content:space-between">
+                      <div>
+                      <button  id="userBtn">utilisateurs</button>
+                      <button  id="announceBtn">announces</button></div>
+                     <div style="display:flex">
+                     <div class="dataTable-search">
+                      <label class="form-label" style="display:none">Search by:</label>
+                      <select id="search-select" class="form-select">
+                        <option value="" style="display:none">search by id/name</option>
+                        <option value="id">ID</option>
+                        <option value="name">Name</option>
+                      </select>
+                     </div>
+                    <div id="search-input-container">
+                      <label class="form-label" style="display:none">Search:</label>
+                      <input class="form-control" placeholder="Search..." type="text">
+                     
+                    </div>
+                  </div>
+                    </div> <div class="container">
+                 
+                   
+                      <table id="announceTable" class="table table-striped">
+                          <thead>
+                              <tr>
+                                  <th>ID</th>
+                                  <th>Titre announce </th>
+                                  <th>Name Announceur </th>
+                                  <th>Date announce </th>
+                                  <th>Delete</th>
+                              </tr>
+                          </thead>
+                          <tbody>
+                          
+                            
+                            
+                     
+                       
+                            
+                          </tbody>
+                      </table>
+
+                      <table id="userTable" class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Name</th>
+                                <th>Announcements</th>
+                                <th>Posts</th>
+                                <th>Delete</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        
+                       
+                     
+                          
+                        </tbody>
+                    </table>
+                  </div></div>
+                    
+              
+                  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.0.2/js/bootstrap.min.js"></script>
+             
+            
+
+               </div>
+         </section>
+          <!--FOOTER-->
+<div class="container-fluid mt-5">
+            
+  <div class="card mx-5" style="    background-color: #184530;">
+      <div class="row mb-4 ">
+          
+          <div class=" col-12  col-md-4    col-sm-11 "  style="display:flex;justify-content:center;align-items:end">
+              <div class="footer-text pull-left">
+                   <div class="d-flex">
+                       <h1 class="font-weight-bold mr-2 px-3" style="color:#ffc107; background-color:#16a085ff" > D </h1>
+                       <h1 style="color: #ffc107">CAR</h1>
+                   </div>
+                   <p class="card-text">is the best destination if u're looking for a car in a simple way </p>
+
+                   
+
+               
+               </div>
+          </div>
+          
+          
+          <div class="col-md-2 col-sm-1 col-xs-1 mb-2"></div>
+          
+          <div id="col-sm-4" class=" text-center col-md-6 col-sm-4 col-xs-4" style="margin-top:5%">
+       
+              <h5 class="heading" style="color:blanchedalmond">Services</h5>
+              <ul  style="display:flex; justify-content:center;align-items:end">
+                  <li >
+                    <a class="nav-link  " aria-current="page" href="#">Home</a>
+                  </li>
+                  <li >
+                    <a class="nav-link " href="../announces/announces.html">Anounces</a>
+                  </li>
+                  
+                  <li >
+                    <a class="nav-link " href="#">About Us</a>
+                  </li>
+                  <li >
+                    <a class="nav-link " href="#">Contact Us</a>
+                  </li>
+                </ul>
+                  <div class="d-flex align-items-center icons" style="justify-content:center ;     margin-left: 12%;">                
+                      <a href="#" class="fs-5 d-flex align-items-center justify-content-center">
+                          <span class="fab fa-facebook-f"></span>
+                      </a>                
+                      <a href="#" class="fs-5 d-flex align-items-center justify-content-center">
+                          <span class="fab fa-twitter"></span>
+                      </a>                
+                      <a href="#" class="fs-5 d-flex align-items-center justify-content-center">
+                          <span class="fab fa-instagram"></span>
+                      </a>                
+                      <a href="#" class="fs-5 d-flex align-items-center justify-content-center">
+                          <span class="fab fa-whatsapp"></span>
+                      </a>                
+                      <a href="#" class="fs-5 d-flex align-items-center justify-content-center">
+                          <span class="fab fa-telegram-plane"></span>
+                      </a>
+      
+          
+      
+               </div>
+       
+          </div>
+       
+         
+         
+
+       
+
+      </div>
+      
+      
+      <div class="divider mb-4" >   
+      </div>
+
+     
+      <div class="row" style="font-size:10px;">
+      
+      <div class="col-md-6 col-sm-6 col-xs-6">
+          
+          <div class="pull-left">
+              
+              <p style="    color: #e5dec3;"><i class="fa fa-copyright"></i> 2022-2023 Dream-car</p>
+              
+          </div>
+          
+      </div>
+      
+      
+
+      <div class="col-md-6 col-sm-6 col-xs-6">
+         
+         
+          <div class="pull-right mr-4 d-flex policy" style="color: #e5dec3;">
+              
+             <div >Terms of Use</div>
+             <div>Privacy Policy</div>
+             <div>Cookie Policy</div>
+              
+          </div>
+          
+          
+          
+      </div>
+       
+       
+       
+   </div>
+  </div>
+  
+</div>
+      </main>
+      <footer id="footer" class="footer">
+         <div class="copyright"> &copy; Copyright <strong><span>Compnay Name</span></strong>. All Rights Reserved</div>
+         <div class="credits"> with love <a href="https://freeetemplates.com/">FreeeTemplates</a></div>
+      </footer>
+      <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>  
+        <script src="../assets/js/apexcharts.min.js"></script>
+        <script src="../assets/js/bootstrap.bundle.min.js"></script>
+        <script src="../assets/js/chart.min.js"></script>
+        <script src="../assets/js/echarts.min.js"></script>
+        <script src="../assets/js/quill.min.js"></script>
+        <script src="../assets/js/simple-datatables.js"></script>
+        <script src="../assets/js/tinymce.min.js"></script>
+        <script src="../assets/js/validate.js"></script>
+        <script src="../assets/js/main.js"></script> 
+
+    
+
+   </body>
+</html>
