@@ -1,6 +1,6 @@
 <?php
 
-echo "Inside the view file";
+
 
     
 function output_ride(bool|array $result)

@@ -2,24 +2,6 @@
 // Include your database connection file
 require_once('../includes/db_connect.php');
 
-// Check if rideID is provided in the URL for deletion
-if (isset($_GET['deleteID'])) {
-    $deleteID = $_GET['deleteID'];
-
-    // Perform the delete query (modify as per your database structure)
-    $sql = "DELETE FROM rides WHERE RideID = '$deleteID'";
-
-    // Execute the query
-    if (mysqli_query($conn, $sql)) {
-        // Redirect to the same page after deleting
-        header('Location: listecond.php');
-        exit();
-    } else {
-        // Handle errors
-        echo "Error deleting record: " . mysqli_error($conn);
-    }
-}
-
 // Check if rideID is provided in the URL for fetching details
 if (isset($_GET['RideID'])) {
     $RideID = $_GET['RideID'];
@@ -39,6 +21,57 @@ if (isset($_GET['RideID'])) {
         $dayOfWeek = $dateObj->format('l');
         $availableSeats = $row["AvailableSeats"];
         $price = $row["price"];
+
+        // Include the Bing Maps JavaScript SDK
+        echo '<script type="text/javascript" src="https://www.bing.com/api/maps/mapcontrol?key=ApE-HNGaFCRDs_bsmYj3Dgak-HaLSYWyN7K35FxHQXjQt8ePrxpy8_uvZoXESwIg&callback=loadMapScenario" async defer></script>';
+
+        // Function to load Bing Maps
+        echo '<script type="text/javascript">
+            function loadMapScenario() {
+                var map = new Microsoft.Maps.Map(document.getElementById("map"), {
+                    credentials: "ApE-HNGaFCRDs_bsmYj3Dgak-HaLSYWyN7K35FxHQXjQt8ePrxpy8_uvZoXESwIg"
+                });
+
+                // Add pushpins for departure and destination
+                var departureLocation = new Microsoft.Maps.Location(' . json_encode($departureLocation) . ');
+                var destination = new Microsoft.Maps.Location(' . json_encode($destination) . ');
+
+                var departurePin = new Microsoft.Maps.Pushpin(departureLocation);
+                var destinationPin = new Microsoft.Maps.Pushpin(destination);
+
+                map.entities.push(departurePin);
+                map.entities.push(destinationPin);
+
+                // Calculate and display directions
+                Microsoft.Maps.loadModule("Microsoft.Maps.Directions", function () {
+                    var directionsManager = new Microsoft.Maps.Directions.DirectionsManager(map);
+
+                    directionsManager.setRequestOptions({
+                        routeMode: Microsoft.Maps.Directions.RouteMode.driving,
+                        routeDraggable: false
+                    });
+
+                    var waypoint1 = new Microsoft.Maps.Directions.Waypoint({
+                        address: ' . json_encode($departureLocation) . ',
+                        location: departureLocation
+                    });
+
+                    var waypoint2 = new Microsoft.Maps.Directions.Waypoint({
+                        address: ' . json_encode($destination) . ',
+                        location: destination
+                    });
+
+                    directionsManager.addWaypoint(waypoint1);
+                    directionsManager.addWaypoint(waypoint2);
+
+                    directionsManager.setRenderOptions({
+                        autoUpdateMapView: true
+                    });
+
+                    directionsManager.calculateDirections();
+                });
+            }
+        </script>';
     } else {
         // Handle case where rideID is not found
         echo "Ride not found";
@@ -46,10 +79,11 @@ if (isset($_GET['RideID'])) {
     }
 } else {
     // Handle case where rideID is not provided
-    echo "Invalid accessbbbb";
+    echo "Invalid access";
     exit();
 }
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -59,6 +93,7 @@ if (isset($_GET['RideID'])) {
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css" integrity="sha256-kLaT2GOSpHechhsozzB+flnD+zUyjE2LlfWPgU04xyI=" crossorigin="" />
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDfYaBDnZ6vo0t_f8ACEzHhJirgcMfwpyI&callback=initMap" async defer></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -94,18 +129,21 @@ if (isset($_GET['RideID'])) {
             <h3><?php echo $dayOfWeek . ' ' . $departureTime; ?></h3>
             <p><strong>Depart:</strong> <a href="#" onclick="showMap('<?php echo $departureLocation; ?>')"><?php echo $departureLocation; ?></a></p>
             <p><strong>Destination:</strong> <a href="#" onclick="showMap('<?php echo $destination; ?>')"><?php echo $destination; ?></a></p>
-            <br>
+            <br/>
             <hr>
             <p style="margin:2%;">Aucun passager pour ce trajet</p>
             <hr>
-        </div>
+        </div><br><br>
         <div class="parametre">
             <a class="edit" href="edit_trip.php?RideID=<?php echo urlencode($RideID); ?>"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Modifier votre trajet</a> 
             <a class="delete" href="#" onclick="confirmDelete('<?php echo urlencode($RideID); ?>')">
                 <i class="fa fa-trash-o" aria-hidden="true"></i> Annuler votre trajet
             </a>
         </div>
+        <div></div>
+        <div></div>
     </div>
+    <div id="map" style="z-index: -5; display: inline-block; height: 400px; width: 50%; margin-top: 1%;"></div>
     <div class="modal" id="deleteModal">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -164,6 +202,35 @@ if (isset($_GET['RideID'])) {
             window.open(mapUrl, '_blank');
         }
     </script>
+    <link rel="stylesheet" href="https://www.bing.com/api/maps/mapcontrol?key=ApE-HNGaFCRDs_bsmYj3Dgak-HaLSYWyN7K35FxHQXjQt8ePrxpy8_uvZoXESwIg&callback=loadMapScenario" async defer>
+    
+   <!-- Remplacez le script Google Maps par le script Leaflet -->
+   <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js" integrity="sha256-WBkoXOwTeyKclOHuWtc+i2uENFpDZ9YPdf5Hf+D7ewM=" crossorigin=""></script>
 
+<script>
+    function initMap() {
+        var myLatLng;
+
+        // Check if userCoordinates is not empty
+        if (Object.keys(userCoordinates).length !== 0) {
+            myLatLng = [userCoordinates.lat, userCoordinates.lng];
+        }
+
+        // Utiliser Leaflet pour créer une carte
+        var map = L.map('map').setView(myLatLng, 15);
+
+        // Ajouter une couche OpenStreetMap à la carte
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '© OpenStreetMap contributors'
+        }).addTo(map);
+
+        // Ajouter un marqueur à la position de l'utilisateur
+        if (myLatLng) {
+            L.marker(myLatLng).addTo(map)
+                .bindPopup('User Location')
+                .openPopup();
+        }
+    }
+</script>
 </body>
 </html>

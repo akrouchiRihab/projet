@@ -378,3 +378,11 @@ footer{
 .liste p {
     display: inline-block;
 }
+.square {
+    display: inline-block;
+    width: 200px; /* ajustez la largeur selon vos besoins */
+    padding: 10px;
+    margin: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* ombre légère */
+    border-radius: 5px;
+}

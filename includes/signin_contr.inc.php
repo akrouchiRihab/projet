@@ -2,8 +2,8 @@
 declare(strict_types=1);
 
 //verifier que les champs sont toute remplie
-function is_input_empty(string $firstname,string $lastname,string $email,string $pwd,string $cpwd,$phone) {
-     if(empty($firstname) || empty($lastname) || empty($email) || empty($pwd) || empty($cpwd) || empty($phone)){
+function is_input_empty(string $firstname,string $lastname,string $email,string $pwd,string $cpwd,$phone,$role) {
+     if(empty($firstname) || empty($lastname) || empty($email) || empty($pwd) || empty($cpwd) || empty($phone) || empty($role)){
          return true;
      }else{
         return false; 
@@ -48,6 +48,6 @@ function is_email_registered(object $pdo,string $email)
     }
 }
 
-function create_user(object $pdo,string $email,string $firstname ,string $lastname,string $pwd,string $phone){
-   set_user($pdo,$email,$firstname ,$lastname,$pwd,$phone);
+function create_user(object $pdo,string $email,string $firstname ,string $lastname,string $pwd,string $phone,$role){
+   set_user($pdo,$email,$firstname ,$lastname,$pwd,$phone,$role);
 }
