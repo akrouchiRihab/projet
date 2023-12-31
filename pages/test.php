@@ -1,64 +1,85 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <!-- Autres balises meta et liens CSS ici -->
-
-    <!-- Ajoutez le script de l'API Bing Maps avec votre clé API -->
-    <script type="text/javascript" src="https://www.bing.com/api/maps/mapcontrol?key=ApE-HNGaFCRDs_bsmYj3Dgak-HaLSYWyN7K35FxHQXjQt8ePrxpy8_uvZoXESwIg"></script>
-
-    <!-- Votre code CSS et titre ici -->
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script type='text/javascript' src='https://www.bing.com/api/maps/mapcontrol?key=ApE-HNGaFCRDs_bsmYj3Dgak-HaLSYWyN7K35FxHQXjQt8ePrxpy8_uvZoXESwIg&callback=loadMapScenario' async defer></script>
+    <style>
+        #map {
+            height: 300px;
+            width: 100%;
+        }
+    </style>
 </head>
+<body>
+    <div id="map"></div>
+    <label for="departureInput">Lieu de départ</label>
+    <input type="text" id="departureInput" placeholder="Saisissez le lieu de départ" />
 
-<body onload="initMap()">
-    <!-- Votre contenu HTML existant -->
-
-    <!-- Ajoutez un conteneur pour la carte Bing Maps -->
-    <div id="map" style="height: 400px;"></div>
-
-    <!-- Votre code JavaScript existant -->
-
-    <!-- Ajoutez le script JavaScript pour gérer Bing Maps et le calcul de l'itinéraire -->
     <script>
         var map;
 
-        function initMap() {
+        function loadMapScenario() {
             map = new Microsoft.Maps.Map(document.getElementById('map'), {
-                center: new Microsoft.Maps.Location(0, 0), // Centre de la carte initial
-                zoom: 2 // Niveau de zoom initial
+                credentials: 'ApE-HNGaFCRDs_bsmYj3Dgak-HaLSYWyN7K35FxHQXjQt8ePrxpy8_uvZoXESwIg',
+                center: new Microsoft.Maps.Location(48.8566, 2.3522),
+                zoom: 13
+            });
+
+            Microsoft.Maps.loadModule('Microsoft.Maps.AutoSuggest', function () {
+                var options = {
+                    maxResults: 5,
+                    map: map
+                };
+                var manager = new Microsoft.Maps.AutosuggestManager(options);
+                manager.attachAutosuggest('#departureInput', '#searchBoxContainer', selectedSuggestion);
+            });
+
+            // Ajoutez un gestionnaire d'événements pour déclencher la recherche lors de la saisie
+            document.getElementById('departureInput').addEventListener('input', function () {
+                searchLocation();
             });
         }
 
-        function calculateRoute() {
-            var departureTerm = document.getElementById('departureInput').value;
-            var arrivalTerm = document.getElementById('arrivalInput').value;
+        function searchLocation() {
+            var query = document.getElementById('departureInput').value;
+            
+            Microsoft.Maps.loadModule('Microsoft.Maps.Search', function () {
+                var searchManager = new Microsoft.Maps.Search.SearchManager(map);
+                var geocodeRequest = {
+                    where: query,
+                    callback: geocodeCallback,
+                    errorCallback: errorCallback
+                };
+                searchManager.geocode(geocodeRequest);
+            });
+        }
 
-            // Géocodage du lieu de départ
-            fetch(`https://dev.virtualearth.net/REST/v1/Locations?q=${departureTerm}&key=VOTRE_CLE_API`)
-                .then(response => response.json())
-                .then(departureData => {
-                    var departureLocation = departureData.resourceSets[0].resources[0].point.coordinates;
-                    // Utilisez les coordonnées pour afficher le marqueur sur la carte ou effectuer d'autres opérations
-                    console.log('Coordonnées du lieu de départ:', departureLocation);
-                    var departurePin = new Microsoft.Maps.Pushpin(new Microsoft.Maps.Location(departureLocation[0], departureLocation[1]));
-                    map.entities.push(departurePin);
-                })
-                .catch(error => {
-                    console.error('Erreur lors du géocodage du lieu de départ : ', error);
-                });
+        function geocodeCallback(result, userData) {
+            if (result && result.results && result.results.length > 0) {
+                var location = result.results[0].location;
+                var pushpin = new Microsoft.Maps.Pushpin(location);
+                map.entities.clear();
+                map.entities.push(pushpin);
+                map.setView({ center: location, zoom: 13 });
+            }
+        }
 
-            // Géocodage du lieu d'arrivée
-            fetch(`https://dev.virtualearth.net/REST/v1/Locations?q=${arrivalTerm}&key=VOTRE_CLE_API`)
-                .then(response => response.json())
-                .then(arrivalData => {
-                    var arrivalLocation = arrivalData.resourceSets[0].resources[0].point.coordinates;
-                    // Utilisez les coordonnées pour afficher le marqueur sur la carte ou effectuer d'autres opérations
-                    console.log('Coordonnées du lieu d\'arrivée:', arrivalLocation);
-                    var arrivalPin = new Microsoft.Maps.Pushpin(new Microsoft.Maps.Location(arrivalLocation[0], arrivalLocation[1]));
-                    map.entities.push(arrivalPin);
-                })
-                .catch(error => {
-                    console.error('Erreur lors du géocodage du lieu d\'arrivée : ', error);
-                });
+        function errorCallback(e) {
+            console.log("Une erreur s'est produite lors de la recherche de lieu :", e);
+        }
+
+        function selectedSuggestion(suggestionResult) {
+            if (suggestionResult) {
+                var location = suggestionResult.location;
+                var pushpin = new Microsoft.Maps.Pushpin(location);
+                map.entities.clear();
+                map.entities.push(pushpin);
+                map.setView({ center: location, zoom: 13 });
+
+                document.getElementById('departureInput').value = suggestionResult.formattedSuggestion;
+            }
         }
     </script>
 </body>
