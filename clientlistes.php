@@ -4,14 +4,26 @@
 <html lang="en">
     <head>
     <style>
-        .square {
-            display: inline-block;
-            width: 200px; /* Ajustez la largeur selon vos besoins */
-            padding: 10px;
-            margin: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Ombre légère */
-            border-radius: 5px;
-        }
+       .square {
+    display: flex;
+    flex-direction: column;
+    width: 100%; /* Ajustez la largeur selon vos besoins */
+    padding: 10px;
+    margin: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Ombre légère */
+    border-radius: 5px;
+}
+
+.square img {
+    max-width: 100%; /* L'image prendra la largeur totale de la div */
+    border-radius: 5px 5px 0 0; /* Coins arrondis uniquement en haut */
+}
+.square iframe {
+    width: 100%; /* La carte prendra toute la largeur de la div */
+    height: 200px; /* Ajustez la hauteur selon vos besoins */
+    border-radius: 5px 5px 0 0; /* Coins arrondis uniquement en haut */
+}
+
     </style>
         <meta charset="UTF-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -65,7 +77,7 @@
         <div class="container">
           <div class="col-2">
             <br/>
-            <a href="" class="proposer_btn" >rechercher un trajet ?</a>
+            <a href="proposer.php" class="proposer_btn" >rechercher un trajet ?</a>
             
           </div>
           <br/>
@@ -87,6 +99,7 @@
         // Parcours des résultats
         while ($row = $result->fetch_assoc()) {
             echo '<div class="square">';
+            echo '<iframe src="" frameborder="0" style="border:0;" allowfullscreen="" aria-hidden="false" tabindex="0"></iframe>';
             echo '    Départ: ' . $row["DepartureLocation"] . '<br>';
             echo '    Destination: ' . $row["Destination"] . '<br>';
             echo '    Heure de départ: ' . $row["DepartureTime"] . '<br>';
