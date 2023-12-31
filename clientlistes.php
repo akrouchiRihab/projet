@@ -3,6 +3,16 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
+    <style>
+        .square {
+            display: inline-block;
+            width: 200px; /* Ajustez la largeur selon vos besoins */
+            padding: 10px;
+            margin: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Ombre légère */
+            border-radius: 5px;
+        }
+    </style>
         <meta charset="UTF-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
