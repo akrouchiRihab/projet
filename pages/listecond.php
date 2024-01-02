@@ -17,6 +17,7 @@ require_once('../includes/db_connect.php'); // Include your database connection 
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="../css/style2.css">
+    <link rel="icon" href="../images/tt.png" type="image/x-icon">
     <title>Conducteur</title>
     <script>
         var scroll = new SmoothScroll('a[href*="#"]');
@@ -161,11 +162,11 @@ require_once('../includes/db_connect.php'); // Include your database connection 
 <div class="main">
     <header>
         <div class="container">
-            <a href="#"><img class="logo" src="../images/logo2.png"></a>
+            <a href="#"><img class="logo" src="../images/twsil3.png"></a>
     
             <nav class="navigation">
                 <ul>
-                    <li class="nav1"><a href="reservation.php" class="home">Voir Réservations</a></li>
+                    <li class="nav1"><a href="../reservation.php" class="home">Voir Réservations</a></li>
                     <li><a href="../includes/logout.inc.php" class="logout">Déconnexion</a></li>
                 </ul>
             </nav>
