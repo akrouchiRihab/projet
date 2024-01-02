@@ -21,8 +21,8 @@ if($_SERVER["REQUEST_METHOD"]==="POST"){
           
           $result=get_email($pdo , $email);
           
-          /*$id=get_id($pdo , $email);
-          $_SESSION["user_id"] = (int) $id["UserId"];*/
+          $id=get_id($pdo , $email);
+          $_SESSION["user_id"] = (int) $id["UserId"];
 
           if(is_email_wrong($result)){
             $errors["email_invalid"] = "email n'existe pas";
@@ -42,7 +42,7 @@ if($_SERVER["REQUEST_METHOD"]==="POST"){
             die();
           }
 
-          if(isset($result['Role'])){
+          /*if(isset($result['Role'])){
             echo'yes';
             if ($result['Role'] === 'driver') {
               header('Location: ../pages/listecond.php');
@@ -51,16 +51,17 @@ if($_SERVER["REQUEST_METHOD"]==="POST"){
               header('Location: ../clientlistes.php');
               exit();
           }
-          }
+          }*/
+          
           
           $_SESSION["user_fname"] = htmlspecialchars($result["FirstName"]); 
           $_SESSION["user_lname"] = htmlspecialchars($result["LastName"]);
           $_SESSION["user_phone"] = htmlspecialchars($result["phonenumber"]);
-         
+          $_SESSION["user_role"] = htmlspecialchars($result["Role"]);
 
           $pdo=null;
           $stmt=null;
-          
+          header("Location:../index.php?login=success");
           
           die();
 

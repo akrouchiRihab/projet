@@ -45,17 +45,21 @@ if($_SERVER["REQUEST_METHOD"]==="POST"){
          }
         
          create_user($pdo,$email, $firstname ,$lastname,$pwd,$phone,$role);
-         
+
+         $id=get_id($pdo , $email);
+         $_SESSION["user_id"] = (int) $id["UserId"];
+         $_SESSION["user_role"] = $role;
+
          $pdo=null;
          $stmt=null;
-         if ($role === 'driver') {
+         /*if ($role === 'driver') {
             header('Location: ../pages/listecond.php');
             exit();
         } elseif ($role === 'passenger') {
             header('Location: ../clientlistes.php');
             exit();
-        }
-        
+        }*/
+        header("Location:../index.php?signin=success");
          die();
       
 
