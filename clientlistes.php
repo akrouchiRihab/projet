@@ -3,6 +3,8 @@ session_start();
 require_once('includes/db_connect.php'); // Include your database connection file
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
+  if (isset($_SESSION["user_id"])) {
+    $userID = $_SESSION["user_id"];
     $RideID = $_POST["RideID"];
     $DepartureLocation = $_POST["DepartureLocation"];
     $Destination = $_POST["Destination"];
@@ -20,6 +22,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Redirect to the current page after submitting
     header('Location: ' . $_SERVER['HTTP_REFERER']);
     exit();
+   } else {
+    // Rediriger vers la page de connexion si l'utilisateur n'est pas connecté
+    header("Location: login.php");
+    exit();
+}
 }
 ?>
 
@@ -197,7 +204,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <nav class="navigation">
                 <ul>
                      <li>
-                        
+                     <li class="nav1"><a href="clientlistes.php">listes trajets</a></li>
+                     <li class="nav1"><a href="reservation.php">Mes reservations</a></li>
+                    <?php
+                     $userID = $_SESSION["user_id"]; 
+                    ?>
                     </li>
                 </ul>
             </nav>

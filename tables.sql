@@ -33,3 +33,9 @@ CREATE TABLE RideProposals (
     FOREIGN KEY (ProposerID) REFERENCES Users(UserID) ,
     FOREIGN KEY (RideID) REFERENCES Rides(RideID)
 );
+CREATE TABLE reservations (
+    ReservationID INT PRIMARY KEY AUTO_INCREMENT,
+    UserID INT, 
+    RideID INT,
+    FOREIGN KEY (RideID) REFERENCES rides(RideID)
+);

@@ -107,7 +107,8 @@ if (isset($_GET['RideID'])) {
                 <a href="#"><img class="logo" src="images/logo2.png"></a>
                 <nav class="navigation">
                     <ul>
-                        <li class="nav1"><a href="listecond.php">listes trajets</a></li>
+                        <li class="nav1"><a href="clientlistes.php">listes trajets</a></li>
+                        <li class="nav1"><a href="reservation.php">Mes reservations</a></li>
                        
                             <?php if(isset($_SESSION["user_id"])){ ?>
                             <form action="includes/logout.inc.php" method="post">
