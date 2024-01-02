@@ -21,7 +21,11 @@ if($_SERVER["REQUEST_METHOD"]==="POST"){
           
           $result=get_email($pdo , $email);
           
+<<<<<<< HEAD
+          $id=get_id($pdo , $email);
+=======
           /*$id=get_id($pdo , $email);*/
+>>>>>>> 9b3ae4a86a8a0ea459a746b33969f9153fd4f9aa
           $_SESSION["user_id"] = (int) $id["UserId"];
 
           if(is_email_wrong($result)){
@@ -42,7 +46,7 @@ if($_SERVER["REQUEST_METHOD"]==="POST"){
             die();
           }
 
-          if(isset($result['Role'])){
+          /*if(isset($result['Role'])){
             echo'yes';
             $_SESSION["user_id"] = (int) $id["UserId"];
             $userID = $_SESSION["user_id"];
@@ -53,16 +57,17 @@ if($_SERVER["REQUEST_METHOD"]==="POST"){
               header('Location: ../clientlistes.php');
               exit();
           }
-          }
+          }*/
+          
           
           $_SESSION["user_fname"] = htmlspecialchars($result["FirstName"]); 
           $_SESSION["user_lname"] = htmlspecialchars($result["LastName"]);
           $_SESSION["user_phone"] = htmlspecialchars($result["phonenumber"]);
-         
+          $_SESSION["user_role"] = htmlspecialchars($result["Role"]);
 
           $pdo=null;
           $stmt=null;
-          
+          header("Location:../index.php?login=success");
           
           die();
 
