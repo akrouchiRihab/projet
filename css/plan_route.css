@@ -320,3 +320,14 @@ nav{
     background-color: white;
     border: none;
 }
+.proposer_btn{
+    border-radius: 10px;
+    background-color:#3e1f92;
+    margin-right: 20px;
+    display: inline-block;
+    width: 20%;
+    text-align: center;
+    padding:10px;
+    color:white;
+    font-size: 15px;
+}

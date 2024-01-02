@@ -21,8 +21,8 @@ if($_SERVER["REQUEST_METHOD"]==="POST"){
           
           $result=get_email($pdo , $email);
           
-          /*$id=get_id($pdo , $email);
-          $_SESSION["user_id"] = (int) $id["UserId"];*/
+          /*$id=get_id($pdo , $email);*/
+          $_SESSION["user_id"] = (int) $id["UserId"];
 
           if(is_email_wrong($result)){
             $errors["email_invalid"] = "email n'existe pas";
@@ -44,6 +44,8 @@ if($_SERVER["REQUEST_METHOD"]==="POST"){
 
           if(isset($result['Role'])){
             echo'yes';
+            $_SESSION["user_id"] = (int) $id["UserId"];
+            $userID = $_SESSION["user_id"];
             if ($result['Role'] === 'driver') {
               header('Location: ../pages/listecond.php');
               exit();

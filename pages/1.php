@@ -6,23 +6,69 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
     <link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
     <style>
-        #map {
-            height: 400px;
-            width: 400px;
-            left: 70%;
-            display: none;
-        }
+    body {
+        background-color: #f0f0f0; /* Couleur de fond blanche */
+        color: #333; /* Couleur du texte principale */
+        font-family: Arial, sans-serif; /* Police par défaut */
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
 
-        #search-form {
-            position: absolute;
-            top: 10px;
-            left: 10px;
-            z-index: 1000;
-            background: white;
-            padding: 10px;
-            border-radius: 5px;
-        }
-    </style>
+    #map {
+        height: 400px;
+        width: 400px;
+        left: 40%;
+        display: none;
+        background-color: #fff; /* Couleur de fond de la carte */
+        border: 1px solid #ddd; /* Bordure de la carte */
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Ombre de la carte */
+        margin-top: 20px;
+    }
+
+    #search-form {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        margin-top: 20px;
+    }
+
+    #search-form label {
+        margin-right: 10px;
+        color: #3498db; /* Couleur du texte des labels */
+    }
+
+    #search-form input[type="text"],
+    #search-form input[type="number"] {
+        padding: 8px;
+        box-sizing: border-box;
+        margin-right: 10px;
+    }
+
+    #search-form button {
+        background-color: #3498db; /* Couleur de fond du bouton */
+        color: #fff; /* Couleur du texte du bouton */
+        border: none;
+        padding: 10px 15px;
+        border-radius: 3px;
+        cursor: pointer;
+    }
+
+    #trip-list {
+        margin-top: 20px;
+       
+    }
+
+    .trip-container {
+        background-color: #fff; /* Couleur de fond des conteneurs de voyage */
+        border: 1px solid #ddd; /* Bordure des conteneurs de voyage */
+        padding: 10px;
+        margin-bottom: 20px;
+        border-radius: 5px;
+        box-shadow: 0 0 5px rgba(0, 0, 0, 0.1); /* Ombre des conteneurs de voyage */
+    }
+</style>
+
 </head>
 <body>
 
