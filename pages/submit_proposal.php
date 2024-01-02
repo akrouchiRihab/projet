@@ -1,29 +1,37 @@
 <?php
 session_start();
-require_once('../includes/db_connect.php'); // Include your database connection file
+require_once('../includes/db_connect.php'); // Inclure votre fichier de connexion à la base de données
 
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
+// Vérifier si l'utilisateur est connecté
+if (isset($_SESSION["UserID"])) {
+    // Récupérer l'ID de l'utilisateur connecté
+    $DriverID = $_SESSION["UserID"];
+
+    // Récupérer les autres champs du formulaire
     $DepartureLocation = $_POST["DepartureLocation"];
     $Destination = $_POST["Destination"];
     $DepartureTime = $_POST["DepartureTime"];
     $AvailableSeats = $_POST["AvailableSeats"];
     $price = $_POST["price"];
-    
-    // Insert the data into the database (assuming you have a 'trajet' table)
-    $sql = "INSERT INTO rides (DepartureLocation, Destination, DepartureTime, AvailableSeats, price) 
-            VALUES ('$DepartureLocation', '$Destination', '$DepartureTime', '$AvailableSeats', '$price')";
+
+    // Insérer les données dans la base de données
+    $sql = "INSERT INTO rides (DriverID, DepartureLocation, Destination, DepartureTime, AvailableSeats, price) 
+            VALUES ('$DriverID', '$DepartureLocation', '$Destination', '$DepartureTime', '$AvailableSeats', '$price')";
 
     if ($conn->query($sql) === TRUE) {
-        echo "New record created successfully";
+        echo "Nouvel enregistrement créé avec succès";
     } else {
-        echo "Error: " . $sql . "<br>" . $conn->error;
+        echo "Erreur : " . $sql . "<br>" . $conn->error;
     }
 
-    // Close the database connection
+    // Fermer la connexion à la base de données
     $conn->close();
 
-    // Redirect to the current page after submitting
+    // Rediriger vers la page précédente après la soumission
     header('Location: ' . $_SERVER['HTTP_REFERER']);
     exit();
+} else {
+    echo "L'utilisateur n'est pas connecté.";
 }
+
 ?>
