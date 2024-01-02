@@ -2,25 +2,6 @@
 session_start();
 require_once('../includes/db_connect.php'); // Include your database connection file
 
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $RideID = $_POST["RideID"];
-    $DepartureLocation = $_POST["DepartureLocation"];
-    $Destination = $_POST["Destination"];
-    $DepartureTime = $_POST["DepartureTime"];
-    $AvailableSeats = $_POST["AvailableSeats"];
-    $price = $_POST["price"];
-    
-    // Insert the data into the database (assuming you have a 'trajet' table)
-    $sql = "INSERT INTO trajet (DepartureLocation, Destination, DepartureTime, AvaailableSeats, price) VALUES ('$DepartureLocation', '$Destination', '$DepartureTime', '$AvailableSeats', '$price')";
-    mysqli_query($conn, $sql);
-
-    // Close the database connection
-    mysqli_close($conn);
-
-    // Redirect to the current page after submitting
-    header('Location: ' . $_SERVER['HTTP_REFERER']);
-    exit();
-}
 ?>
 
 <!DOCTYPE html>
@@ -174,9 +155,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     font-weight: bold;
     margin-right: 10px;
 }
-
-
-
     </style>
 </head>
 <body>
@@ -188,9 +166,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <nav class="navigation">
                 <ul>
                     <li class="nav1"><a href="reservation.php" class="home">Voir Réservations</a></li>
-                    <li>
-                        
-                    </li>
+                    <li><a href="../includes/logout.inc.php" class="logout">Déconnexion</a></li>
                 </ul>
             </nav>
         </div>
@@ -238,15 +214,13 @@ if ($result->num_rows > 0) {
     <div class="modal-content">
         <span class="close">&times;</span>
         <form id="proposalForm" method="post" action="submit_proposal.php">
-        <label for="DepartureLocation">Lieu de départ</label>
-<input type="text" id="departureInput" placeholder="Saisissez le lieu de départ" />
-<input type="hidden" name="DepartureLocation" id="departureLocation" required>
-<br/>
+            <label for="DepartureLocation">Lieu de départ</label>
+            <input type="text" placeholder="Saisissez le lieu de départ" name="DepartureLocation" id="departureLocation" required>
+            <br/>
 
-<label for="Destination">Destination</label>
-<input type="text" id="destinationInput" placeholder="Saisissez la destination" />
-<input type="hidden" name="Destination" id="destinationLocation" required>
-<br/>
+            <label for="Destination">Destination</label>
+            <input type="text" name="Destination" placeholder="Saisissez la destination" id="destinationLocation" required>
+            <br/>
 
             <label for="DepartureTime">Date et Heure</label>
             <input placeholder="Quand partez-vous ?" class="flatpickr" type="datetime-local" name="DepartureTime" required>

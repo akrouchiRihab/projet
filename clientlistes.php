@@ -1,186 +1,340 @@
-<?php 
-require_once 'includes/config_session.inc.php';
-require_once 'includes/login_view.inc.php';
-require_once 'includes/search_view.inc.php';
-require_once 'includes/search_model.inc.php';
-require_once 'includes/dbh.inc.php';
- 
+<?php
+session_start();
+require_once('includes/db_connect.php'); // Include your database connection file
 
-$result=[];
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+  if (isset($_SESSION["user_id"])) {
+    $userID = $_SESSION["user_id"];
+    $RideID = $_POST["RideID"];
+    $DepartureLocation = $_POST["DepartureLocation"];
+    $Destination = $_POST["Destination"];
+    $DepartureTime = $_POST["DepartureTime"];
+    $AvailableSeats = $_POST["AvailableSeats"];
+    $price = $_POST["price"];
+    
+    // Insert the data into the database (assuming you have a 'trajet' table)
+    $sql = "INSERT INTO trajet (DepartureLocation, Destination, DepartureTime, AvaailableSeats, price) VALUES ('$DepartureLocation', '$Destination', '$DepartureTime', '$AvailableSeats', '$price')";
+    mysqli_query($conn, $sql);
 
+    // Close the database connection
+    mysqli_close($conn);
+
+    // Redirect to the current page after submitting
+    header('Location: ' . $_SERVER['HTTP_REFERER']);
+    exit();
+   } else {
+    // Rediriger vers la page de connexion si l'utilisateur n'est pas connecté
+    header("Location: login.php");
+    exit();
+}
+}
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
- 
-  <script src="https://cdn.jsdelivr.net/npm/smooth-scroll@16.1.3/dist/smooth-scroll.polyfills.min.js"></script>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+    <link rel="stylesheet" href="https://www.bing.com/api/maps/mapcontrol?key=ApE-HNGaFCRDs_bsmYj3Dgak-HaLSYWyN7K35FxHQXjQt8ePrxpy8_uvZoXESwIg&callback=loadMapScenario" async defer>
+    <script type='text/javascript' src='https://www.bing.com/api/maps/mapcontrol?key=ApE-HNGaFCRDs_bsmYj3Dgak-HaLSYWyN7K35FxHQXjQt8ePrxpy8_uvZoXESwIg'></script> 
+    <script src="https://cdn.jsdelivr.net/npm/smooth-scroll@16.1.3/dist/smooth-scroll.polyfills.min.js"></script>
+    <script src='https://kit.fontawesome.com/a076d05399.js' crossorigin='anonymous'></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style2.css">
+    <title>Client</title>
+    <script>
+        var scroll = new SmoothScroll('a[href*="#"]');
+    </script>
+    <style>
+        .main{
+    min-height: auto;
+    
+}
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.4);
+}
 
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
-  
-  
+.modal-content {
+    background-color: #fefefe;
+    margin: 3% auto;
+    padding: 25px;
+    border: 1px solid #888;
+    width: 60%;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border-radius: 4px;
+}
 
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <link rel="stylesheet" href="css/style.css">
-  <title>Acceuil</title>
-  <script>
-    var scroll = new SmoothScroll('a[href*="#"]');
-  </script>
+.close {
+    color: #aaaaaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: #000;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.modal-content form label {
+    justify-content: center;
+    align-items: center;
+    font-size: 16px;
+    font-weight: bold;
+    margin-bottom: 5px;
+    display: inline-block;
+    width: 35%;
+}
+
+.modal-content form input {
+    align-items: center;
+    font-size: 16px;
+    padding: 8px;
+    margin-bottom: 15px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    display: inline-block;
+    width: 50%;
+}
+.modal-content form input[type="submit"] {
+    background-color: #4CAF50;
+    color: white;
+    cursor: pointer;
+    align-items: center;
+    justify-content: center;
+    margin-left: 35%;
+    width:30%;
+}
+
+.modal-content form input[type="submit"]:hover {
+    background-color: #45a049;
+}
+/* Style the button that opens the modal */
+.modal button {
+    background-color: #3e1f92;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+    text-align: center;
+    display: inline-block;
+    font-size: 15px;
+    margin: 4px 2px;
+    transition: 0.3s;
+    border-radius: 4px;
+}
+
+/* Change the background color of the button on hover */
+.modal button:hover {
+    background-color: #3e1f91;
+}
+
+.div-content {
+    font-size: 0; /* Fix pour éliminer l'espace blanc entre les éléments inline-block */
+}
+
+.station {
+    display: inline-block;
+    width: 48%; /* Ajuste la largeur pour deux éléments par ligne */
+    margin-bottom: 20px;
+    margin-right: 20px;
+    background-color: #f5f5f5;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 10px;
+    box-sizing: border-box;
+    vertical-align: top; /* Ajuste l'alignement vertical au sommet */
+    font-size: 16px; /* Réinitialise la taille de la police après le fix de font-size: 0; */
+}
+
+.station h2,
+.passenger h2 {
+    font-size: 18px;
+    font-weight: bold;
+    margin-right: 10px;
+}
+
+.station p,
+.passenger p {
+    font-size: 16px;
+    color: #333;
+}
+
+.station p {
+    font-size: 16px;
+    margin-right: 10px;
+}
+
+.station h2 {
+    font-size: 18px;
+    font-weight: bold;
+    margin-right: 10px;
+}
 
 
-</head>
 
-<body class="client" >
+#bingMap {
+    display: flex;
+    flex: 1;
+    height: 400px; 
+    width: 100%;
+}
 
-  
-  <!-- start header-->
-  <div class="main">
-    <header>
-      <div class="container">
-
-
-        <a href="#"><img class="logo" src="images/logo.png"></a>
-
-
-        <nav class="navigation">
-          <ul>
-            <li><a href="#" class="home"> Acceuil</a></li>
-
-            <li><a href="#contact">Contact</a></li>
-            <li><a href="#about"> À propos</a></li>
-            <li>
-            <?php 
-         if(isset($_SESSION["user_id"])){ ?>
-              
-      <form action="includes/logout.inc.php" method="post">
-         <button class="logout-icon"><i class="fa-solid fa-right-from-bracket" ></i></button>
-      </form>
-        <?php }
-        ?>
-            </li>
-          </ul>
-          
-        </nav>
-
-
-      </div>
-
-    </header>
-    <div class="container">
-      
-  <style>
-
-        .square {
-            align-items: center;
-            border-radius: 10px;
-            width: 500px;
-            height: 300px;
-            border-color: gray;
-            box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.1);
-            background-color: whitesmoke; /* Couleur de fond des carrés */
-            margin: 10px; /* Marge entre les carrés */
-        }
     </style>
-  <?php  
-   $rideId = 1; // Remplacez 1 par l'ID du trajet que vous souhaitez afficher
-   $sql = "SELECT DepartureLocation, Destination, DepartureTime, DriverID FROM Rides WHERE RideID = :rideId";
-
-   // Préparation de la requête
-   $stmt = $pdo->prepare($sql);
-   $stmt->bindParam(':rideId', $rideId, PDO::PARAM_INT);
-
-   // Exécution de la requête
-   $stmt->execute();
-
-   // Récupération des résultats
-   $row = $stmt->fetch(PDO::FETCH_ASSOC);
-
-   if ($row) {
-       // Afficher les données
-       echo "<p>Départ: " . $row["DepartureLocation"] . "</p>";
-       echo "<p>Destination: " . $row["Destination"] . "</p>";
-       echo "<p>Heure de départ: " . $row["DepartureTime"] . "</p>";
-       echo "<p>Conducteur: " . $row["Driver"] . "</p>";
-   }
-  ?>
+</head>
+<body>
+<div class="main">
+    <header>
+        <div class="container">
+            <a href="#"><img class="logo" src="images/logo2.png"></a>
+    
+            <nav class="navigation">
+                <ul>
+                     <li>
+                     <li class="nav1"><a href="clientlistes.php">listes trajets</a></li>
+                     <li class="nav1"><a href="reservation.php">Mes reservations</a></li>
+                    <?php
+                     $userID = $_SESSION["user_id"]; 
+                    ?>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+    </div>
     <div class="container">
-        <h1>Trajets</h1>
-        <div class="square">
-    <form id="rideForm">
-        Départ: <input type="text" name="departure_location" required>
-        <br>
-        Destination: <input type="text" name="destination" required>
-        <br>
-        Heure de départ: <input type="datetime-local" name="departure_time" required>
-        <br>
-        Conducteur: <input type="text" name="driver" required>
-        <br>
-        <button type="button" onclick="submitForm()">Soumettre</button>
-    </form>
+        <div class="col-2">
+            <br/>
+            <a id="openModal" class="proposer_btn" >+ rechercher un trajet</a>
+        </div>
+        <br/>
+        <div>
+            <div class="div-content">
+            <?php
+// Fetch data from the database
+$sql = "SELECT * FROM rides WHERE AvailableSeats > 0";
+
+$result = $conn->query($sql);
+
+if ($result->num_rows > 0) {
+    // Output data of each row
+    while ($row = $result->fetch_assoc()) {
+        echo '<a style=" height:auto;" href="rechercher.php?RideID=' . urlencode($row["RideID"]) . '">';
+        echo '<div class="station">';
+        echo '<p style="font-weight: bold; text-align: center;">' . $row["DepartureTime"] . '</p>';
+        echo '<br/>';
+        echo '<span style="color: black; text-decoration: none; font-size: 20px; display: inline-block;" class="fas fa-map-marker-alt"></span>     <p style=" display: inline-block;">' . $row["DepartureLocation"] . '</p>';
+        if ($row["price"] !== "") {
+            echo '<p style=" font-weight: bold; margin-left: 85% ; display: inline-block;" class="price" style="margin-left: 250px;">' . $row["price"] . '</p>';
+        }
+        echo '<br/>';
+        echo '<span style="color: black; text-decoration: none; font-size: 20px; display: inline-block;" class="fas fa-flag"></span>     <p style=" display: inline-block;"> ' . $row["Destination"] . '</p>';
+        echo '<p style="display: inline-block; font-size: 30px; margin-left: 80%;">' . $row["AvailableSeats"] . '</p><img style="display: inline-block;  width: 7%; height:7%;" src="images/car-seat.png"/>';
+        echo '</div>';
+        echo '</a>';
+    }
+} else {
+    echo "0 results";
+}
+?>
+      
 </div>
-
-        <div class="square"></div>
-        <div class="square"></div>
-        <div class="square"></div>
-        <div class="square"></div>
-        <div class="square"></div>
-        <!-- Ajoutez plus de carrés si nécessaire -->
-    </div>
-
-
-    </div>
-  </div>
-  <!-- end header-->
-
- 
-
-  <!--end about section-->
-  
-  
-
-  <!--footer-->
-  <footer id="contact">
-    <div class="container">
-      <div class="flex-box">
-        <div class="img">
-          <img src="images/logo.png">
         </div>
-
-        <div class="contact-foot">
-          <h2>Contact</h2>
-          <p>Bonjour, nous sommes toujours
-            ouverts à la coopération et aux suggestions
-            . Contactez-nous de l'une des manières suivantes :
-          </p>
-          <span>Adresse</span>
-          <p>USTHB Bab-zouar</p>
-          <span>phone</span>
-          <p>+0123 4567 8910</p>
-          <span>Email</span>
-          <p>pweb@usthb.dz</p>
-         
-        </div>
-       
-      </div>
-
     </div>
+    <div id="myModal" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <form id="proposalForm" method="post" action="submit_proposal.php">
+            <label for="DepartureLocation">Lieu de départ</label>
+            <input type="text" id="departureInput" placeholder="Saisissez le lieu de départ" />
+            <input type="hidden" name="DepartureLocation" id="departureLocation" required>
+            <br/>
 
-    <div class="bottom">
-      <p>Powered by <span>USTHB</span> - Designed by <span>Algerian students</span></p>
+            <label for="Destination">Destination</label>
+            <input type="text" id="destinationInput" placeholder="Saisissez la destination" />
+            <input type="hidden" name="Destination" id="destinationLocation" required>
+            <br/>
+
+            <label for="DepartureTime">Date et Heure</label>
+            <input placeholder="Quand partez-vous ?" class="flatpickr" type="datetime-local" name="DepartureTime" required>
+            <br/>
+            
+            <label for="AvailableSeats">Nombre de places </label>
+            <input placeholder="Combien de passagers pouvez-vous accepter ?" type="number" name="AvailableSeats" required>
+            <br/>
+            <label for="price">Prix </label>
+            <input placeholder="Fixez votre prix par place"  type="text" name="price" required>
+            <br/><br/>
+            <div id="map" style="z-index: 1; display: inline-block; height: 400px; width: 50%; margin-top: 1%;"></div>
+    
+            <input type="submit" value="Rechecher">
+        </form>
     </div>
-  </footer>
-  <!--end footer-->
-
-  <script src="js/homepage.js"></script>
-  <script src="js/geo.js"></script>
-  
-  
- 
- 
-
+    
+</div>
+</div>
 </body>
+<script>
+    var modal = document.getElementById("myModal");
+    var btn = document.getElementById("openModal");
+    var span = document.getElementsByClassName("close")[0];
+    btn.onclick = function() {
+        modal.style.display = "block";
+    }
+    span.onclick = function() {
+        modal.style.display = "none";
+    }
+    window.onclick = function(event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
+    }
+</script>
+<script>
+        flatpickr(".flatpickr", {
+            enableTime: true,
+            dateFormat: "Y-m-d H:i",
+            // Ajoutez d'autres options selon vos besoins
+        });
+</script>
+<script>
+    function initMap() {
+        var myLatLng;
+
+        // Check if userCoordinates is not empty
+        if (Object.keys(userCoordinates).length !== 0) {
+            myLatLng = [userCoordinates.lat, userCoordinates.lng];
+        }
+
+        // Utiliser Leaflet pour créer une carte
+        var map = L.map('map').setView(myLatLng, 15);
+
+        // Ajouter une couche OpenStreetMap à la carte
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '© OpenStreetMap contributors'
+        }).addTo(map);
+
+        // Ajouter un marqueur à la position de l'utilisateur
+        if (myLatLng) {
+            L.marker(myLatLng).addTo(map)
+                .bindPopup('User Location')
+                .openPopup();
+        }
+    }
+</script>
+
 
 </html>
