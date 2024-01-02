@@ -2,25 +2,6 @@
 session_start();
 require_once('../includes/db_connect.php'); // Include your database connection file
 
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $RideID = $_POST["RideID"];
-    $DepartureLocation = $_POST["DepartureLocation"];
-    $Destination = $_POST["Destination"];
-    $DepartureTime = $_POST["DepartureTime"];
-    $AvailableSeats = $_POST["AvailableSeats"];
-    $price = $_POST["price"];
-    
-    // Insert the data into the database (assuming you have a 'trajet' table)
-    $sql = "INSERT INTO trajet (DepartureLocation, Destination, DepartureTime, AvaailableSeats, price) VALUES ('$DepartureLocation', '$Destination', '$DepartureTime', '$AvailableSeats', '$price')";
-    mysqli_query($conn, $sql);
-
-    // Close the database connection
-    mysqli_close($conn);
-
-    // Redirect to the current page after submitting
-    header('Location: ' . $_SERVER['HTTP_REFERER']);
-    exit();
-}
 ?>
 
 <!DOCTYPE html>
@@ -28,9 +9,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
-    <link rel="stylesheet" href="https://www.bing.com/api/maps/mapcontrol?key=ApE-HNGaFCRDs_bsmYj3Dgak-HaLSYWyN7K35FxHQXjQt8ePrxpy8_uvZoXESwIg&callback=loadMapScenario" async defer>
-    <script type='text/javascript' src='https://www.bing.com/api/maps/mapcontrol?key=ApE-HNGaFCRDs_bsmYj3Dgak-HaLSYWyN7K35FxHQXjQt8ePrxpy8_uvZoXESwIg'></script> 
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">  
     <script src="https://cdn.jsdelivr.net/npm/smooth-scroll@16.1.3/dist/smooth-scroll.polyfills.min.js"></script>
     <script src='https://kit.fontawesome.com/a076d05399.js' crossorigin='anonymous'></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
@@ -176,16 +155,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     font-weight: bold;
     margin-right: 10px;
 }
-
-
-
-#bingMap {
-    display: flex;
-    flex: 1;
-    height: 400px; 
-    width: 100%;
-}
-
     </style>
 </head>
 <body>
@@ -197,9 +166,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <nav class="navigation">
                 <ul>
                     <li class="nav1"><a href="reservation.php" class="home">Voir Réservations</a></li>
-                    <li>
-                        
-                    </li>
+                    <li><a href="../includes/logout.inc.php" class="logout">Déconnexion</a></li>
                 </ul>
             </nav>
         </div>
@@ -248,13 +215,11 @@ if ($result->num_rows > 0) {
         <span class="close">&times;</span>
         <form id="proposalForm" method="post" action="submit_proposal.php">
             <label for="DepartureLocation">Lieu de départ</label>
-            <input type="text" id="departureInput" placeholder="Saisissez le lieu de départ" />
-            <input type="hidden" name="DepartureLocation" id="departureLocation" required>
+            <input type="text" placeholder="Saisissez le lieu de départ" name="DepartureLocation" id="departureLocation" required>
             <br/>
 
             <label for="Destination">Destination</label>
-            <input type="text" id="destinationInput" placeholder="Saisissez la destination" />
-            <input type="hidden" name="Destination" id="destinationLocation" required>
+            <input type="text" name="Destination" placeholder="Saisissez la destination" id="destinationLocation" required>
             <br/>
 
             <label for="DepartureTime">Date et Heure</label>
@@ -267,12 +232,9 @@ if ($result->num_rows > 0) {
             <label for="price">Prix </label>
             <input placeholder="Fixez votre prix par place"  type="text" name="price" required>
             <br/><br/>
-            <div id="map" style="z-index: 1; display: inline-block; height: 400px; width: 50%; margin-top: 1%;"></div>
-    
             <input type="submit" value="Proposer">
         </form>
     </div>
-    
 </div>
 </div>
 </body>
@@ -299,31 +261,4 @@ if ($result->num_rows > 0) {
             // Ajoutez d'autres options selon vos besoins
         });
 </script>
-<script>
-    function initMap() {
-        var myLatLng;
-
-        // Check if userCoordinates is not empty
-        if (Object.keys(userCoordinates).length !== 0) {
-            myLatLng = [userCoordinates.lat, userCoordinates.lng];
-        }
-
-        // Utiliser Leaflet pour créer une carte
-        var map = L.map('map').setView(myLatLng, 15);
-
-        // Ajouter une couche OpenStreetMap à la carte
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '© OpenStreetMap contributors'
-        }).addTo(map);
-
-        // Ajouter un marqueur à la position de l'utilisateur
-        if (myLatLng) {
-            L.marker(myLatLng).addTo(map)
-                .bindPopup('User Location')
-                .openPopup();
-        }
-    }
-</script>
-
-
 </html>
