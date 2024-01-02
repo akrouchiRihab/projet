@@ -214,7 +214,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <div class="div-content">
             <?php
 // Fetch data from the database
-$sql = "SELECT * FROM rides WHERE AvailableSeats >= 0";
+$sql = "SELECT * FROM rides WHERE AvailableSeats > 0";
 
 $result = $conn->query($sql);
 
@@ -269,7 +269,7 @@ if ($result->num_rows > 0) {
             <br/><br/>
             <div id="map" style="z-index: 1; display: inline-block; height: 400px; width: 50%; margin-top: 1%;"></div>
     
-            <input type="submit" value="Proposer">
+            <input type="submit" value="Rechecher">
         </form>
     </div>
     

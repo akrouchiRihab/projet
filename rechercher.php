@@ -128,11 +128,15 @@ if (isset($_GET['RideID'])) {
             <h3><?php echo $dayOfWeek . ' ' . $departureTime; ?></h3>
             <p><strong>Depart:</strong> <a href="#" onclick="showMap('<?php echo $departureLocation; ?>')"><?php echo $departureLocation; ?></a></p>
             <p><strong>Destination:</strong> <a href="#" onclick="showMap('<?php echo $destination; ?>')"><?php echo $destination; ?></a></p>
+            <p><strong>Nombre de places:<?php echo $availableSeats; ?></strong>
             <br/>
             <hr>
         </div><br><br>
-        <button type="submit" class="proposer_btn">Réserver</button>
+        <form action="process_reservation.php" method="post">
+    <input type="hidden" name="ride_id" value="<?php echo $RideID; ?>">
+    <button type="submit" class="proposer_btn">Réserver</button>
 </form>
+
 </div>
     <div id="map" style="z-index: -5; display: inline-block; height: 400px; width: 50%; margin-top: 1%;"></div>
  
