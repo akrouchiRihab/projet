@@ -20,4 +20,17 @@ function get_id(object $pdo, string $email){
 
     $result = $stmt->fetch(PDO::FETCH_ASSOC);
     return $result;
+
 }
+function get_user_id(object $pdo, string $email): int
+{
+    $result = get_email($pdo, $email);
+
+    if (!is_email_wrong($result)) {
+        return (int)$result["UserId"];
+    }
+
+    return 0; // Retourne 0 si l'e-mail n'est pas trouvé
+}
+
+?>
