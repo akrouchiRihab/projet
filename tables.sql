@@ -21,6 +21,7 @@ CREATE TABLE Rides (
     Destination VARCHAR(100),
     DepartureTime DATETIME,
     AvailableSeats INT,
+    price INT,
     FOREIGN KEY (DriverID) REFERENCES Users(UserID) 
 );
 

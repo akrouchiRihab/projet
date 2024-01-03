@@ -47,7 +47,8 @@ if($_SERVER["REQUEST_METHOD"]==="POST"){
          create_user($pdo,$email, $firstname ,$lastname,$pwd,$phone,$role);
 
          $id=get_id($pdo , $email);
-         $_SESSION["user_id"] = (int) $id["UserId"];
+         $_SESSION["UserID"] = (int) $id["UserID"];
+        
          $_SESSION["user_role"] = $role;
 
          $pdo=null;

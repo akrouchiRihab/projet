@@ -9,6 +9,7 @@ function get_email(object $pdo,string $email){
     $stmt->execute();
 
     $result = $stmt->fetch(PDO::FETCH_ASSOC);
+   
     return $result;
 }
 
@@ -19,5 +20,6 @@ function get_id(object $pdo, string $email){
     $stmt->execute();
 
     $result = $stmt->fetch(PDO::FETCH_ASSOC);
+    
     return $result;
 }

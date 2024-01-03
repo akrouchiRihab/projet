@@ -4,7 +4,7 @@
     <link rel="stylesheet" href="../css/login.css">
 </head>
 <?php
-
+ 
 function output_username()
 {
     if (isset($_SESSION["user_id"])) {

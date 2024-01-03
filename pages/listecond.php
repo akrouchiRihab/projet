@@ -1,5 +1,5 @@
 <?php
-session_start();
+require_once '../includes/config_session.inc.php';
 require_once('../includes/db_connect.php'); // Include your database connection file
 
 ?>
@@ -182,11 +182,17 @@ require_once('../includes/db_connect.php'); // Include your database connection 
             <div class="div-content">
             <?php
 // Fetch data from the database
-$sql = "SELECT * FROM rides";
-$result = $conn->query($sql);
+
+/*$result = $conn->query($sql);*/
+
+$DriverID = $_SESSION["UserID"];
+$sql = "SELECT * FROM rides WHERE DriverID = ?";
+$statement = $conn->prepare($sql);
+$statement->bind_param('i', $DriverID);
+$statement->execute();
+$result = $statement->get_result();
 
 if ($result->num_rows > 0) {
-    // Output data of each row
     while ($row = $result->fetch_assoc()) {
         echo '<a style=" height:auto;" href="plan_route.php?RideID=' . urlencode($row["RideID"]) . '">';
         echo '<div class="station">';

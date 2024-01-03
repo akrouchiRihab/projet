@@ -51,7 +51,7 @@ require_once 'includes/search_model.inc.php';
             <li><a href="#about"> À propos</a></li>
             <li>
             <?php 
-         if(isset($_SESSION["user_id"])){ ?>
+         if(isset($_SESSION["UserID"])){ ?>
               
       <form action="includes/logout.inc.php" method="post">
          <button class="logout-icon"><i class="fa-solid fa-right-from-bracket" ></i></button>
@@ -72,19 +72,22 @@ require_once 'includes/search_model.inc.php';
         <h1><span>Trouvez</span> votre trajet en quelques clics <br>ou proposez votre propre <br>trajet dès maintenant!</h1>
         <!--<p>Des innovations technologiques pour stimuler<br> votre croissance et votre efficacité</p> -->
         <?php 
-         if(!isset($_SESSION["user_id"])){ ?>
+         if(!isset($_SESSION["UserID"])){ ?>
              <a href="signin.php" class="signin_btn" id="signInLink" onclick="signIn()">S'inscrire</a>
         <a href="login.php" class="login_btn" id="loginLink" onclick="login()">Se connecter</a>
         <?php }
         ?>
         <?php 
-         if(isset($_SESSION["user_id"]) && isset($_SESSION["user_role"]) && $_SESSION["user_role"] == 'driver'){ ?>
-             <a href="pages/listecond.php" class="proposer_btn" >proposer un trajet</a>  <?php }
+       
+         if(isset($_SESSION["UserID"]) && isset($_SESSION["user_role"]) && $_SESSION["user_role"] == 'driver'){ ?>
+             <a href="pages/listecond.php" class="proposer_btn" >proposer un trajet</a>  <?php  echo "User ID in session: " . $_SESSION["UserID"];
+             } 
         
-         if(isset($_SESSION["user_id"]) && isset($_SESSION["user_role"]) && $_SESSION["user_role"] == 'passenger'){ ?>
+         if(isset($_SESSION["UserID"]) && isset($_SESSION["user_role"]) && $_SESSION["user_role"] == 'passenger'){  echo $_SESSION["id"];
+         ?>
         <a href="clientlistes.php" class="reserver_btn"  >réserver un trajet</a>
-        <?php } ?>
-        
+        <?php }   ?>
+       
       </div>
      
     </div>
