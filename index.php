@@ -78,12 +78,11 @@ require_once 'includes/search_model.inc.php';
         <?php }
         ?>
         <?php 
-         if(isset($_SESSION["user_id"]) && isset($_SESSION["user_role"]) && $_SESSION["user_role"] == 'driver'){ ?>
-             <a href="pages/listecond.php" class="proposer_btn" >proposer un trajet</a>  <?php }
-        
-         if(isset($_SESSION["user_id"]) && isset($_SESSION["user_role"]) && $_SESSION["user_role"] == 'passenger'){ ?>
-        <a href="clientlistes.php" class="reserver_btn"  >réserver un trajet</a>
-        <?php } ?>
+         if(isset($_SESSION["user_id"])){//role ? ?>
+             <a href="pages/listecond.php" class="proposer_btn" >proposer un trajet</a>
+        <a href="login.php" class="reserver_btn"  >réserver un trajet</a>
+        <?php }
+        ?>
         
       </div>
      

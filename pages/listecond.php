@@ -233,6 +233,9 @@ if ($result->num_rows > 0) {
             <label for="price">Prix </label>
             <input placeholder="Fixez votre prix par place"  type="text" name="price" required>
             <br/><br/>
+            <?php if (isset($errorMessage)): ?>
+            <div style="color: red; z-index:1; width: 80%;"><?php echo $errorMessage; ?></div>
+            <?php endif; ?>
             <input type="submit" value="Proposer">
         </form>
     </div>
