@@ -3,8 +3,8 @@ session_start();
 require_once('includes/db_connect.php'); // Include your database connection file
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-  if (isset($_SESSION["user_id"])) {
-    $userID = $_SESSION["user_id"];
+  if (isset($_SESSION["UserID"])) {
+    $userID = $_SESSION["UserID"];
     $RideID = $_POST["RideID"];
     $DepartureLocation = $_POST["DepartureLocation"];
     $Destination = $_POST["Destination"];
@@ -207,7 +207,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                      <li class="nav1"><a href="clientlistes.php">listes trajets</a></li>
                      <li class="nav1"><a href="reservation.php">Mes reservations</a></li>
                     <?php
-                     $userID = $_SESSION["user_id"]; 
+                     $userID = $_SESSION["UserID"]; 
                     ?>
                     </li>
                 </ul>

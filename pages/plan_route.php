@@ -2,6 +2,31 @@
 // Include your database connection file
 require_once('../includes/db_connect.php');
 
+// Check if rideID is provided in the URL for deletion
+if (isset($_GET['deleteID'])) {
+    $deleteID = $_GET['deleteID'];
+
+    // Supprimer d'abord les enregistrements liés dans la table "reservations"
+    $deleteReservationsQuery = "DELETE FROM reservations WHERE RideID = '$deleteID'";
+    if ($conn->query($deleteReservationsQuery) === TRUE) {
+        // Ensuite, supprimer la ligne dans la table "rides"
+        $deleteRideQuery = "DELETE FROM rides WHERE RideID = '$deleteID'";
+        if ($conn->query($deleteRideQuery) === TRUE) {
+            // Redirect to the same page after deleting
+            header('Location: listecond.php');
+            exit();
+        } else {
+            // Handle errors
+            echo "Error deleting record: " . mysqli_error($conn);
+            exit();
+        }
+    } else {
+        // Handle errors
+        echo "Error deleting reservations: " . mysqli_error($conn);
+        exit();
+    }
+}
+
 // Check if rideID is provided in the URL for fetching details
 if (isset($_GET['RideID'])) {
     $RideID = $_GET['RideID'];
@@ -21,57 +46,6 @@ if (isset($_GET['RideID'])) {
         $dayOfWeek = $dateObj->format('l');
         $availableSeats = $row["AvailableSeats"];
         $price = $row["price"];
-
-        // Include the Bing Maps JavaScript SDK
-        echo '<script type="text/javascript" src="https://www.bing.com/api/maps/mapcontrol?key=ApE-HNGaFCRDs_bsmYj3Dgak-HaLSYWyN7K35FxHQXjQt8ePrxpy8_uvZoXESwIg&callback=loadMapScenario" async defer></script>';
-
-        // Function to load Bing Maps
-        echo '<script type="text/javascript">
-            function loadMapScenario() {
-                var map = new Microsoft.Maps.Map(document.getElementById("map"), {
-                    credentials: "ApE-HNGaFCRDs_bsmYj3Dgak-HaLSYWyN7K35FxHQXjQt8ePrxpy8_uvZoXESwIg"
-                });
-
-                // Add pushpins for departure and destination
-                var departureLocation = new Microsoft.Maps.Location(' . json_encode($departureLocation) . ');
-                var destination = new Microsoft.Maps.Location(' . json_encode($destination) . ');
-
-                var departurePin = new Microsoft.Maps.Pushpin(departureLocation);
-                var destinationPin = new Microsoft.Maps.Pushpin(destination);
-
-                map.entities.push(departurePin);
-                map.entities.push(destinationPin);
-
-                // Calculate and display directions
-                Microsoft.Maps.loadModule("Microsoft.Maps.Directions", function () {
-                    var directionsManager = new Microsoft.Maps.Directions.DirectionsManager(map);
-
-                    directionsManager.setRequestOptions({
-                        routeMode: Microsoft.Maps.Directions.RouteMode.driving,
-                        routeDraggable: false
-                    });
-
-                    var waypoint1 = new Microsoft.Maps.Directions.Waypoint({
-                        address: ' . json_encode($departureLocation) . ',
-                        location: departureLocation
-                    });
-
-                    var waypoint2 = new Microsoft.Maps.Directions.Waypoint({
-                        address: ' . json_encode($destination) . ',
-                        location: destination
-                    });
-
-                    directionsManager.addWaypoint(waypoint1);
-                    directionsManager.addWaypoint(waypoint2);
-
-                    directionsManager.setRenderOptions({
-                        autoUpdateMapView: true
-                    });
-
-                    directionsManager.calculateDirections();
-                });
-            }
-        </script>';
     } else {
         // Handle case where rideID is not found
         echo "Ride not found";
@@ -83,6 +57,7 @@ if (isset($_GET['RideID'])) {
     exit();
 }
 ?>
+
 
 
 <!DOCTYPE html>
@@ -133,7 +108,7 @@ if (isset($_GET['RideID'])) {
             <hr>
             <p style="margin:2%;">Aucun passager pour ce trajet</p>
             <hr>
-        </div><br><br>
+        </div>
         <div class="parametre">
             <a class="edit" href="edit_trip.php?RideID=<?php echo urlencode($RideID); ?>"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Modifier votre trajet</a> 
             <a class="delete" href="#" onclick="confirmDelete('<?php echo urlencode($RideID); ?>')">

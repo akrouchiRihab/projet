@@ -156,6 +156,9 @@ require_once('../includes/db_connect.php'); // Include your database connection 
     font-weight: bold;
     margin-right: 10px;
 }
+.navigation{
+    margin-left:50%;
+}
     </style>
 </head>
 <body>
@@ -166,7 +169,7 @@ require_once('../includes/db_connect.php'); // Include your database connection 
     
             <nav class="navigation">
                 <ul>
-                    <li class="nav1"><a href="../reservation.php" class="home">Voir Réservations</a></li>
+                    <li><a href="../reservation.php" class="logout">Voir Réservations</a></li>
                     <li><a href="../includes/logout.inc.php" class="logout">Déconnexion</a></li>
                 </ul>
             </nav>
@@ -223,6 +226,7 @@ if ($result->num_rows > 0) {
         <form id="proposalForm" method="post" action="submit_proposal.php">
             <label for="DepartureLocation">Lieu de départ</label>
             <input type="text" placeholder="Saisissez le lieu de départ" name="DepartureLocation" id="departureLocation" required>
+            <button><a alt="votre location" class='fas fa-map-marker-alt'></a></button>
             <br/>
 
             <label for="Destination">Destination</label>
@@ -239,9 +243,12 @@ if ($result->num_rows > 0) {
             <label for="price">Prix </label>
             <input placeholder="Fixez votre prix par place"  type="text" name="price" required>
             <br/><br/>
-            <?php if (isset($errorMessage)): ?>
-            <div style="color: red; z-index:1; width: 80%;"><?php echo $errorMessage; ?></div>
+           
+            <?php if (isset($_SESSION['errorMessages'])): ?>
+                <div style="color: red; width: 80%; margin-bottom: 10px;"><?php echo $_SESSION['errorMessages']; ?></div>
+                <?php unset($_SESSION['errorMessages']); // Effacer les messages après les avoir affichés ?>
             <?php endif; ?>
+            
             <input type="submit" value="Proposer">
         </form>
     </div>

@@ -44,7 +44,7 @@ if($_SERVER["REQUEST_METHOD"]==="POST"){
             die();
           }
 
-          /*if(isset($result['Role'])){
+          if(isset($result['Role'])){
             echo'yes';
             $_SESSION["user_id"] = (int) $id["UserId"];
             $userID = $_SESSION["user_id"];
@@ -55,7 +55,7 @@ if($_SERVER["REQUEST_METHOD"]==="POST"){
               header('Location: ../clientlistes.php');
               exit();
           }
-          }*/
+          }
           
           
           $_SESSION["user_fname"] = htmlspecialchars($result["FirstName"]); 
