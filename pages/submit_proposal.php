@@ -15,24 +15,28 @@ if (isset($_SESSION["UserID"])) {
     $AvailableSeats = $_POST["AvailableSeats"];
     $price = $_POST["price"];
 
-    // Insérer les données dans la base de données
-    $sql = "INSERT INTO rides (DriverID, DepartureLocation, Destination, DepartureTime, AvailableSeats, price) 
-            VALUES ('$DriverID', '$DepartureLocation', '$Destination', '$DepartureTime', '$AvailableSeats', '$price')";
+           
 
-    if ($conn->query($sql) === TRUE) {
-        echo "Nouvel enregistrement créé avec succès";
-    } else {
-        echo "Erreur : " . $sql . "<br>" . $conn->error;
-    }
+            // Insérer les données dans la base de données
+            $sql = "INSERT INTO rides (DriverID, DepartureLocation, Destination, DepartureTime, AvailableSeats, price) 
+                    VALUES ('$DriverID', '$DepartureLocation', '$Destination', '$DepartureTime', '$AvailableSeats', '$price')";
 
+            if ($pdo->query($sql) === TRUE) {
+                echo "Nouvel enregistrement créé avec succès";
+            } else {
+                echo "Erreur : " . $sql . "<br>" . $pdo->error;
+            }
+
+          
     // Fermer la connexion à la base de données
     $conn->close();
 
     // Rediriger vers la page précédente après la soumission
     header('Location: ' . $_SERVER['HTTP_REFERER']);
     exit();
-} else if (!isset($_SESSION["user_id"])){
+} else if (!isset($_SESSION["UserID"])){
     echo "L'utilisateur n'est pas connecté.";
 }
 
 ?>
+
