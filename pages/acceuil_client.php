@@ -1,109 +1,524 @@
+<?php
+session_start();
+require_once('../includes/db_connect.php'); // Include your database connection file
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+  if (isset($_SESSION["UserID"])) {
+    $UserID = $_SESSION["UserID"];
+    $RideID = $_POST["RideID"];
+    $DepartureLocation = $_POST["DepartureLocation"];
+    $Destination = $_POST["Destination"];
+    $DepartureTime = $_POST["DepartureTime"];
+    $AvailableSeats = $_POST["AvailableSeats"];
+    $price = $_POST["price"];
+    
+    // Insert the data into the database (assuming you have a 'trajet' table)
+    $sql = "INSERT INTO trajet (DepartureLocation, Destination, DepartureTime, AvaailableSeats, price) VALUES ('$DepartureLocation', '$Destination', '$DepartureTime', '$AvailableSeats', '$price')";
+    mysqli_query($conn, $sql);
+
+    // Close the database connection
+    mysqli_close($conn);
+
+    // Redirect to the current page after submitting
+    header('Location: ' . $_SERVER['HTTP_REFERER']);
+    exit();
+   } else {
+    // Rediriger vers la page de connexion si l'utilisateur n'est pas connecté
+    header("Location: login.php");
+    exit();
+}
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Bing Maps Location Selection</title>
-    <meta charset="utf-8" />
+<meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+    <link rel="stylesheet" href="https://www.bing.com/api/maps/mapcontrol?key=ApE-HNGaFCRDs_bsmYj3Dgak-HaLSYWyN7K35FxHQXjQt8ePrxpy8_uvZoXESwIg&callback=loadMapScenario" async defer>
+    <script type='text/javascript' src='https://www.bing.com/api/maps/mapcontrol?key=ApE-HNGaFCRDs_bsmYj3Dgak-HaLSYWyN7K35FxHQXjQt8ePrxpy8_uvZoXESwIg'></script> 
+    <script src="https://cdn.jsdelivr.net/npm/smooth-scroll@16.1.3/dist/smooth-scroll.polyfills.min.js"></script>
+    <script src='https://kit.fontawesome.com/a076d05399.js' crossorigin='anonymous'></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../css/style2.css">
+    <title>Client</title>
+    <script>
+        var scroll = new SmoothScroll('a[href*="#"]');
+    </script>
+
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
     <style>
-        #myMap {
-            position: relative;
-            width: 600px;
-            height: 400px;
-            display: none;
-            margin-top: 10%;
-        }
-    </style>
-    <script type='text/javascript' src='http://www.bing.com/api/maps/mapcontrol?callback=GetMap&key=Ah2oWyGHFM1s9k2TY3eiEKR4r5sxVaamEPcCDl8BICrRwD9fulT_KsjML-F09_R6' async defer></script>
-<body>
- 
-    <div id="search-form">
-        <label for="destination">Destination:</label>
-        <input type="text" id="destination" onclick="showMap()" >
 
-        <label for="current-location">Current Location:</label>
-        <input type="text" id="current-location" readonly>
+    body {
+        background-color: #f0f0f0; /* Couleur de fond blanche */
+        color: #333; /* Couleur du texte principale */
+        font-family: Arial, sans-serif; /* Police par défaut */
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
 
-        <label for="seats">Number of Seats:</label>
-        <input type="number" id="seats" min="1" value="1">
-
-        <button onclick="searchTrips()">Search</button>
-    </div>
-    <div id="myMap" style="position:relative;width:600px;height:400px;"></div>
-   
-
-</body>
- <script type='text/javascript'>
-    var map;
-    var searchManager;
-
+    #map {
+        height: 300px;
+        width:80%;
+      
+        display: none;
+        background-color: #fff; /* Couleur de fond de la carte */
+        border: 1px solid #ddd; /* Bordure de la carte */
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Ombre de la carte */
+        margin-top: 20px;
+    }
+    #close-button {
     
-        function GetMap() {
-        map = new Microsoft.Maps.Map('#myMap', {
-            credentials: 'Ah2oWyGHFM1s9k2TY3eiEKR4r5sxVaamEPcCDl8BICrRwD9fulT_KsjML-F09_R6',
-            center: new Microsoft.Maps.Location(0, 0),
-            zoom: 2
-        });
+    display:none;
+    top: 70%;
+    right: 10px;
+    padding: 8px 12px;
+    background-color: #3498db;
+    color: #fff;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+}
 
-        Microsoft.Maps.loadModule('Microsoft.Maps.AutoSuggest', function () {
-            var options = {
-                maxResults: 4,
-                map: map
-            };
-            searchManager = new Microsoft.Maps.AutosuggestManager(options);
-        });
+#close-button:hover {
+    background-color: #2980b9;
+}
 
-        // ... (existing code)
+    #search-form {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        margin-top: 20px;
+    }
 
-        // Add event listener for map click
-        Microsoft.Maps.Events.addHandler(map, 'click', function (e) {
-            var point = new Microsoft.Maps.Point(e.getX(), e.getY());
-            var loc = e.target.tryPixelToLocation(point);
+    #search-form label {
+        margin-right: 10px;
+        color: #3498db; /* Couleur du texte des labels */
+    }
 
-            // Reverse geocode to get the address of the clicked location
-            Microsoft.Maps.Location.reverseGeocode(loc, 'AqVY6zwaJ7oOe9iXs0xDdHJ2ysZ07ay2n0Rcf4mITb7HdtNdBQv5cZlTTq8awc8d', function (result) {
-                if (result && result.resourceSets && result.resourceSets.length > 0) {
-                    var address = result.resourceSets[0].resources[0].address;
-                    var locationString = address.locality || address.adminDistrict || '';
+    #search-form input[type="text"],
+    #search-form input[type="number"] {
+        padding: 8px;
+        box-sizing: border-box;
+        margin-right: 10px;
+    }
 
-                    // Update the destination input field with the selected location
-                    document.getElementById('destination').value = locationString;
-                }
-            });
-        });
+    #search-form button {
+        background-color: #3498db; /* Couleur de fond du bouton */
+        color: #fff; /* Couleur du texte du bouton */
+        border: none;
+        padding: 10px 15px;
+        border-radius: 3px;
+        cursor: pointer;
+    }
 
+    #trip-list {
+        margin-top: 20px;
+       
+    }
+
+    .trip-container {
+        background-color: #fff; /* Couleur de fond des conteneurs de voyage */
+        border: 1px solid #ddd; /* Bordure des conteneurs de voyage */
+        padding: 10px;
+        margin-bottom: 20px;
+        border-radius: 5px;
+        box-shadow: 0 0 5px rgba(0, 0, 0, 0.1); /* Ombre des conteneurs de voyage */
+    }
+    /* new code de   rihab */
+    .main{
+    min-height: auto;
+    
+}
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.4);
+}
+
+.modal-content {
+    background-color: #fefefe;
+    margin: 3% auto;
+    padding: 25px;
+    border: 1px solid #888;
+    width: 60%;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border-radius: 4px;
+}
+
+.close {
+    color: #aaaaaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: #000;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.modal-content form label {
+    justify-content: center;
+    align-items: center;
+    font-size: 16px;
+    font-weight: bold;
+    margin-bottom: 5px;
+    display: inline-block;
+    width: 35%;
+}
+
+.modal-content form input {
+    align-items: center;
+    font-size: 16px;
+    padding: 8px;
+    margin-bottom: 15px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    display: inline-block;
+    width: 50%;
+}
+.modal-content form input[type="submit"] {
+    background-color: #4CAF50;
+    color: white;
+    cursor: pointer;
+    align-items: center;
+    justify-content: center;
+    margin-left: 35%;
+    width:30%;
+}
+
+.modal-content form input[type="submit"]:hover {
+    background-color: #45a049;
+}
+/* Style the button that opens the modal */
+.modal button {
+    background-color: #3e1f92;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+    text-align: center;
+    display: inline-block;
+    font-size: 15px;
+    margin: 4px 2px;
+    transition: 0.3s;
+    border-radius: 4px;
+}
+
+/* Change the background color of the button on hover */
+.modal button:hover {
+    background-color: #3e1f91;
+}
+
+.div-content {
+    font-size: 0; /* Fix pour éliminer l'espace blanc entre les éléments inline-block */
+}
+
+.station {
+    display: inline-block;
+    width: 48%; /* Ajuste la largeur pour deux éléments par ligne */
+    margin-bottom: 20px;
+    margin-right: 20px;
+    background-color: #f5f5f5;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 10px;
+    box-sizing: border-box;
+    vertical-align: top; /* Ajuste l'alignement vertical au sommet */
+    font-size: 16px; /* Réinitialise la taille de la police après le fix de font-size: 0; */
+}
+
+.station h2,
+.passenger h2 {
+    font-size: 18px;
+    font-weight: bold;
+    margin-right: 10px;
+}
+
+.station p,
+.passenger p {
+    font-size: 16px;
+    color: #333;
+}
+
+.station p {
+    font-size: 16px;
+    margin-right: 10px;
+}
+
+.station h2 {
+    font-size: 18px;
+    font-weight: bold;
+    margin-right: 10px;
+}
+
+
+
+#bingMap {
+    display: flex;
+    flex: 1;
+    height: 400px; 
+    width: 100%;
+}
+
+   
+</style>
+</head>
+<body>
+<div class="main">
+    <header>
+        <div class="container">
+            <a href="#"><img class="logo" src="../images/logo2.png"></a>
+    
+            <nav class="navigation">
+                <ul>
+                     <li>
+                     <li class="nav1"><a href="../clientlistes.php">listes trajets</a></li>
+                     <li class="nav1"><a href="../reservation.php">Mes reservations</a></li>
+                    <?php
+                     $UserID = $_SESSION["UserID"]; 
+                    ?>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+    </div>
+
+<!-- Modified search form with a select element for position -->
+<div id="search-form">
+    <label for="destination">Destination:</label>
+    <input type="text" id="destination" onclick="showMap()" readonly>
+
+    <!-- Use a select element for the position options -->
+    <label for="position">Position:</label>
+    <select id="position">
+    <option value="choose option" style="display:none">choose option</option>
+        <option value="navigator">Let navigator choose my position automatically</option>
+        <option value="manual" >Choose from the map search</option>
+    </select>
+    <input type="text" id="positionName" readonly style='display:none';>
+    <label for="seats">Number of Seats:</label>
+    <input type="number" id="seats" min="1"  max='5' value="1">
+
+    <button onclick="searchTrips()">Search</button>
+</div>
+<button id="close-button" onclick="closeMap()">Close Map</button><div id="map"></div>
+<div id="trip-list"></div>
+<div class="container">
+        <div>
+            <div class="div-content">
+            <?php
+// Fetch data from the database
+$sql = "SELECT * FROM rides WHERE AvailableSeats > 0";
+
+$result = $conn->query($sql);
+
+if ($result->num_rows > 0) {
+    // Output data of each row
+    while ($row = $result->fetch_assoc()) {
+        echo '<a style=" height:auto;" href="rechercher.php?RideID=' . urlencode($row["RideID"]) . '">';
+        echo '<div class="station">';
+        echo '<p style="font-weight: bold; text-align: center;">' . $row["DepartureTime"] . '</p>';
+        echo '<br/>';
+        echo '<span style="color: black; text-decoration: none; font-size: 20px; display: inline-block;" class="fas fa-map-marker-alt"></span>     <p style=" display: inline-block;">' . $row["DepartureLocation"] . '</p>';
+        if ($row["price"] !== "") {
+            echo '<p style=" font-weight: bold; margin-left: 85% ; display: inline-block;" class="price" style="margin-left: 250px;">' . $row["price"] . '</p>';
+        }
+        echo '<br/>';
+        echo '<span style="color: black; text-decoration: none; font-size: 20px; display: inline-block;" class="fas fa-flag"></span>     <p style=" display: inline-block;"> ' . $row["Destination"] . '</p>';
+        echo '<p style="display: inline-block; font-size: 30px; margin-left: 80%;">' . $row["AvailableSeats"] . '</p><img style="display: inline-block;  width: 7%; height:7%;" src="../images/car-seat.png"/>';
+        echo '</div>';
+        echo '</a>';
+    }
+} else {
+    echo "0 results";
+}
+?>
+      
+</div>
+        </div>
+    </div>
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+<script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
+<script>
+
+    var map = L.map('map').setView([0, 0], 2);
+    var destinationInput = document.getElementById('destination');
+    var positionSelect = document.getElementById('position');
+    var positionNameInput = document.getElementById('positionName');
+    var seatsInput = document.getElementById('seats');
+    var tripListContainer = document.getElementById('trip-list');
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '© OpenStreetMap contributors'
+    }).addTo(map);
+
+    var geocoder = L.Control.geocoder().addTo(map);
+    
+    function showMap() {
+        document.getElementById('map').style.display ='block';
+        document.getElementById('close-button').style.display = 'block';
+        map.invalidateSize();
+    }
+    function closeMap() {
+        var mapElement = document.getElementById('map');
+       
+        mapElement.style.display = 'none';
+        document.getElementById('close-button').style.display = 'none';
+    }
+
+    destinationInput.addEventListener('click', function() {
+    showMap();
+    geocoder.off('markgeocode');
+        geocoder.on('markgeocode', function (e) {
+            var city = e.geocode.properties.address.city || e.geocode.properties.address.town || e.geocode.properties.address.village;
+        var city_name = city || 'Unknown';
+       
+        destinationInput.value = city_name;
+        // Hide the map after selecting a location
+        document.getElementById('map').style.display = 'none';
+        document.getElementById('close-button').style.display = 'none';
+    });
+});
+
+positionSelect.addEventListener('change', function() {
+    var selectedOption = positionSelect.value;
+    
+    if (selectedOption === 'navigator') {
         if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(function (position) {
+            navigator.geolocation.getCurrentPosition(function(position) {
                 var lat = position.coords.latitude;
                 var lon = position.coords.longitude;
 
-                fetch(`https://dev.virtualearth.net/REST/v1/Locations/${lat},${lon}?key=Ah2oWyGHFM1s9k2TY3eiEKR4r5sxVaamEPcCDl8BICrRwD9fulT_KsjML-F09_R6`)
+                fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}`)
                     .then(response => response.json())
                     .then(data => {
-                        var cityName = data.resourceSets[0].resources[0].address.locality || data.resourceSets[0].resources[0].address.adminDistrict;
-                        document.getElementById('current-location').value = cityName;
+                        
+                       
+                          var  city = data.address.city || data.address.town || data.address.village;
+                          
+                        var city_name = city || 'Unknown';
+                       
+                        positionNameInput.style.display='block';
+                        positionNameInput.value = city_name;
+                        positionSelect.value = 'choose option';
+                     
                     })
                     .catch(error => {
                         console.error('Error getting address:', error.message);
                     });
+
+                map.setView([lat, lon], 13);
             }, function (error) {
                 console.error('Error getting geolocation:', error.message);
             });
         } else {
             console.error('Geolocation is not supported by this browser.');
         }
+    } else if (selectedOption === 'manual') {
+        // Show the map when choosing manually
+        showMap();
+        geocoder.off('markgeocode');
+        geocoder.on('markgeocode', function (e) {
+             var city = e.geocode.properties.address.city || e.geocode.properties.address.town || e.geocode.properties.address.village;
+        var city_name = city || 'Unknown';
+            positionNameInput.style.display='block';
+        positionNameInput.value = city_name;
+        // Hide the map after selecting a location
+        document.getElementById('map').style.display = 'none';
+        document.getElementById('close-button').style.display = 'none';
+        positionSelect.value = 'choose option';
+    });
     }
-    
-    function showMap() {
-        document.getElementById('myMap').style.display = 'block';
+});
+
+  
+
+function searchTrips()  {
+        var destination = $('#destinationInput').val();
+        var seats = $('#seats').val();
+
+        // Use AJAX to send a request to the server
+        $.ajax({
+            url: 'searchTrips.php', // The server-side script
+            type: 'POST', // Send as a POST request
+            data: { destination: destination }, // Data to send to the server
+            success: function (data) {
+                // Replace the content of the tripList div with the new data
+                $('#tripList').html(data);
+            }
+        });
+    };
+  
+   /* function searchTrips() {
+        tripListContainer.innerHTML = '';
+        var currentLat, currentLon;
+
+        if (navigator.geolocation && positionSelect.value === 'navigator') {
+            navigator.geolocation.getCurrentPosition(function (position) {
+                currentLat = position.coords.latitude;
+                currentLon = position.coords.longitude;
+
+                var filteredTrips = trips.filter(function (trip) {
+                    return trip.destination.toLowerCase() === destinationInput.value.toLowerCase() &&
+                        trip.availableSeats >= parseInt(seatsInput.value);
+                });
+
+                filteredTrips.sort(function (a, b) {
+                    var distanceA = haversineDistance(currentLat, currentLon, a.lat, a.lon);
+                    var distanceB = haversineDistance(currentLat, currentLon, b.lat, b.lon);
+                    return distanceA - distanceB;
+                });
+
+                filteredTrips.forEach(function (trip) {
+                    var tripContainer = document.createElement('div');
+                    tripContainer.className = 'trip-container';
+                    tripContainer.innerHTML = '<strong>Destination:</strong> ' + trip.destination +
+                        '<br><strong>Current Location:</strong> ' + trip.currentLocation +
+                        '<br><strong>Available Seats:</strong> ' + trip.availableSeats +
+                        '<br><strong>Distance:</strong> ' + haversineDistance(currentLat, currentLon, trip.startLat, trip.startLon).toFixed(2) + ' km';
+                    tripListContainer.appendChild(tripContainer);
+                });
+            }, function (error) {
+                console.error('Error getting geolocation:', error.message);
+            });
+       
+        } else {
+            console.error('Geolocation is not supported by this browser.');
+        }
+    }*/
+
+    function haversineDistance(lat1, lon1, lat2, lon2) {
+        var R = 6371;
+        var dLat = deg2rad(lat2 - lat1);
+        var dLon = deg2rad(lon2 - lon1);
+        var a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+            Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) * Math.sin(dLon / 2) * Math.sin(dLon / 2);
+        var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+        var distance = R * c;
+        return distance;
     }
 
-    function searchTrips() {
-        alert('Searching for trips to ' + document.getElementById('destination').value +
-            ' from ' + document.getElementById('current-location').value +
-            ' with ' + document.getElementById('seats').value + ' available seats.');
-
-        document.getElementById('myMap').style.display = 'none';
+    function deg2rad(deg) {
+        return deg * (Math.PI / 180);
     }
-
-
 </script>
+
+</body>
 </html>
