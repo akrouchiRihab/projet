@@ -32,9 +32,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <!DOCTYPE html>
 <html lang="en">
 <head>
+
 <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+    <!--  link to jquery  to make $ work in js-->
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
     <link rel="stylesheet" href="https://www.bing.com/api/maps/mapcontrol?key=ApE-HNGaFCRDs_bsmYj3Dgak-HaLSYWyN7K35FxHQXjQt8ePrxpy8_uvZoXESwIg&callback=loadMapScenario" async defer>
     <script type='text/javascript' src='https://www.bing.com/api/maps/mapcontrol?key=ApE-HNGaFCRDs_bsmYj3Dgak-HaLSYWyN7K35FxHQXjQt8ePrxpy8_uvZoXESwIg'></script> 
     <script src="https://cdn.jsdelivr.net/npm/smooth-scroll@16.1.3/dist/smooth-scroll.polyfills.min.js"></script>
@@ -291,7 +294,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                      <li class="nav1"><a href="../clientlistes.php">listes trajets</a></li>
                      <li class="nav1"><a href="../reservation.php">Mes reservations</a></li>
                     <?php
-                     $UserID = $_SESSION["UserID"]; 
+                  
                     ?>
                     </li>
                 </ul>
@@ -319,10 +322,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <button onclick="searchTrips()">Search</button>
 </div>
 <button id="close-button" onclick="closeMap()">Close Map</button><div id="map"></div>
-<div id="trip-list"></div>
+
 <div class="container">
         <div>
-            <div class="div-content">
+            <div id="trip-list" class="div-content">
+           
             <?php
 // Fetch data from the database
 $sql = "SELECT * FROM rides WHERE AvailableSeats > 0";
@@ -352,19 +356,22 @@ if ($result->num_rows > 0) {
 ?>
       
 </div>
-        </div>
+           
+</div>
+   
     </div>
 <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
 <script>
-
+    
     var map = L.map('map').setView([0, 0], 2);
     var destinationInput = document.getElementById('destination');
     var positionSelect = document.getElementById('position');
     var positionNameInput = document.getElementById('positionName');
     var seatsInput = document.getElementById('seats');
     var tripListContainer = document.getElementById('trip-list');
-
+    var destinationLatitude, destinationLongitude;
+    var positionLatitude, positionLongitude;
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '© OpenStreetMap contributors'
     }).addTo(map);
@@ -376,6 +383,7 @@ if ($result->num_rows > 0) {
         document.getElementById('close-button').style.display = 'block';
         map.invalidateSize();
     }
+    
     function closeMap() {
         var mapElement = document.getElementById('map');
        
@@ -391,6 +399,9 @@ if ($result->num_rows > 0) {
         var city_name = city || 'Unknown';
        
         destinationInput.value = city_name;
+        // Set the destination latitude and longitude
+        destinationLatitude = e.geocode.center.lat;
+        destinationLongitude = e.geocode.center.lng;
         // Hide the map after selecting a location
         document.getElementById('map').style.display = 'none';
         document.getElementById('close-button').style.display = 'none';
@@ -418,6 +429,9 @@ positionSelect.addEventListener('change', function() {
                         positionNameInput.style.display='block';
                         positionNameInput.value = city_name;
                         positionSelect.value = 'choose option';
+                        // Set the position latitude and longitude
+                        positionLatitude = lat;
+                        positionLongitude = lon;
                      
                     })
                     .catch(error => {
@@ -440,6 +454,11 @@ positionSelect.addEventListener('change', function() {
         var city_name = city || 'Unknown';
             positionNameInput.style.display='block';
         positionNameInput.value = city_name;
+
+        // Set the position latitude and longitude
+        positionLatitude = e.geocode.center.lat;
+            positionLongitude = e.geocode.center.lng;
+
         // Hide the map after selecting a location
         document.getElementById('map').style.display = 'none';
         document.getElementById('close-button').style.display = 'none';
@@ -451,58 +470,64 @@ positionSelect.addEventListener('change', function() {
   
 
 function searchTrips()  {
-        var destination = $('#destinationInput').val();
+        var position = $('#position').val();
+        var destination = $('#destination').val();
         var seats = $('#seats').val();
-
+        console.log('position latitude:', positionLatitude);
+        console.log('Destination:', destination);
+    console.log('Seats:', seats);
         // Use AJAX to send a request to the server
         $.ajax({
             url: 'searchTrips.php', // The server-side script
             type: 'POST', // Send as a POST request
-            data: { destination: destination }, // Data to send to the server
+            data: { destination: destination,seats: seats,destinationLongitude:destinationLongitude,destinationLatitude:destinationLatitude ,positionLongitude :positionLongitude , positionLatitude: positionLatitude}, // Data to send to the server
+            dataType: 'json', // Make sure to specify the expected data type
+            
             success: function (data) {
-                // Replace the content of the tripList div with the new data
-                $('#tripList').html(data);
+                console.log("heres data")
+                console.log(data);
+                // Handle the data received from the server
+                if (data.error) {
+                    // Display an error message if no results found
+                    $('#trip-list').html('<p>' + data.error + '</p>');
+                } else {
+                    // Render the trips dynamically
+                    renderTrips(data);
+                }
+            },
+            error: function () {
+                // Handle the error case
+                $('#trip-list').html('<p>Error fetching data.</p>');
             }
         });
-    };
-  
-   /* function searchTrips() {
-        tripListContainer.innerHTML = '';
-        var currentLat, currentLon;
+    }
+    function renderTrips(trips) {
+    // Clear the existing content in the trips container
+    $('#trip-list').html('');
 
-        if (navigator.geolocation && positionSelect.value === 'navigator') {
-            navigator.geolocation.getCurrentPosition(function (position) {
-                currentLat = position.coords.latitude;
-                currentLon = position.coords.longitude;
-
-                var filteredTrips = trips.filter(function (trip) {
-                    return trip.destination.toLowerCase() === destinationInput.value.toLowerCase() &&
-                        trip.availableSeats >= parseInt(seatsInput.value);
-                });
-
-                filteredTrips.sort(function (a, b) {
-                    var distanceA = haversineDistance(currentLat, currentLon, a.lat, a.lon);
-                    var distanceB = haversineDistance(currentLat, currentLon, b.lat, b.lon);
-                    return distanceA - distanceB;
-                });
-
-                filteredTrips.forEach(function (trip) {
-                    var tripContainer = document.createElement('div');
-                    tripContainer.className = 'trip-container';
-                    tripContainer.innerHTML = '<strong>Destination:</strong> ' + trip.destination +
-                        '<br><strong>Current Location:</strong> ' + trip.currentLocation +
-                        '<br><strong>Available Seats:</strong> ' + trip.availableSeats +
-                        '<br><strong>Distance:</strong> ' + haversineDistance(currentLat, currentLon, trip.startLat, trip.startLon).toFixed(2) + ' km';
-                    tripListContainer.appendChild(tripContainer);
-                });
-            }, function (error) {
-                console.error('Error getting geolocation:', error.message);
-            });
-       
-        } else {
-            console.error('Geolocation is not supported by this browser.');
+    // Iterate through the trips and append them to the container
+    trips.forEach(function (trip) {
+        var tripHtml = '<a style=" height:auto;" href="rechercher.php?RideID=' + trip.RideID + '">';
+        tripHtml += '<div class="station">';
+        tripHtml += '<p style="font-weight: bold; text-align: center;">' + trip.DepartureTime + '</p>';
+        tripHtml += '<br/>';
+        tripHtml += '<span style="color: black; text-decoration: none; font-size: 20px; display: inline-block;" class="fas fa-map-marker-alt"></span>';
+        tripHtml += '<p style=" display: inline-block;">' + trip.DepartureLocation + '</p>';
+        if (trip.price !== "") {
+            tripHtml += '<p style=" font-weight: bold; margin-left: 85% ; display: inline-block;" class="price" style="margin-left: 250px;">' + trip.price + '</p>';
         }
-    }*/
+        tripHtml += '<br/>';
+        tripHtml += '<span style="color: black; text-decoration: none; font-size: 20px; display: inline-block;" class="fas fa-flag"></span>';
+        tripHtml += '<p style=" display: inline-block;"> ' + trip.Destination + '</p>';
+        tripHtml += '<p style="display: inline-block; font-size: 30px; margin-left: 80%;">' + trip.AvailableSeats + '</p><img style="display: inline-block;  width: 7%; height:7%;" src="../images/car-seat.png"/>';
+        tripHtml += '</div>';
+        tripHtml += '</a>';
+
+        // Append the generated HTML to the container
+        $('#trip-list').append(tripHtml);
+    });
+}
+
 
     function haversineDistance(lat1, lon1, lat2, lon2) {
         var R = 6371;
