@@ -235,7 +235,7 @@ if ($result->num_rows > 0) {
 
             <label for="DepartureTime">Date et Heure</label>
             <input placeholder="Quand partez-vous ?" class="flatpickr" type="datetime-local" name="DepartureTime" required>
-            <br/>
+            <br/> 
             
             <label for="AvailableSeats">Nombre de places </label>
             <input placeholder="Combien de passagers pouvez-vous accepter ?" type="number" name="AvailableSeats" required>
