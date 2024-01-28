@@ -22,9 +22,10 @@ if (isset($_POST['ride_id'])) {
 
     if ($resultCheckReservation->num_rows > 0) {
         // User has already made a reservation for this ride
-        echo '<script>alert("Vous avez déjà réservé une place pour ce trajet.");</script>';
-        
-    } else {
+        echo '<script>alert("Vous avez déjà réservé une place pour ce trajet."); 
+        window.location.href = "reservation.php"; 
+        </script>';
+        } else {
         // User has not made a reservation for this ride, proceed with the reservation
         // Update the database to decrement the number of available seats
         $sqlUpdate = "UPDATE rides SET AvailableSeats = AvailableSeats - 1 WHERE RideID = '$rideID' AND AvailableSeats > 0";
@@ -35,14 +36,17 @@ if (isset($_POST['ride_id'])) {
 
             if ($conn->query($sqlInsertReservation) === TRUE) {
                 // Succès de la réservation
-                echo '<script>alert("Réservé avec succès! ");</script>';
-            } else {
+                echo '<script>alert("Réservé avec succès! ");
+                window.location.href = "reservation.php"; 
+                </script>';
+                } else {
                 // Erreur lors de l'insertion de la réservation
-                echo '<script>alert("Erreur lors de l\'insertion de la réservation : ' . $conn->error . '");</script>';
+                echo '<script>alert("Erreur lors de l\'insertion de la réservation : ' . $conn->error . '");
+                window.location.href = "reservation.php"; </script>';
             }
         } else {
             // Erreur lors de la mise à jour des places disponibles
-            echo '<script>alert("Erreur lors de la mise à jour des places disponibles : ' . $conn->error . '");</script>';
+            echo '<script>alert("Erreur lors de la mise à jour des places disponibles : ' . $conn->error . '");window.location.href = "reservation.php"; </script>';
         }
     }
 } else {

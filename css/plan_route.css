@@ -331,3 +331,20 @@ nav{
     color:white;
     font-size: 15px;
 }
+.proposer_btn:hover {
+    background-color: rgb(32, 16, 59);
+}
+.annuler_btn{
+    border-radius: 10px;
+    background-color:#921f1f;
+    margin-right: 20px;
+    display: inline-block;
+    width: 20%;
+    text-align: center;
+    padding:10px;
+    color:white;
+    font-size: 15px;
+}
+.annuler_btn:hover{
+    background-color:#4d0f0f;
+}
