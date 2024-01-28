@@ -1,32 +1,32 @@
 <?php
 session_start();
-require_once('includes/db_connect.php'); // Include your database connection file
+require_once('includes/db_connect.php'); // Inclure votre fichier de connexion à la base de données
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-  if (isset($_SESSION["UserID"])) {
-    $userID = $_SESSION["UserID"];
-    $RideID = $_POST["RideID"];
-    $DepartureLocation = $_POST["DepartureLocation"];
-    $Destination = $_POST["Destination"];
-    $DepartureTime = $_POST["DepartureTime"];
-    $AvailableSeats = $_POST["AvailableSeats"];
-    $price = $_POST["price"];
-    
-    // Insert the data into the database (assuming you have a 'trajet' table)
-    $sql = "INSERT INTO trajet (DepartureLocation, Destination, DepartureTime, AvaailableSeats, price) VALUES ('$DepartureLocation', '$Destination', '$DepartureTime', '$AvailableSeats', '$price')";
-    mysqli_query($conn, $sql);
+    if (isset($_SESSION["UserID"])) {
+        $userID = $_SESSION["UserID"];
+        $rideID = $_POST["RideID"];
+        $departureLocation = $_POST["DepartureLocation"];
+        $destination = $_POST["Destination"];
+        $departureTime = $_POST["DepartureTime"];
+        $availableSeats = $_POST["AvailableSeats"];
+        $price = $_POST["price"];
 
-    // Close the database connection
-    mysqli_close($conn);
+        // Insérer les données dans la table 'trajet' (assuming you have a 'trajet' table)
+        $sql = "INSERT INTO trajet (DepartureLocation, Destination, DepartureTime, AvailableSeats, price) VALUES ('$departureLocation', '$destination', '$departureTime', '$availableSeats', '$price')";
+        mysqli_query($conn, $sql);
 
-    // Redirect to the current page after submitting
-    header('Location: ' . $_SERVER['HTTP_REFERER']);
-    exit();
-   } else {
-    // Rediriger vers la page de connexion si l'utilisateur n'est pas connecté
-    header("Location: login.php");
-    exit();
-}
+        // Fermer la connexion à la base de données
+        mysqli_close($conn);
+
+        // Rediriger vers la page actuelle après la soumission
+        header('Location: ' . $_SERVER['HTTP_REFERER']);
+        exit();
+    } else {
+        // Rediriger vers la page de connexion si l'utilisateur n'est pas connecté
+        header("Location: login.php");
+        exit();
+    }
 }
 ?>
 
@@ -199,7 +199,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <div class="main">
     <header>
         <div class="container">
-            <a href="#"><img class="logo" src="images/logo2.png"></a>
+            <a href="clientlistes.php"><img class="logo" src="images/logo2.png"></a>
     
             <nav class="navigation">
                 <ul>
@@ -235,7 +235,7 @@ $result = $conn->query($sql);
 if ($result->num_rows > 0) {
     // Output data of each row
     while ($row = $result->fetch_assoc()) {
-        echo '<a style=" height:auto;" href="rechercher.php?RideID=' . urlencode($row["RideID"]) . '">';
+        echo '<a style=" height:auto;" href="maReservation.php?RideID=' . urlencode($row["RideID"]) . '">';
         echo '<div class="station">';
         echo '<p style="font-weight: bold; text-align: center;">' . $row["DepartureTime"] . '</p>';
         echo '<br/>';
