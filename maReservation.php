@@ -133,9 +133,9 @@ if (isset($_GET['RideID'])) {
             <br/>
             <hr>
         </div><br><br>
-        <form action="process_reservation.php" method="post">
+        <form action="process_annulation.php" method="post">
     <input type="hidden" name="ride_id" value="<?php echo $RideID; ?>">
-    <button type="submit" class="proposer_btn">Réserver</button>
+    <button type='submit' class="annuler_btn">Annuler</button>
 </form>
 
 </div>

@@ -222,11 +222,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         </div>
         <br/>
         <div>
-            <div class="div-content">
-            <?php
+     <div class="div-content">
+       <?php
 // Fetch data from the database
 $sql = "SELECT * FROM rides WHERE AvailableSeats > 0";
-
+$result=mysqli_query($conn,$sql);
 $result = $conn->query($sql);
 
 if ($result->num_rows > 0) {
@@ -251,7 +251,7 @@ if ($result->num_rows > 0) {
 }
 ?>
       
-</div>
+        </div>
         </div>
     </div>
     <div id="myModal" class="modal">
@@ -311,9 +311,9 @@ if ($result->num_rows > 0) {
         });
 </script>
 <script>
+    
     function initMap() {
         var myLatLng;
-
         // Check if userCoordinates is not empty
         if (Object.keys(userCoordinates).length !== 0) {
             myLatLng = [userCoordinates.lat, userCoordinates.lng];
@@ -335,6 +335,4 @@ if ($result->num_rows > 0) {
         }
     }
 </script>
-
-
 </html>
