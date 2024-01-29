@@ -236,9 +236,9 @@ if ($result->num_rows > 0) {
         echo '<div class="station">';
         echo '<p style="font-weight: bold; text-align: center;">' . $row["DepartureTime"] . '</p>';
         echo '<br/>';
-        echo '<span style="color: black; text-decoration: none; font-size: 20px; display: inline-block;" class="fas fa-map-marker-alt"></span>     <p style=" display: inline-block;">' . $row["DepartureLocation"] . '</p>';
+        echo '<span class="fas fa-map-marker-alt"></span>   <p>' . $row["DepartureLocation"] . '</p>';
         if ($row["price"] !== "") {
-            echo '<p style=" font-weight: bold; margin-left: 85% ; display: inline-block;" class="price" style="margin-left: 250px;">' . $row["price"] . '</p>';
+            echo '<p class="price" >' . $row["price"] . '</p>';
         }
         echo '<br/>';
         echo '<span style="color: black; text-decoration: none; font-size: 20px; display: inline-block;" class="fas fa-flag"></span>     <p style=" display: inline-block;"> ' . $row["Destination"] . '</p>';

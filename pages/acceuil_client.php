@@ -38,6 +38,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
     <!--  link to jquery  to make $ work in js-->
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <link href="../bootstrap/css/all.min.css" rel="stylesheet">
+    <link href="../bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <script src="../bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="../bootstrap/js/all.min.js"></script>
     <link rel="stylesheet" href="https://www.bing.com/api/maps/mapcontrol?key=ApE-HNGaFCRDs_bsmYj3Dgak-HaLSYWyN7K35FxHQXjQt8ePrxpy8_uvZoXESwIg&callback=loadMapScenario" async defer>
     <script type='text/javascript' src='https://www.bing.com/api/maps/mapcontrol?key=ApE-HNGaFCRDs_bsmYj3Dgak-HaLSYWyN7K35FxHQXjQt8ePrxpy8_uvZoXESwIg'></script> 
     <script src="https://cdn.jsdelivr.net/npm/smooth-scroll@16.1.3/dist/smooth-scroll.polyfills.min.js"></script>
@@ -235,7 +239,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 .station {
     display: inline-block;
-    width: 48%; /* Ajuste la largeur pour deux éléments par ligne */
+   
     margin-bottom: 20px;
     margin-right: 20px;
     background-color: #f5f5f5;
@@ -317,49 +321,57 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     </select>
     <input type="text" id="positionName" readonly style='display:none';>
     <label for="seats">Number of Seats:</label>
-    <input type="number" id="seats" min="1"  max='5' value="1">
+    <input type="number" id="seats" min="1"  max='4' value="1">
 
     <button onclick="searchTrips()">Search</button>
 </div>
 <button id="close-button" onclick="closeMap()">Close Map</button><div id="map"></div>
-
 <div class="container">
-        <div>
-            <div id="trip-list" class="div-content">
-           
-            <?php
-// Fetch data from the database
-$sql = "SELECT * FROM rides WHERE AvailableSeats > 0";
+    <div class="row">
+        <div class="col-md-12">
+            <div id="trip-list" class="div-content row">
+                <?php
+                   require_once('../includes/db_connect.php'); // Include your database connection file
+                    // Fetch data from the database
+                    $sql = "SELECT * FROM rides WHERE AvailableSeats > 0";
+                    $result = $conn->query($sql);
 
-$result = $conn->query($sql);
+                    if ($result) {
+                        // Output data of each row
+                        while ($row = $result->fetch_assoc()) {
+                            echo '<div class="col-md-4 mb-4">';
+                            echo '<a style="height:auto;" href="rechercher.php?RideID=' . urlencode($row["RideID"]) . '">';
+                            echo '<div class="card station">';
+                            echo '<div class="card-body">';
+                            echo '<h5 class="card-title font-weight-bold text-center" style="color:black; ">' . $row["DepartureTime"] . '</h5>';
+                            echo '<p class="card-text">';
+                            echo '<span class="fas fa-map-marker-alt" style="color: black;"></span> ' . $row["DepartureLocation"] . '<br>';
+                            if ($row["price"] !== "") {
+                                echo   '<p style=" font-weight: bold; margin-left: 85% ; display: inline-block;" class="price" style="margin-left: 250px;">' . $row["price"] .'</p>';
+                            }
+                            echo '</p>';
+                            echo '<p class="card-text">';
+                            echo '<span class="fas fa-flag" style="color: black;"></span> ' . $row["Destination"] . '<br>';
+                            echo '<span style="font-size: 30px; margin-left: 60%;">' . $row["AvailableSeats"] . '</span> <img style="width: 15%; height:15%;" src="../images/car-seat.png">';
+                            echo '</p>';
+                            echo '</div>';
+                            echo '</div>';
+                            echo '</a>';
+                            echo '</div>';
 
-if ($result->num_rows > 0) {
-    // Output data of each row
-    while ($row = $result->fetch_assoc()) {
-        echo '<a style=" height:auto;" href="rechercher.php?RideID=' . urlencode($row["RideID"]) . '">';
-        echo '<div class="station">';
-        echo '<p style="font-weight: bold; text-align: center;">' . $row["DepartureTime"] . '</p>';
-        echo '<br/>';
-        echo '<span style="color: black; text-decoration: none; font-size: 20px; display: inline-block;" class="fas fa-map-marker-alt"></span>     <p style=" display: inline-block;">' . $row["DepartureLocation"] . '</p>';
-        if ($row["price"] !== "") {
-            echo '<p style=" font-weight: bold; margin-left: 85% ; display: inline-block;" class="price" style="margin-left: 250px;">' . $row["price"] . '</p>';
-        }
-        echo '<br/>';
-        echo '<span style="color: black; text-decoration: none; font-size: 20px; display: inline-block;" class="fas fa-flag"></span>     <p style=" display: inline-block;"> ' . $row["Destination"] . '</p>';
-        echo '<p style="display: inline-block; font-size: 30px; margin-left: 80%;">' . $row["AvailableSeats"] . '</p><img style="display: inline-block;  width: 7%; height:7%;" src="../images/car-seat.png"/>';
-        echo '</div>';
-        echo '</a>';
-    }
-} else {
-    echo "0 results";
-}
-?>
-      
-</div>
-           
-</div>
-   
+
+
+
+                           
+                        }
+                    } else {
+                        echo '<p class="text-center">Error fetching data: ' . $conn->error . '</p>';
+                    }
+                ?>
+            </div>
+        </div>
     </div>
+</div>
 <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
 <script>
@@ -519,7 +531,7 @@ function searchTrips()  {
         tripHtml += '<br/>';
         tripHtml += '<span style="color: black; text-decoration: none; font-size: 20px; display: inline-block;" class="fas fa-flag"></span>';
         tripHtml += '<p style=" display: inline-block;"> ' + trip.Destination + '</p>';
-        tripHtml += '<p style="display: inline-block; font-size: 30px; margin-left: 80%;">' + trip.AvailableSeats + '</p><img style="display: inline-block;  width: 7%; height:7%;" src="../images/car-seat.png"/>';
+        tripHtml += '<p style="display: inline-block; font-size: 30px; margin-left: 70%;">' + trip.AvailableSeats + '</p><img style="display: inline-block;  width: 15%; height:15%;" src="../images/car-seat.png"/>';
         tripHtml += '</div>';
         tripHtml += '</a>';
 
