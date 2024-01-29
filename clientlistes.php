@@ -33,9 +33,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
+<meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+    <!--  link to jquery  to make $ work in js-->
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <link href="bootstrap/css/all.min.css" rel="stylesheet">
+    <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <script src="bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="bootstrap/js/all.min.js"></script>
     <link rel="stylesheet" href="https://www.bing.com/api/maps/mapcontrol?key=ApE-HNGaFCRDs_bsmYj3Dgak-HaLSYWyN7K35FxHQXjQt8ePrxpy8_uvZoXESwIg&callback=loadMapScenario" async defer>
     <script type='text/javascript' src='https://www.bing.com/api/maps/mapcontrol?key=ApE-HNGaFCRDs_bsmYj3Dgak-HaLSYWyN7K35FxHQXjQt8ePrxpy8_uvZoXESwIg'></script> 
     <script src="https://cdn.jsdelivr.net/npm/smooth-scroll@16.1.3/dist/smooth-scroll.polyfills.min.js"></script>
@@ -49,7 +55,97 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <script>
         var scroll = new SmoothScroll('a[href*="#"]');
     </script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
+    <script>
+        var scroll = new SmoothScroll('a[href*="#"]');
+    </script>
     <style>
+
+
+        
+   .search-div{
+    margin-left:5%;
+    display: flex;
+        flex-direction: column;
+        align-items: center;
+        width:90%;
+   }
+   .search-div button{
+ margin-left:0px;
+   margin-top: 0px;
+}
+    #map {
+        height: 300px;
+        width:80%;
+      
+        display: none;
+        background-color: #fff; /* Couleur de fond de la carte */
+        border: 1px solid #ddd; /* Bordure de la carte */
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Ombre de la carte */
+        margin-top: 20px;
+    }
+    #close-button {
+    
+    display:none;
+    top: 70%;
+    right: 10px;
+    padding: 8px 12px;
+    background-color: #3498db;
+    color: #fff;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+#close-button:hover {
+    background-color: #2980b9;
+}
+
+    #search-form {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        margin-top: 20px;
+    }
+
+    #search-form label {
+        margin-right: 10px;
+        color: #3498db; /* Couleur du texte des labels */
+    }
+
+    #search-form input[type="text"],
+    #search-form input[type="number"] {
+        padding: 8px;
+        box-sizing: border-box;
+        margin-right: 10px;
+    }
+
+    #search-form button {
+        background-color: #3498db; /* Couleur de fond du bouton */
+        color: #fff; /* Couleur du texte du bouton */
+        border: none;
+        padding: 10px 15px;
+        border-radius: 3px;
+        cursor: pointer;
+        margin-left:0px;
+    }
+
+    #trip-list {
+        margin-top: 20px;
+       
+    }
+
+    .trip-container {
+        background-color: #fff; /* Couleur de fond des conteneurs de voyage */
+        border: 1px solid #ddd; /* Bordure des conteneurs de voyage */
+        padding: 10px;
+        margin-bottom: 20px;
+        border-radius: 5px;
+        box-shadow: 0 0 5px rgba(0, 0, 0, 0.1); /* Ombre des conteneurs de voyage */
+    }
+    /* new code de   rihab */
         .main{
     min-height: auto;
     
@@ -149,7 +245,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 .station {
     display: inline-block;
-    width: 48%; /* Ajuste la largeur pour deux éléments par ligne */
+    
     margin-bottom: 20px;
     margin-right: 20px;
     background-color: #f5f5f5;
@@ -215,46 +311,71 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         </div>
     </header>
     </div>
-    <div class="container">
-        <div class="col-2">
-            <br/>
-            <a id="openModal" class="proposer_btn" >+ rechercher un trajet</a>
-        </div>
-        <br/>
-        <div>
-     <div class="div-content">
-       <?php
-// Fetch data from the database
-$sql = "SELECT * FROM rides WHERE AvailableSeats > 0";
-$result=mysqli_query($conn,$sql);
-$result = $conn->query($sql);
+   <!-- Modified search form with a select element for position -->
+<div class="search-div">
+<div id="search-form">
+    <label for="destination">Destination:</label>
+    <input type="text" id="destination" onclick="showMap()" readonly>
 
-if ($result->num_rows > 0) {
-    // Output data of each row
-    while ($row = $result->fetch_assoc()) {
-        echo '<a style=" height:auto;" href="rechercher.php?RideID=' . urlencode($row["RideID"]) . '">';
-        echo '<div class="station">';
-        echo '<p style="font-weight: bold; text-align: center;">' . $row["DepartureTime"] . '</p>';
-        echo '<br/>';
-        echo '<span class="fas fa-map-marker-alt"></span>   <p>' . $row["DepartureLocation"] . '</p>';
-        if ($row["price"] !== "") {
-            echo '<p class="price" >' . $row["price"] . '</p>';
-        }
-        echo '<br/>';
-        echo '<span style="color: black; text-decoration: none; font-size: 20px; display: inline-block;" class="fas fa-flag"></span>     <p style=" display: inline-block;"> ' . $row["Destination"] . '</p>';
-        echo '<p style="display: inline-block; font-size: 30px; margin-left: 80%;">' . $row["AvailableSeats"] . '</p><img style="display: inline-block;  width: 7%; height:7%;" src="images/car-seat.png"/>';
-        echo '</div>';
-        echo '</a>';
-    }
-} else {
-    echo "0 results";
-}
-?>
-      
-        </div>
+    <!-- Use a select element for the position options -->
+    <label for="position">Position:</label>
+    <select id="position">
+    <option value="choose option" style="display:none">choose option</option>
+        <option value="navigator">Let navigator choose my position automatically</option>
+        <option value="manual" >Choose from the map search</option>
+    </select>
+    <input type="text" id="positionName" readonly style='display:none';>
+    <label for="seats">Number of Seats:</label>
+    <input type="number" id="seats" min="1"  max='4' value="1">
+
+    <button onclick="searchTrips()">Search</button>
+</div>
+<button id="close-button" onclick="closeMap()">Close Map</button><div id="map"></div>
+</div>
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <div id="trip-list" class="div-content row">
+                <?php
+                   require_once('includes/db_connect.php'); // Include your database connection file
+                    // Fetch data from the database
+                    $sql = "SELECT * FROM rides WHERE AvailableSeats > 0";
+                    $result = $conn->query($sql);
+
+                    if ($result) {
+                        // Output data of each row
+                        while ($row = $result->fetch_assoc()) {
+                            echo '<div class="col-md-4 mb-4">';
+                            echo '<a  id="trajet-reserve" style="height:auto;"class="open-modal" data-ride-id="' . $row["RideID"] . '">';
+                            echo '<div class="card station">';
+                            echo '<div class="card-body">';
+                            echo '<h5 class="card-title font-weight-bold text-center" style="color:black; ">' . $row["DepartureTime"] . '</h5>';
+                            echo '<p class="card-text">';
+                            echo '<span class="fas fa-map-marker-alt" style="color: black;"></span> ' . $row["DepartureLocation"] . '<br/>';
+        
+                                echo   '<p style=" font-weight: bold; margin-left: 85% ; display: inline-block;" class="price" style="margin-left: 250px;">' . $row["price"] .'</p>';
+                          
+                            echo '</p>';
+                            echo '<p class="card-text">';
+                            echo '<span class="fas fa-flag" style="color: black;"></span> ' . $row["Destination"] . '<br/>';
+                            echo '<span style="font-size: 30px; margin-left: 60%;">' . $row["AvailableSeats"] . '</span> <img style="width: 15%; height:15%;" src="images/car-seat.png">';
+                            echo '</p>';
+                            echo '</div>';
+                            echo '</div>';
+                            echo '</a>';
+                            echo '</div>';                           
+                        }
+                    } else {
+                        echo '<p class="text-center">Error fetching data: ' . $conn->error . '</p>';
+                    }
+                ?>
+            </div>
         </div>
     </div>
-    <div id="myModal" class="modal">
+</div>
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+<script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
+    <!--<div id="myModal" class="modal">
     <div class="modal-content">
         <span class="close">&times;</span>
         <form id="proposalForm" method="post" action="submit_proposal.php">
@@ -285,25 +406,264 @@ if ($result->num_rows > 0) {
     </div>
     
 </div>
+</div>-->
+<!-- Add this modal container with an ID -->
+<div id="myModal" class="modal">
+    <div id="modalContent" class="modal-content">
+        <span id="closeModal" class="close">&times;</span>
+        <h3 id="modalDayOfWeek"></h3>
+        <p id="modalDepartureLocation"><strong>Depart:</strong> </p>
+        <p id="modalDestination" ><strong>Destination:</strong> </p>
+        <p id="modalAvailableSeats" ><strong>Nombre de places:</strong> </p>
+        <hr>
+        <form action="process_reservation.php" method="post">
+         <!-- Hidden input fields to store values -->
+    <input type="hidden" name="departureLocation">
+    <input type="hidden" name="destination">
+    <input type="hidden" name="availableSeats">
+        
+    <input type="hidden" name="ride_id" name="ride_id">
+    <button type="submit" class="proposer_btn">Réserver</button>
+                </form>
+    </div>
 </div>
 </body>
 <script>
-    var modal = document.getElementById("myModal");
-    var btn = document.getElementById("openModal");
-    var span = document.getElementsByClassName("close")[0];
-    btn.onclick = function() {
-        modal.style.display = "block";
-    }
-    span.onclick = function() {
-        modal.style.display = "none";
-    }
-    window.onclick = function(event) {
-        if (event.target == modal) {
-            modal.style.display = "none";
+ $(document).ready(function () {
+    $('.open-modal').on('click', function (e) {
+        e.preventDefault();
+        var rideData = $(this).data('ride-id');
+        $('input[name="ride_id"]').val(rideData);
+          console.log(rideData)
+        // AJAX request to fetch additional details
+        $.ajax({
+            url: 'fetch_trip_details.php', // Replace with the actual URL to handle AJAX request
+            method: 'POST',
+            data: { rideData: rideData },
+            success: function (data) {
+                if (data.error) {
+                console.error('Error fetching trip details:', data.error);
+            } else {
+                console.log(data)
+                // Update modal content with the fetched details
+                $('#modalDepartureTime').append(data.departureTime);
+                $('#modalDepartureLocation').append(data.departureLocation);
+                $('#modalDestination').append(data.destination);
+                $('#modalAvailableSeats').append(data.availableSeats);
+                 
+// Set values in hidden input fields for form submission
+
+$('input[name="departureLocation"]').val(data.departureLocation);
+$('input[name="destination"]').val(data.destination);
+$('input[name="availableSeats"]').val(data.availableSeats);
+                // Show the modal
+                $('#myModal').show();
+            }
+        },
+        error: function (xhr, status, error) {
+            console.error('Error fetching trip details. Status:', status, 'Error:', error);
         }
-    }
+    });
+});
+
+
+    $('.close').on('click', function () {
+        $('#myModal').hide();
+    });
+});
 </script>
 <script>
+
+  
+var map = L.map('map').setView([0, 0], 2);
+    var destinationInput = document.getElementById('destination');
+    var positionSelect = document.getElementById('position');
+    var positionNameInput = document.getElementById('positionName');
+    var seatsInput = document.getElementById('seats');
+    var tripListContainer = document.getElementById('trip-list');
+    var destinationLatitude, destinationLongitude;
+    var positionLatitude, positionLongitude;
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '© OpenStreetMap contributors'
+    }).addTo(map);
+
+    var geocoder = L.Control.geocoder().addTo(map);
+    
+    function showMap() {
+        document.getElementById('map').style.display ='block';
+        document.getElementById('close-button').style.display = 'block';
+        map.invalidateSize();
+    }
+    
+    function closeMap() {
+        var mapElement = document.getElementById('map');
+       
+        mapElement.style.display = 'none';
+        document.getElementById('close-button').style.display = 'none';
+    }
+
+    destinationInput.addEventListener('click', function() {
+    showMap();
+    geocoder.off('markgeocode');
+        geocoder.on('markgeocode', function (e) {
+            var city = e.geocode.properties.address.city || e.geocode.properties.address.town || e.geocode.properties.address.village;
+        var city_name = city || 'Unknown';
+       
+        destinationInput.value = city_name;
+        // Set the destination latitude and longitude
+        destinationLatitude = e.geocode.center.lat;
+        destinationLongitude = e.geocode.center.lng;
+        // Hide the map after selecting a location
+        document.getElementById('map').style.display = 'none';
+        document.getElementById('close-button').style.display = 'none';
+    });
+});
+
+positionSelect.addEventListener('change', function() {
+    var selectedOption = positionSelect.value;
+    
+    if (selectedOption === 'navigator') {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(function(position) {
+                var lat = position.coords.latitude;
+                var lon = position.coords.longitude;
+
+                fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        
+                       
+                          var  city = data.address.city || data.address.town || data.address.village;
+                          
+                        var city_name = city || 'Unknown';
+                       
+                        positionNameInput.style.display='block';
+                        positionNameInput.value = city_name;
+                        positionSelect.value = 'choose option';
+                        // Set the position latitude and longitude
+                        positionLatitude = lat;
+                        positionLongitude = lon;
+                     
+                    })
+                    .catch(error => {
+                        console.error('Error getting address:', error.message);
+                    });
+
+                map.setView([lat, lon], 13);
+            }, function (error) {
+                console.error('Error getting geolocation:', error.message);
+            });
+        } else {
+            console.error('Geolocation is not supported by this browser.');
+        }
+    } else if (selectedOption === 'manual') {
+        // Show the map when choosing manually
+        showMap();
+        geocoder.off('markgeocode');
+        geocoder.on('markgeocode', function (e) {
+             var city = e.geocode.properties.address.city || e.geocode.properties.address.town || e.geocode.properties.address.village;
+        var city_name = city || 'Unknown';
+            positionNameInput.style.display='block';
+        positionNameInput.value = city_name;
+
+        // Set the position latitude and longitude
+        positionLatitude = e.geocode.center.lat;
+            positionLongitude = e.geocode.center.lng;
+
+        // Hide the map after selecting a location
+        document.getElementById('map').style.display = 'none';
+        document.getElementById('close-button').style.display = 'none';
+        positionSelect.value = 'choose option';
+    });
+    }
+});
+
+  
+
+function searchTrips()  {
+        var position = $('#position').val();
+        var destination = $('#destination').val();
+        var seats = $('#seats').val();
+        console.log('position latitude:', positionLatitude);
+        console.log('Destination:', destination);
+    console.log('Seats:', seats);
+        // Use AJAX to send a request to the server
+        $.ajax({
+            url: 'pages/searchTrips.php', // The server-side script
+            type: 'POST', // Send as a POST request
+            data: { destination: destination,seats: seats,destinationLongitude:destinationLongitude,destinationLatitude:destinationLatitude ,positionLongitude :positionLongitude , positionLatitude: positionLatitude}, // Data to send to the server
+            dataType: 'json', // Make sure to specify the expected data type
+            
+            success: function (data) {
+                console.log("heres data")
+                console.log(data);
+                // Handle the data received from the server
+                if (data.error) {
+                    // Display an error message if no results found
+                    $('#trip-list').html('<p>' + data.error + '</p>');
+                } else {
+                    // Render the trips dynamically
+                    renderTrips(data);
+                }
+            },
+            error: function () {
+                // Handle the error case
+                $('#trip-list').html('<p>Error fetching data.</p>');
+            }
+        });
+    }
+    function renderTrips(trips) {
+    // Clear the existing content in the trips container
+    $('#trip-list').html('');
+
+    // Iterate through the trips and append them to the container
+    trips.forEach(function (trip) {
+       
+        var tripHtml = '<div class="col-md-4 mb-4">';
+        tripHtml+='<a style=" height:auto;" href="rechercher.php?RideID=' + trip.RideID + '">';
+        tripHtml += '<div class=" card station">';
+        tripHtml+= '<div class="card-body">';
+        tripHtml += '<h5 class="card-title font-weight-bold text-center" style="color:black; ">' + trip.DepartureTime + '</h5>';
+        tripHtml += '<p class="card-text">';
+       
+        tripHtml +=  '<span class="fas fa-map-marker-alt" style="color: black;"></span> ' + trip.DepartureLocation + '<br>';
+        
+        tripHtml += '<p style=" font-weight: bold; margin-left: 85% ; display: inline-block;" class="price" style="margin-left: 250px;">' + trip.price + '</p>';
+       
+        tripHtml += '<br>';
+        tripHtml+='<p class="card-text">';
+      
+        tripHtml += '<span class="fas fa-flag" style="color: black;"></span> ' + trip.Destination + '<br>';
+        tripHtml += '<span style="font-size: 30px; margin-left: 60%;">' + trip.AvailableSeats + '</span> <img style="width: 15%; height:15%;" src="images/car-seat.png">';
+        tripHtml += '</p>';
+        tripHtml += '</div>';
+        tripHtml += '</div>';
+        tripHtml += '</a>';
+        tripHtml+= '</div>';
+
+
+      
+        // Append the generated HTML to the container
+        $('#trip-list').append(tripHtml);
+    });
+}
+
+
+    function haversineDistance(lat1, lon1, lat2, lon2) {
+        var R = 6371;
+        var dLat = deg2rad(lat2 - lat1);
+        var dLon = deg2rad(lon2 - lon1);
+        var a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+            Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) * Math.sin(dLon / 2) * Math.sin(dLon / 2);
+        var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+        var distance = R * c;
+        return distance;
+    }
+
+    function deg2rad(deg) {
+        return deg * (Math.PI / 180);
+    }
+
         flatpickr(".flatpickr", {
             enableTime: true,
             dateFormat: "Y-m-d H:i",
