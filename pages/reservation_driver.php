@@ -177,7 +177,7 @@ require_once('../includes/db_connect.php'); // Inclure votre fichier de connexio
             <nav class="navigation">
                 <ul>
                      <li>
-                     <li class="nav1"><a href="listcond.php">listes trajets</a></li>
+                     <li class="nav1"><a href="listecond.php">listes trajets</a></li>
                     <?php
                      $userID = $_SESSION["UserID"]; 
                     ?>
