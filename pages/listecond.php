@@ -17,6 +17,7 @@ require_once('../includes/db_connect.php'); // Include your database connection 
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="../css/style2.css">
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <link rel="icon" href="../images/tt.png" type="image/x-icon">
     <title>Conducteur</title>
     <script>
@@ -251,7 +252,9 @@ require_once('../includes/db_connect.php'); // Include your database connection 
     border-color: #3498db; /* Change border color on focus */
     box-shadow: 0 0 5px rgba(52, 152, 219, 0.7); /* Add a subtle box shadow on focus */
 }
-
+#positionName{
+    margin-left: 35%;
+}
     </style>
 </head>
 <body>
@@ -262,7 +265,7 @@ require_once('../includes/db_connect.php'); // Include your database connection 
     
             <nav class="navigation">
                 <ul>
-                    <li><a href="../reservation.php" class="logout">Voir Réservations</a></li>
+                    <li><a href="reservation_driver.php" class="logout">Voir Réservations</a></li>
                     <li><a href="../includes/logout.inc.php" class="logout">Déconnexion</a></li>
                 </ul>
             </nav>
@@ -318,12 +321,12 @@ if ($result->num_rows > 0) {
         <span class="close">&times;</span>
         <form id="proposalForm" method="post" action="submit_proposal.php">
             <label for="DepartureLocation">Lieu de départ</label>
-            <input type="text" name="DepartureLocation" id="positionName" readonly style='display:none';>
             <select id="position">
-            <option value="choose option" style="display:none">choose option</option>
-                <option value="navigator">Let navigator choose my position automatically</option>
-                <option value="manual" >Choose from the map search</option>
-            </select>
+    <option value="choose option" style="display:none">choose option</option>
+        <option value="navigator">Let navigator choose my position automatically</option>
+        <option value="manual" >Choose from the map search</option>
+    </select>
+    <input type="text" id="positionName" name="DepartureLocation" readonly style='display:none';>
             <br/>
 
             <label for="Destination">Destination</label>
@@ -340,7 +343,10 @@ if ($result->num_rows > 0) {
             <label for="price">Prix </label>
             <input placeholder="Fixez votre prix par place"  type="text" name="price" required>
             <br/><br/>
-            
+            <input type="hidden" name="destinationLatitude" id="destinationLatitude" />
+            <input type="hidden" name="destinationLongitude" id="destinationLongitude" />
+            <input type="hidden" name="positionLatitude" id="positionLatitude" />
+            <input type="hidden" name="positionLongitude" id="positionLongitude" />
             <?php if (isset($_SESSION['errorMessages'])): ?>
                 <div style="color: red; width: 80%; margin-bottom: 10px;"><?php echo $_SESSION['errorMessages']; ?></div>
                 <?php unset($_SESSION['errorMessages']); // Effacer les messages après les avoir affichés ?>
@@ -403,6 +409,36 @@ if ($result->num_rows > 0) {
         mapElement.style.display = 'none';
         document.getElementById('close-button').style.display = 'none';
     }
+    function sendToServer() {
+    // Créez un objet FormData pour envoyer les données au serveur
+    document.getElementById('destinationLatitude').value = destinationLatitude;
+    document.getElementById('destinationLongitude').value = destinationLongitude;
+    document.getElementById('positionLatitude').value = positionLatitude; // Ajout de cette ligne
+    document.getElementById('positionLongitude').value = positionLongitude; // Ajout de cette ligne
+
+    var formData = new FormData();
+    formData.append('destinationLatitude', destinationLatitude);
+    formData.append('destinationLongitude', destinationLongitude);
+    formData.append('positionLatitude', positionLatitude); // Ajout de cette ligne
+    formData.append('positionLongitude', positionLongitude); // Ajout de cette ligne
+
+    console.log('Destination Latitude:', destinationLatitude);
+    console.log('Destination Longitude:', destinationLongitude);
+    console.log('Position Latitude:', positionLatitude); // Ajout de cette ligne
+    console.log('Position Longitude:', positionLongitude); // Ajout de cette ligne
+
+    // Effectuez une requête AJAX pour envoyer les données au serveur
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST', 'submit_proposal.php', true);
+    xhr.onload = function () {
+        if (xhr.status === 200) {
+            console.log('Données envoyées avec succès au serveur.');
+        } else {
+            console.error('Erreur lors de l\'envoi des données au serveur.');
+        }
+    };
+    xhr.send(formData);
+}
 
     destinationInput.addEventListener('click', function() {
     showMap();
@@ -415,9 +451,15 @@ if ($result->num_rows > 0) {
         // Set the destination latitude and longitude
         destinationLatitude = e.geocode.center.lat;
         destinationLongitude = e.geocode.center.lng;
+
+       
+         // Envoyer les données au serveur via AJAX
+         sendToServer();
         // Hide the map after selecting a location
         document.getElementById('map').style.display = 'none';
         document.getElementById('close-button').style.display = 'none';
+        
+       
     });
 });
 
@@ -445,6 +487,9 @@ positionSelect.addEventListener('change', function() {
                         // Set the position latitude and longitude
                         positionLatitude = lat;
                         positionLongitude = lon;
+
+                        // Envoyer les données au serveur via AJAX
+                        sendToServer();
                      
                     })
                     .catch(error => {
@@ -476,9 +521,11 @@ positionSelect.addEventListener('change', function() {
         document.getElementById('map').style.display = 'none';
         document.getElementById('close-button').style.display = 'none';
         positionSelect.value = 'choose option';
+
+        // Envoyer les données au serveur via AJAX
+        sendToServer();
     });
     }
 });
-
 </script>
 </html>

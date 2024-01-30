@@ -57,8 +57,21 @@ if (isset($_GET['RideID'])) {
     exit();
 }
 ?>
+<?php
+// Assurez-vous de remplacer ces informations par les vôtres
+require_once '../includes/db_connect.php';
 
+$rideID = $_GET['RideID'];  // Assurez-vous de sécuriser cette valeur pour éviter les injections SQL
 
+$sql = "SELECT destinationLatitude, destinationLongitude, positionLatitude, positionLongitude FROM rides WHERE RideID = ?";
+$statement = $conn->prepare($sql);
+$statement->bind_param('i', $rideID);
+$statement->execute();
+$statement->bind_result($destinationLatitude, $destinationLongitude, $positionLatitude, $positionLongitude);
+$statement->fetch();
+$statement->close();
+$conn->close();
+?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -74,6 +87,27 @@ if (isset($_GET['RideID'])) {
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="../css/plan_route.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css">
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+<script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
+    <style>
+        .div-container{
+            display: inline-block;
+            width: 40%;
+            height: 40%;
+        }
+        /* Style for the map container */
+        #map {
+            display : inline-block;
+            height: 400px;
+            width: 40%;
+            position: relative;
+            left: 5%;
+            top: 1%;
+            margin-top : 1%;
+        }
+    </style>
 </head>
 <body>
     <div class="main">
@@ -83,7 +117,7 @@ if (isset($_GET['RideID'])) {
                 <nav class="navigation">
                     <ul>
                         <li class="nav1"><a href="listecond.php">listes trajets</a></li>
-                        <li class="nav1"><a href="reservation.php">Voir Réservations</a></li>
+                        <li class="nav1"><a href="reservation_driver.php">Voir Réservations</a></li>
                         <li>
                             <?php if(isset($_SESSION["user_id"])){ ?>
                             <form action="../includes/logout.inc.php" method="post">
@@ -117,8 +151,9 @@ if (isset($_GET['RideID'])) {
         </div>
         <div></div>
         <div></div>
-    </div>
-    <div id="map" style="z-index: -5; display: inline-block; height: 400px; width: 50%; margin-top: 1%;"></div>
+        
+        </div>
+        <div id="map"></div>
     <div class="modal" id="deleteModal">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -169,43 +204,23 @@ if (isset($_GET['RideID'])) {
             }
         };
     </script>
-    <script>
-        function showMap(location) {
-            // Remplacez 'YOUR_GOOGLE_MAPS_API_KEY' par votre clé API Google Maps
-            var apiKey = 'AIzaSyDfYaBDnZ6vo0t_f8ACEzHhJirgcMfwpyI';
-            var mapUrl = 'https://www.google.com/maps/embed/v1/place?key=' + apiKey + '&q=' + encodeURIComponent(location);
-            window.open(mapUrl, '_blank');
-        }
-    </script>
-    <link rel="stylesheet" href="https://www.bing.com/api/maps/mapcontrol?key=ApE-HNGaFCRDs_bsmYj3Dgak-HaLSYWyN7K35FxHQXjQt8ePrxpy8_uvZoXESwIg&callback=loadMapScenario" async defer>
-    
-   <!-- Remplacez le script Google Maps par le script Leaflet -->
-   <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js" integrity="sha256-WBkoXOwTeyKclOHuWtc+i2uENFpDZ9YPdf5Hf+D7ewM=" crossorigin=""></script>
-
 <script>
-    function initMap() {
-        var myLatLng;
+var map = L.map('map').setView([0, 0], 2);
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '© OpenStreetMap contributors'
+}).addTo(map);
 
-        // Check if userCoordinates is not empty
-        if (Object.keys(userCoordinates).length !== 0) {
-            myLatLng = [userCoordinates.lat, userCoordinates.lng];
-        }
+// Ajoutez des marqueurs pour la position et la destination
+L.marker([<?php echo $positionLatitude; ?>, <?php echo $positionLongitude; ?>]).addTo(map).bindPopup('Position');
+L.marker([<?php echo $destinationLatitude; ?>, <?php echo $destinationLongitude; ?>]).addTo(map).bindPopup('Destination');
 
-        // Utiliser Leaflet pour créer une carte
-        var map = L.map('map').setView(myLatLng, 15);
+// Ajoutez une ligne pour représenter le trajet
+var polyline = L.polyline([
+    [<?php echo $positionLatitude; ?>, <?php echo $positionLongitude; ?>],
+    [<?php echo $destinationLatitude; ?>, <?php echo $destinationLongitude; ?>]
+], { color: 'blue' }).addTo(map);
 
-        // Ajouter une couche OpenStreetMap à la carte
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '© OpenStreetMap contributors'
-        }).addTo(map);
-
-        // Ajouter un marqueur à la position de l'utilisateur
-        if (myLatLng) {
-            L.marker(myLatLng).addTo(map)
-                .bindPopup('User Location')
-                .openPopup();
-        }
-    }
+map.fitBounds(polyline.getBounds());
 </script>
 </body>
 </html>

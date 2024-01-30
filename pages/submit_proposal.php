@@ -3,6 +3,7 @@ session_start();
 require_once('../includes/db_connect.php');
 require_once '../includes/login_model.inc.php';
 require_once('../includes/dbh.inc.php');
+var_dump($_POST);
 
 // Initialiser les messages d'erreur à une chaîne vide
 $errorMessages = '';
@@ -19,7 +20,10 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $DepartureTime = $_POST["DepartureTime"];
         $AvailableSeats = $_POST["AvailableSeats"];
         $price = $_POST["price"];
-
+        $destinationLatitude = $_POST["destinationLatitude"];
+        $destinationLongitude = $_POST["destinationLongitude"];
+        $positionLatitude = $_POST['positionLatitude'];
+        $positionLongitude = $_POST['positionLongitude'];
         // Vérifier que la date et l'heure fournies ne sont pas inférieures à la date et à l'heure actuelles
         $currentDateTime = date('Y-m-d H:i:s');
         if ($DepartureTime < $currentDateTime) {
@@ -41,8 +45,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $price = $price . " DA";
 
         // Insérer les données dans la base de données
-        $sql = "INSERT INTO rides (DriverID, DepartureLocation, Destination, DepartureTime, AvailableSeats, price) 
-                VALUES ('$DriverID', '$DepartureLocation', '$Destination', '$DepartureTime', '$AvailableSeats', '$price')";
+        $sql = "INSERT INTO rides (DriverID, DepartureLocation, Destination, DepartureTime, AvailableSeats, price, destinationLatitude, destinationLongitude, positionLatitude, positionLongitude ) 
+                VALUES ('$DriverID', '$DepartureLocation', '$Destination', '$DepartureTime', '$AvailableSeats', '$price', '$destinationLatitude', '$destinationLongitude', '$positionLatitude', '$positionLongitude')";
 
         // Exécuter la requête SQL
         if ($pdo->query($sql)) {
