@@ -172,7 +172,7 @@ require_once('../includes/db_connect.php'); // Inclure votre fichier de connexio
 <div class="main">
     <header>
         <div class="container">
-            <a><img class="logo" src="../images/logo2.png"></a>
+            <a href="listecond.php"><img class="logo" src="../images/logo2.png"></a>
     
             <nav class="navigation">
                 <ul>
