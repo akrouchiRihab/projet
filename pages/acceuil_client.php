@@ -344,9 +344,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             echo '<h5 class="card-title font-weight-bold text-center" style="color:black; ">' . $row["DepartureTime"] . '</h5>';
                             echo '<p class="card-text">';
                             echo '<span class="fas fa-map-marker-alt" style="color: black;"></span> ' . $row["DepartureLocation"] . '<br>';
-                            if ($row["price"] !== "") {
+        
                                 echo   '<p style=" font-weight: bold; margin-left: 85% ; display: inline-block;" class="price" style="margin-left: 250px;">' . $row["price"] .'</p>';
-                            }
+                          
                             echo '</p>';
                             echo '<p class="card-text">';
                             echo '<span class="fas fa-flag" style="color: black;"></span> ' . $row["Destination"] . '<br>';
