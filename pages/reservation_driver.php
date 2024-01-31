@@ -241,7 +241,7 @@ if (isset($_SESSION['UserID'])) {
                 echo '<p>Numero telephone du client: ' . $row['phonenumber'] . '</p>';
                 echo '</div>';
                 echo '</a>';
-
+ 
             }
 
             // Fermer la connexion et la requête

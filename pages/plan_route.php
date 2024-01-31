@@ -19,7 +19,7 @@ if (isset($_GET['deleteID'])) {
             // Handle errors
             echo "Error deleting record: " . mysqli_error($conn);
             exit();
-        }
+        } 
     } else {
         // Handle errors
         echo "Error deleting reservations: " . mysqli_error($conn);
