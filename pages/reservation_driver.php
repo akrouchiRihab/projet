@@ -1,18 +1,17 @@
-<?php
+<?php 
+// Assurez-vous que vous avez la connexion à la base de données
+// Include your database connection file
 session_start();
-require_once('../includes/db_connect.php'); // Inclure votre fichier de connexion à la base de données
+require_once('../includes/db_connect.php');
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
-    <link rel="stylesheet" href="https://www.bing.com/api/maps/mapcontrol?key=ApE-HNGaFCRDs_bsmYj3Dgak-HaLSYWyN7K35FxHQXjQt8ePrxpy8_uvZoXESwIg&callback=loadMapScenario" async defer>
-    <script type='text/javascript' src='https://www.bing.com/api/maps/mapcontrol?key=ApE-HNGaFCRDs_bsmYj3Dgak-HaLSYWyN7K35FxHQXjQt8ePrxpy8_uvZoXESwIg'></script> 
     <script src="https://cdn.jsdelivr.net/npm/smooth-scroll@16.1.3/dist/smooth-scroll.polyfills.min.js"></script>
-    <script src='https://kit.fontawesome.com/a076d05399.js' crossorigin='anonymous'></script>
+    
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
@@ -178,9 +177,7 @@ require_once('../includes/db_connect.php'); // Inclure votre fichier de connexio
                 <ul>
                      <li>
                      <li class="nav1"><a href="listecond.php">listes trajets</a></li>
-                    <?php
-                     $userID = $_SESSION["UserID"]; 
-                    ?>
+                    
                     </li>
                 </ul>
             </nav>
@@ -195,37 +192,72 @@ require_once('../includes/db_connect.php'); // Inclure votre fichier de connexio
         <div>
             <div class="div-content">
             <?php
-// Fetch data from the database
-$sql = "SELECT rides.*, reservations.ReservationID
-            FROM rides
-            INNER JOIN reservations ON rides.RideID = reservations.RideID
-            WHERE reservations.UserID = '$userID'";
+// Vérifier si l'utilisateur est connecté
+if (isset($_SESSION['UserID'])) {
+    $userID = $_SESSION['UserID'];
 
+    // Vérifier si la connexion à la base de données est établie
+    if ($conn) {
+        // Requête SQL
+        $sql = "SELECT
+                    rides.DepartureLocation,
+                    rides.Destination,
+                    rides.DepartureTime,
+                    rides.AvailableSeats,
+                    rides.price,
+                    users.FirstName,
+                    users.LastName,
+                    users.phonenumber
+                FROM
+                    reservations
+                JOIN
+                    rides ON reservations.RideID = rides.RideID
+                JOIN
+                    users ON reservations.UserID = users.UserID
+                WHERE
+                    rides.DriverID = ?";
 
-$result = $conn->query($sql);
+        // Préparation de la requête
+        $statement = $conn->prepare($sql);
 
-if ($result->num_rows > 0) {
-    // Output data of each row
-    while ($row = $result->fetch_assoc()) {
-        echo '<a style=" height:auto;" href="maReservation.php?RideID=' . urlencode($row["RideID"]) . '">';
-        echo '<div class="station">';
-        echo '<p style="font-weight: bold; text-align: center;">' . $row["DepartureTime"] . '</p>';
-        echo '<br/>';
-        echo '<span style="color: black; text-decoration: none; font-size: 20px; display: inline-block;" class="fas fa-map-marker-alt"></span>     <p style=" display: inline-block;">' . $row["DepartureLocation"] . '</p>';
-        if ($row["price"] !== "") {
-            echo '<p style=" font-weight: bold; margin-left: 85% ; display: inline-block;" class="price" style="margin-left: 250px;">' . $row["price"] . '</p>';
+        // Vérifier si la préparation de la requête a réussi
+        if ($statement) {
+            $statement->bind_param('i', $userID);
+            $statement->execute();
+            $result = $statement->get_result();
+
+            // Affichage des résultats
+            while ($row = $result->fetch_assoc()) {
+                // Afficher les informations de réservation, trajet et client
+                echo '<a style=" height:auto;">';
+                echo '<div class="station">';
+                echo '<p style="font-weight: bold; text-align: center;">' . $row["DepartureTime"] . '</p>';
+                echo '<span style="color: black; text-decoration: none; font-size: 20px; display: inline-block;" class="fas fa-map-marker-alt"></span>     <p style=" display: inline-block;">' . $row["DepartureLocation"] . '</p>';
+                echo '<br/>';
+                echo '<span style="color: black; text-decoration: none; font-size: 20px; display: inline-block;" class="fas fa-flag"></span>     <p style=" display: inline-block;"> ' . $row["Destination"] . '</p>';
+                echo '<p>Places disponibles: ' . $row['AvailableSeats'] . '</p>';
+                echo '<p>Prix: ' . $row['price'] . '</p>';
+                echo '<p>Nom du client: ' . $row['FirstName'] . ' ' . $row['LastName'] . '</p>';
+                echo '<p>Numero telephone du client: ' . $row['phonenumber'] . '</p>';
+                echo '</div>';
+                echo '</a>';
+
+            }
+
+            // Fermer la connexion et la requête
+            $statement->close();
+        } else {
+            // Gérer l'échec de la préparation de la requête
+            echo "Erreur lors de la préparation de la requête.";
         }
-        echo '<br/>';
-        echo '<span style="color: black; text-decoration: none; font-size: 20px; display: inline-block;" class="fas fa-flag"></span>     <p style=" display: inline-block;"> ' . $row["Destination"] . '</p>';
-        echo '<p style="display: inline-block; font-size: 30px; margin-left: 80%;">' . $row["AvailableSeats"] . '</p><img style="display: inline-block;  width: 7%; height:7%;" src="images/car-seat.png"/>';
-        echo '</div>';
-        echo '</a>';
+
+        $conn->close();
+    } else {
+        // Gérer l'échec de la connexion à la base de données
+        echo "Erreur de connexion à la base de données.";
     }
-} else {
-    echo "0 results";
 }
-?>
-      
+?>     
 </div>
         </div>
     </div>
@@ -235,53 +267,12 @@ if ($result->num_rows > 0) {
 </div>
 </body>
 <script>
-    var modal = document.getElementById("myModal");
-    var btn = document.getElementById("openModal");
-    var span = document.getElementsByClassName("close")[0];
-    btn.onclick = function() {
-        modal.style.display = "block";
-    }
-    span.onclick = function() {
-        modal.style.display = "none";
-    }
-    window.onclick = function(event) {
-        if (event.target == modal) {
-            modal.style.display = "none";
-        }
-    }
-</script>
-<script>
         flatpickr(".flatpickr", {
             enableTime: true,
             dateFormat: "Y-m-d H:i",
             // Ajoutez d'autres options selon vos besoins
         });
 </script>
-<script>
-    function initMap() {
-        var myLatLng;
-
-        // Check if userCoordinates is not empty
-        if (Object.keys(userCoordinates).length !== 0) {
-            myLatLng = [userCoordinates.lat, userCoordinates.lng];
-        }
-
-        // Utiliser Leaflet pour créer une carte
-        var map = L.map('map').setView(myLatLng, 15);
-
-        // Ajouter une couche OpenStreetMap à la carte
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '© OpenStreetMap contributors'
-        }).addTo(map);
-
-        // Ajouter un marqueur à la position de l'utilisateur
-        if (myLatLng) {
-            L.marker(myLatLng).addTo(map)
-                .bindPopup('User Location')
-                .openPopup();
-        }
-    }
-</script>
-
 
 </html>
+

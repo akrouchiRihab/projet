@@ -63,11 +63,28 @@ require_once '../includes/db_connect.php';
 
 $rideID = $_GET['RideID'];  // Assurez-vous de sécuriser cette valeur pour éviter les injections SQL
 
-$sql = "SELECT destinationLatitude, destinationLongitude, positionLatitude, positionLongitude FROM rides WHERE RideID = ?";
+$sql = "SELECT destinationLatitude, destinationLongitude, positionLatitude, positionLongitude FROM rides WHERE RideID = '$RideID'";
 $statement = $conn->prepare($sql);
 $statement->bind_param('i', $rideID);
 $statement->execute();
 $statement->bind_result($destinationLatitude, $destinationLongitude, $positionLatitude, $positionLongitude);
+$statement->fetch();
+$statement->close();
+$conn->close();
+?>
+<?php
+// Assurez-vous de remplacer ces informations par les vôtres
+require_once '../includes/db_connect.php';
+
+$RideID = $_GET['RideID'];  // Assurez-vous de sécuriser cette valeur pour éviter les injections SQL
+$UserID = $_SESSION['UserID']; // Assurez-vous que la session utilisateur est active
+
+// Requête pour compter le nombre de réservations pour ce trajet et cet utilisateur
+$reservationCountQuery = "SELECT COUNT(*) AS reservationCount FROM reservations WHERE RideID = '$RideID' AND UserID = '$userID'";
+$statement = $conn->prepare($reservationCountQuery);
+$statement->bind_param('ii', $rideID, $userID);
+$statement->execute();
+$statement->bind_result($reservationCount);
 $statement->fetch();
 $statement->close();
 $conn->close();
@@ -119,7 +136,7 @@ $conn->close();
                         <li class="nav1"><a href="listecond.php">listes trajets</a></li>
                         <li class="nav1"><a href="reservation_driver.php">Voir Réservations</a></li>
                         <li>
-                            <?php if(isset($_SESSION["user_id"])){ ?>
+                            <?php if(isset($_SESSION["UserID"])){ ?>
                             <form action="../includes/logout.inc.php" method="post">
                                 <button class="logout-icon"><i class="fa-solid fa-right-from-bracket"></i></button>
                             </form>
@@ -140,7 +157,15 @@ $conn->close();
             <p><strong>Destination:</strong> <a href="#" onclick="showMap('<?php echo $destination; ?>')"><?php echo $destination; ?></a></p>
             <br/>
             <hr>
-            <p style="margin:2%;">Aucun passager pour ce trajet</p>
+            <p style="margin:2%;">
+                <?php
+                if ($reservationCount > 0) {
+                    echo "Nombre de passagers pour ce trajet: " . $reservationCount;
+                } else {
+                    echo "Aucun passager pour ce trajet";
+                }
+                ?>
+            </p>
             <hr>
         </div>
         <div class="parametre">
