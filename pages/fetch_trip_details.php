@@ -4,7 +4,7 @@
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['rideData'])) {
     // Include your database connection file
-    require_once('includes/db_connect.php');
+    require_once('../includes/db_connect.php');
 
     $rideData = json_decode($_POST['rideData'], true);
 

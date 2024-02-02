@@ -1,6 +1,6 @@
 <?php
 session_start();
-require_once('includes/db_connect.php'); // Include your database connection file
+require_once('../includes/db_connect.php'); // Include your database connection file
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
   if (isset($_SESSION["UserID"])) {
@@ -24,7 +24,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     exit();
    } else {
     // Rediriger vers la page de connexion si l'utilisateur n'est pas connecté
-    header("Location: login.php");
+    header("Location: ../login.php");
     exit();
 }
 }
@@ -50,7 +50,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="css/style2.css">
+    <link rel="stylesheet" href="../css/style2.css">
     <title>Client</title>
     <script>
         var scroll = new SmoothScroll('a[href*="#"]');
@@ -295,7 +295,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <div class="main">
     <header>
         <div class="container">
-            <a href="#"><img class="logo" src="images/logo2.png"></a>
+            <a href="#"><img class="logo" src="../images/logo2.png"></a>
     
             <nav class="navigation">
                 <ul>
@@ -337,7 +337,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <div class="col-md-12">
             <div id="trip-list" class="div-content row">
                 <?php
-                   require_once('includes/db_connect.php'); // Include your database connection file
+                   require_once('../includes/db_connect.php'); // Include your database connection file
                     // Fetch data from the database
                     $sql = "SELECT * FROM rides WHERE AvailableSeats > 0";
                     $result = $conn->query($sql);
@@ -589,7 +589,7 @@ function searchTrips()  {
     console.log('Seats:', seats);
         // Use AJAX to send a request to the server
         $.ajax({
-            url: 'pages/searchTrips.php', // The server-side script
+            url: 'searchTrips.php', // The server-side script
             type: 'POST', // Send as a POST request
             data: { destination: destination,seats: seats,destinationLongitude:destinationLongitude,destinationLatitude:destinationLatitude ,positionLongitude :positionLongitude , positionLatitude: positionLatitude}, // Data to send to the server
             dataType: 'json', // Make sure to specify the expected data type

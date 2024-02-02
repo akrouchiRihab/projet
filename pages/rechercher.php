@@ -1,6 +1,6 @@
 <?php
 // Include your database connection file
-require_once('includes/db_connect.php');
+require_once('../includes/db_connect.php');
 
 // Check if rideID is provided in the URL for fetching details
 if (isset($_GET['RideID'])) {
@@ -98,20 +98,20 @@ if (isset($_GET['RideID'])) {
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-    <link rel="stylesheet" href="css/plan_route.css">
+    <link rel="stylesheet" href="../css/plan_route.css">
 </head>
 <body>
     <div class="main">
         <header>
             <div class="container">
-                <a href="clientlistes.php"><img class="logo" src="images/logo2.png"></a>
+                <a href="clientlistes.php"><img class="logo" src="../images/logo2.png"></a>
                 <nav class="navigation">
                     <ul>
                         <li class="nav1"><a href="clientlistes.php">listes trajets</a></li>
                         <li class="nav1"><a href="reservation.php">Mes reservations</a></li>
                        
                             <?php if(isset($_SESSION["user_id"])){ ?>
-                            <form action="includes/logout.inc.php" method="post">
+                            <form action="../includes/logout.inc.php" method="post">
                                 <button class="logout-icon"><i class="fa-solid fa-right-from-bracket"></i></button>
                             </form>
                             <?php } ?>
@@ -133,9 +133,9 @@ if (isset($_GET['RideID'])) {
             <br/>
             <hr>
         </div><br><br>
-        <form action="process_annulation.php" method="post">
+        <form action="process_reservation.php" method="post">
     <input type="hidden" name="ride_id" value="<?php echo $RideID; ?>">
-    <button type='submit' class="annuler_btn">Annuler</button>
+    <button type="submit" class="proposer_btn">Réserver</button>
 </form>
 
 </div>
