@@ -88,8 +88,7 @@ if (isset($_GET['RideID'])) {
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <<link rel="icon" href="../images/logopage.png" type="image/x-icon">
-    <title>Twsila - Client</title>
+    <title>Plan de Route</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -106,15 +105,21 @@ if (isset($_GET['RideID'])) {
         <header>
             <div class="container">
                 <a href="clientlistes.php"><img class="logo" src="../images/twsil3.png"></a>
-                <nav class="navigation">
-                    <ul style="margin-left: 30%;">
-                        <li><a href="clientlistes.php">listes trajets</a></li>
-                        <li><a href="reservation.php">Mes reservations</a></li>
-                        <li><a href="../includes/logout.inc.php" class="logout">Déconnexion</a></li>
+        <nav class="navigation">
+                    <ul>
+                        <li class="nav1"><a href="clientlistes.php">listes trajets</a></li>
+                        <li class="nav1"><a href="reservation.php">Mes reservations</a></li>
+                        <li class="nav1"><a href="../includes/logout.inc.php" ><img class="logout" src="../images/logout.png"></a></li>
+             
+                            <?php if(isset($_SESSION["user_id"])){ ?>
+                            <form action="../includes/logout.inc.php" method="post">
+                                <button class="logout-icon"><i class="fa-solid fa-right-from-bracket"></i></button>
+                            </form>
+                            <?php } ?>
                         </li>
                     </ul>
                 </nav>
-            </div>
+            </div>   </div>
         </header>
     </div>
     <div class="div-container">

@@ -342,3 +342,7 @@ nav{
 .annuler_btn:hover{
     background-color:#4d0f0f;
 }
+.logout{
+    width: 30px;
+    margin-top: 19px;
+}

@@ -45,8 +45,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="../css/style2.css">
-    <link rel="icon" href="../images/logopage.png" type="image/x-icon">
-    <title>Twsila - Client</title>
+    <title>Client</title>
     <script>
         var scroll = new SmoothScroll('a[href*="#"]');
     </script>
@@ -201,13 +200,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <header>
         <div class="container">
             <a href="clientlistes.php"><img class="logo" src="../images/twsil3.png"></a>
-    
+
+
             <nav class="navigation">
-                <ul style="margin-left: 30%;">
+                <ul>
                      <li>
-                     <li><a href="clientlistes.php">listes trajets</a></li>
-                     <li><a href="reservation.php">Mes reservations</a></li>
-                     <li><a href="../includes/logout.inc.php" class="logout">Déconnexion</a></li>
+                     <li class="nav1"><a href="clientlistes.php">listes trajets</a></li>
+                     <li class="nav1"><a href="reservation.php">Mes reservations</a></li>
+                     <li class="nav1"><a href="../includes/logout.inc.php" ><img class="logout" src="../images/logout.png"></a></li>
+             
                     <?php
                      $userID = $_SESSION["UserID"]; 
                     ?>

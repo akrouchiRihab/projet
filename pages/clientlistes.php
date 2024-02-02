@@ -51,8 +51,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="../css/style2.css">
-    <link rel="icon" href="../images/logopage.png" type="image/x-icon">
-    <title>Twsila - Client</title>
+    <title>Client</title>
     <script>
         var scroll = new SmoothScroll('a[href*="#"]');
     </script>
@@ -281,6 +280,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     margin-right: 10px;
 }
 
+button:hover{
+    background-color: blue;
+}
 
 
 #bingMap {
@@ -299,12 +301,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <a href="#"><img class="logo" src="../images/twsil3.png"></a>
     
             <nav class="navigation">
-                <ul style="margin-left: 30%;">
+                <ul>
                      <li>
-                     <li><a href="clientlistes.php">listes trajets</a></li>
-                     <li ><a href="reservation.php">Mes reservations</a></li>
-                     <li><a href="../includes/logout.inc.php" class="logout">Déconnexion</a></li>
-                    <?php
+                     <li class="nav1"><a href="clientlistes.php">listes trajets</a></li>
+                     <li class="nav1"><a href="reservation.php">Mes reservations</a></li>
+                     <li class="nav1"><a href="../includes/logout.inc.php" ><img class="logout" src="../images/logout.png"></a></li>
+             
+                  <?php
                      $UserID = $_SESSION["UserID"]; 
                     ?>
                     </li>
@@ -330,7 +333,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <label for="seats">Number of Seats:</label>
     <input type="number" id="seats" min="1"  max='4' value="1">
 
-    <button onclick="searchTrips()">Search</button>
+    <button  onclick="searchTrips()">Search</button>
 </div>
 <button id="close-button" onclick="closeMap()">Close Map</button><div id="map"></div>
 </div>
