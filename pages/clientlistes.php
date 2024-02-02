@@ -1,6 +1,6 @@
 <?php
 session_start();
-require_once('../includes/db_connect.php'); // Include your database connection file
+require_once('includes/db_connect.php'); // Include your database connection file
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
   if (isset($_SESSION["UserID"])) {
@@ -24,7 +24,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     exit();
    } else {
     // Rediriger vers la page de connexion si l'utilisateur n'est pas connecté
-    header("Location: ../login.php");
+    header("Location: login.php");
     exit();
 }
 }
@@ -38,10 +38,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
     <!--  link to jquery  to make $ work in js-->
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-    <link href="bootstrap/css/all.min.css" rel="stylesheet">
-    <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
-    <script src="bootstrap/js/bootstrap.bundle.min.js"></script>
-    <script src="bootstrap/js/all.min.js"></script>
+    <link href="../bootstrap/css/all.min.css" rel="stylesheet">
+    <link href="../bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <script src="../bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="../bootstrap/js/all.min.js"></script>
     <link rel="stylesheet" href="https://www.bing.com/api/maps/mapcontrol?key=ApE-HNGaFCRDs_bsmYj3Dgak-HaLSYWyN7K35FxHQXjQt8ePrxpy8_uvZoXESwIg&callback=loadMapScenario" async defer>
     <script type='text/javascript' src='https://www.bing.com/api/maps/mapcontrol?key=ApE-HNGaFCRDs_bsmYj3Dgak-HaLSYWyN7K35FxHQXjQt8ePrxpy8_uvZoXESwIg'></script> 
     <script src="https://cdn.jsdelivr.net/npm/smooth-scroll@16.1.3/dist/smooth-scroll.polyfills.min.js"></script>
@@ -50,7 +50,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="../css/style2.css">
+    <link rel="stylesheet" href="css/style2.css">
     <title>Client</title>
     <script>
         var scroll = new SmoothScroll('a[href*="#"]');
@@ -243,9 +243,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     font-size: 0; /* Fix pour éliminer l'espace blanc entre les éléments inline-block */
 }
 
-.station {
+#station {
     display: inline-block;
-    
+    width:100%;
     margin-bottom: 20px;
     margin-right: 20px;
     background-color: #f5f5f5;
@@ -295,7 +295,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <div class="main">
     <header>
         <div class="container">
-            <a href="#"><img class="logo" src="../images/logo2.png"></a>
+            <a href="#"><img class="logo" src="images/logo2.png"></a>
     
             <nav class="navigation">
                 <ul>
@@ -337,7 +337,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <div class="col-md-12">
             <div id="trip-list" class="div-content row">
                 <?php
-                   require_once('../includes/db_connect.php'); // Include your database connection file
+                   require_once('includes/db_connect.php'); // Include your database connection file
                     // Fetch data from the database
                     $sql = "SELECT * FROM rides WHERE AvailableSeats > 0";
                     $result = $conn->query($sql);
@@ -347,7 +347,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         while ($row = $result->fetch_assoc()) {
                             echo '<div class="col-md-4 mb-4">';
                             echo '<a  id="trajet-reserve" style="height:auto;"class="open-modal" data-ride-id="' . $row["RideID"] . '">';
-                            echo '<div class="card station">';
+                            echo '<div id="station" class="card station  ">';
                             echo '<div class="card-body">';
                             echo '<h5 class="card-title font-weight-bold text-center" style="color:black; ">' . $row["DepartureTime"] . '</h5>';
                             echo '<p class="card-text">';
@@ -358,7 +358,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             echo '</p>';
                             echo '<p class="card-text">';
                             echo '<span class="fas fa-flag" style="color: black;"></span> ' . $row["Destination"] . '<br/>';
-                            echo '<span style="font-size: 30px; margin-left: 60%;">' . $row["AvailableSeats"] . '</span> <img style="width: 15%; height:15%;" src="images/car-seat.png">';
+                            echo '<span style="font-size: 30px; margin-left: 60%;">' . $row["AvailableSeats"] . '</span> <img style="width: 15%; height:15%;" src="../images/car-seat.png">';
                             echo '</p>';
                             echo '</div>';
                             echo '</div>';
@@ -589,7 +589,7 @@ function searchTrips()  {
     console.log('Seats:', seats);
         // Use AJAX to send a request to the server
         $.ajax({
-            url: 'searchTrips.php', // The server-side script
+            url: 'pages/searchTrips.php', // The server-side script
             type: 'POST', // Send as a POST request
             data: { destination: destination,seats: seats,destinationLongitude:destinationLongitude,destinationLatitude:destinationLatitude ,positionLongitude :positionLongitude , positionLatitude: positionLatitude}, // Data to send to the server
             dataType: 'json', // Make sure to specify the expected data type
@@ -621,7 +621,7 @@ function searchTrips()  {
        
         var tripHtml = '<div class="col-md-4 mb-4">';
         tripHtml+='<a style=" height:auto;" href="rechercher.php?RideID=' + trip.RideID + '">';
-        tripHtml += '<div class=" card station">';
+        tripHtml += '<div id="station" class=" card station ">';
         tripHtml+= '<div class="card-body">';
         tripHtml += '<h5 class="card-title font-weight-bold text-center" style="color:black; ">' + trip.DepartureTime + '</h5>';
         tripHtml += '<p class="card-text">';
@@ -634,7 +634,7 @@ function searchTrips()  {
         tripHtml+='<p class="card-text">';
       
         tripHtml += '<span class="fas fa-flag" style="color: black;"></span> ' + trip.Destination + '<br>';
-        tripHtml += '<span style="font-size: 30px; margin-left: 60%;">' + trip.AvailableSeats + '</span> <img style="width: 15%; height:15%;" src="images/car-seat.png">';
+        tripHtml += '<span style="font-size: 30px; margin-left: 60%;">' + trip.AvailableSeats + '</span> <img style="width: 15%; height:15%;" src="../images/car-seat.png">';
         tripHtml += '</p>';
         tripHtml += '</div>';
         tripHtml += '</div>';
