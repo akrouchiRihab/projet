@@ -208,6 +208,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                      <li>
                      <li class="nav1"><a href="clientlistes.php">listes trajets</a></li>
                      <li class="nav1"><a href="reservation.php">Mes reservations</a></li>
+                     <li class="nav1"><a href="../includes/logout.inc.php" ><img class="logout" src="../images/logout.png"></a></li>
+             
                     <?php
                      $userID = $_SESSION["UserID"]; 
                     ?>

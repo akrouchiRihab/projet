@@ -373,3 +373,7 @@ footer{
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* ombre légère */
     border-radius: 5px;
 }
+.logout{
+    width: 30px;
+    margin-top: 19px;
+}
