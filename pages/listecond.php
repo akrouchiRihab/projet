@@ -271,7 +271,7 @@ require_once('../includes/db_connect.php'); // Include your database connection 
             </nav>
         </div>
     </header>
-    </div>
+    </div> 
     <div class="container">
         <div class="col-2">
             <br/>
