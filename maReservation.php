@@ -132,13 +132,13 @@ if (isset($_GET['RideID'])) {
             <p><strong>Nombre de places:<?php echo $availableSeats; ?></strong>
             <br/>
             <hr>
-        </div><br><br>
+       <br><br>
         <form action="process_annulation.php" method="post">
     <input type="hidden" name="ride_id" value="<?php echo $RideID; ?>">
     <button type='submit' class="annuler_btn">Annuler</button>
-</form>
+</form> 
 
-</div>
+
     <div id="map" style="z-index: -5; display: inline-block; height: 400px; width: 50%; margin-top: 1%;"></div>
  
     <script>
