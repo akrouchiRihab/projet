@@ -104,12 +104,8 @@ if (isset($_GET['RideID'])) {
     <div class="main">
         <header>
             <div class="container">
-<<<<<<< HEAD:maReservation.php
-                <a href="clientlistes.php"><img class="logo" src="images/twsil3.png"></a>
-=======
-                <a href="clientlistes.php"><img class="logo" src="../images/logo2.png"></a>
->>>>>>> 70046dc07ebcf671da27decbcc02f6cf3308952a:pages/maReservation.php
-                <nav class="navigation">
+                <a href="clientlistes.php"><img class="logo" src="../images/twsil3.png"></a>
+        <nav class="navigation">
                     <ul>
                         <li class="nav1"><a href="clientlistes.php">listes trajets</a></li>
                         <li class="nav1"><a href="reservation.php">Mes reservations</a></li>
