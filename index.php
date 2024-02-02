@@ -39,7 +39,7 @@ require_once 'includes/search_model.inc.php';
       <div class="container">
 
 
-        <a href="#"><img class="logo" src="images/twsil3.png"></a>
+        <a href="#"><img class="logo" src="images/twsila.png"></a>
 
 
         <nav class="navigation">
