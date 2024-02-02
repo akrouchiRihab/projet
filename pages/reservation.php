@@ -199,11 +199,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <div class="main">
     <header>
         <div class="container">
-<<<<<<< HEAD:reservation.php
-            <a href="clientlistes.php"><img class="logo" src="images/twsil3.png"></a>
-=======
-            <a href="clientlistes.php"><img class="logo" src="../images/logo2.png"></a>
->>>>>>> 70046dc07ebcf671da27decbcc02f6cf3308952a:pages/reservation.php
+
+            <a href="clientlistes.php"><img class="logo" src="../images/twsil3.png"></a>
+
     
             <nav class="navigation">
                 <ul>
