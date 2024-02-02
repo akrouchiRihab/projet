@@ -143,7 +143,7 @@ if (isset($_GET['RideID'])) {
                 <a href="#"><img class="logo" src="../images/twsil3.png"></a>
                 <nav class="navigation">
                     <ul style="margin-left: 50%;">
-                        <li><a href="listecond.php">listes trajets</a></li>
+                        <li><a href="liste_driver.php">listes trajets</a></li>
                         <li><a href="reservation_driver.php">Voir Réservations</a></li>
                         <li><a href="../includes/logout.inc.php" class="logout">Déconnexion</a></li>
                     </ul>
@@ -154,7 +154,7 @@ if (isset($_GET['RideID'])) {
     <div class="div-container">
         <h1>Modifier le Trajet</h1>
 
-        <form method="post" action="edit_trip.php">
+        <form method="post" action="edit_trajet.php">
             <input type="hidden" name="RideID" value="<?php echo $RideID; ?>">
             
             <label for="DepartureLocation">Lieu de départ</label><br/>
