@@ -104,7 +104,11 @@ if (isset($_GET['RideID'])) {
     <div class="main">
         <header>
             <div class="container">
+<<<<<<< HEAD:maReservation.php
+                <a href="clientlistes.php"><img class="logo" src="images/twsil3.png"></a>
+=======
                 <a href="clientlistes.php"><img class="logo" src="../images/logo2.png"></a>
+>>>>>>> 70046dc07ebcf671da27decbcc02f6cf3308952a:pages/maReservation.php
                 <nav class="navigation">
                     <ul>
                         <li class="nav1"><a href="clientlistes.php">listes trajets</a></li>
@@ -132,15 +136,15 @@ if (isset($_GET['RideID'])) {
             <p><strong>Nombre de places:<?php echo $availableSeats; ?></strong>
             <br/>
             <hr>
-        </div><br><br>
+       <br><br>
         <form action="process_annulation.php" method="post">
     <input type="hidden" name="ride_id" value="<?php echo $RideID; ?>">
     <button type='submit' class="annuler_btn">Annuler</button>
-</form>
+</form> 
 
-</div>
-    <div id="map" style="z-index: -5; display: inline-block; height: 400px; width: 50%; margin-top: 1%;"></div>
- 
+
+   <!-- <div id="map" style=" height: 400px; width: 50%; margin-top: 1%;">
+                            -->
     <script>
         function showMap(location) {
             // Remplacez 'YOUR_GOOGLE_MAPS_API_KEY' par votre clé API Google Maps
@@ -179,5 +183,21 @@ if (isset($_GET['RideID'])) {
         }
     }
 </script>
+</div></div></div>
 </body>
 </html>
+<style> .div-container{
+            display: inline-block;
+            width: 40%;
+            height: 40%;
+        }
+        /* Style for the map container */
+        #map {
+            display : inline-block;
+            height: 400px;
+            width: 40%;
+            position: relative;
+            left: 5%;
+            top: 1%;
+            margin-top : 1%;
+        }</style>
