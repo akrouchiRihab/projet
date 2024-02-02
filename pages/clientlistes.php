@@ -38,10 +38,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
     <!--  link to jquery  to make $ work in js-->
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-    <link href="bootstrap/css/all.min.css" rel="stylesheet">
-    <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
-    <script src="bootstrap/js/bootstrap.bundle.min.js"></script>
-    <script src="bootstrap/js/all.min.js"></script>
+    <link href="../bootstrap/css/all.min.css" rel="stylesheet">
+    <link href="../bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <script src="../bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="../bootstrap/js/all.min.js"></script>
     <link rel="stylesheet" href="https://www.bing.com/api/maps/mapcontrol?key=ApE-HNGaFCRDs_bsmYj3Dgak-HaLSYWyN7K35FxHQXjQt8ePrxpy8_uvZoXESwIg&callback=loadMapScenario" async defer>
     <script type='text/javascript' src='https://www.bing.com/api/maps/mapcontrol?key=ApE-HNGaFCRDs_bsmYj3Dgak-HaLSYWyN7K35FxHQXjQt8ePrxpy8_uvZoXESwIg'></script> 
     <script src="https://cdn.jsdelivr.net/npm/smooth-scroll@16.1.3/dist/smooth-scroll.polyfills.min.js"></script>
@@ -243,9 +243,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     font-size: 0; /* Fix pour éliminer l'espace blanc entre les éléments inline-block */
 }
 
-.station {
+#station {
     display: inline-block;
-    
+    width:100%;
     margin-bottom: 20px;
     margin-right: 20px;
     background-color: #f5f5f5;
@@ -347,7 +347,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         while ($row = $result->fetch_assoc()) {
                             echo '<div class="col-md-4 mb-4">';
                             echo '<a  id="trajet-reserve" style="height:auto;"class="open-modal" data-ride-id="' . $row["RideID"] . '">';
-                            echo '<div class="card station">';
+                            echo '<div id="station" class="card station  ">';
                             echo '<div class="card-body">';
                             echo '<h5 class="card-title font-weight-bold text-center" style="color:black; ">' . $row["DepartureTime"] . '</h5>';
                             echo '<p class="card-text">';
@@ -358,7 +358,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             echo '</p>';
                             echo '<p class="card-text">';
                             echo '<span class="fas fa-flag" style="color: black;"></span> ' . $row["Destination"] . '<br/>';
-                            echo '<span style="font-size: 30px; margin-left: 60%;">' . $row["AvailableSeats"] . '</span> <img style="width: 15%; height:15%;" src="images/car-seat.png">';
+                            echo '<span style="font-size: 30px; margin-left: 60%;">' . $row["AvailableSeats"] . '</span> <img style="width: 15%; height:15%;" src="../images/car-seat.png">';
                             echo '</p>';
                             echo '</div>';
                             echo '</div>';
@@ -621,7 +621,7 @@ function searchTrips()  {
        
         var tripHtml = '<div class="col-md-4 mb-4">';
         tripHtml+='<a style=" height:auto;" href="rechercher.php?RideID=' + trip.RideID + '">';
-        tripHtml += '<div class=" card station">';
+        tripHtml += '<div id="station" class=" card station ">';
         tripHtml+= '<div class="card-body">';
         tripHtml += '<h5 class="card-title font-weight-bold text-center" style="color:black; ">' + trip.DepartureTime + '</h5>';
         tripHtml += '<p class="card-text">';
@@ -634,7 +634,7 @@ function searchTrips()  {
         tripHtml+='<p class="card-text">';
       
         tripHtml += '<span class="fas fa-flag" style="color: black;"></span> ' + trip.Destination + '<br>';
-        tripHtml += '<span style="font-size: 30px; margin-left: 60%;">' + trip.AvailableSeats + '</span> <img style="width: 15%; height:15%;" src="images/car-seat.png">';
+        tripHtml += '<span style="font-size: 30px; margin-left: 60%;">' + trip.AvailableSeats + '</span> <img style="width: 15%; height:15%;" src="../images/car-seat.png">';
         tripHtml += '</p>';
         tripHtml += '</div>';
         tripHtml += '</div>';
