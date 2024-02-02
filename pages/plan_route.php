@@ -135,7 +135,7 @@ $conn->close(); // Fermez la connexion après avoir terminé toutes les opérati
                 <a href="listecond.php"><img class="logo" src="../images/twsil3.png"></a>
                 <nav class="navigation">
                     <ul style="margin-left: 50%;">
-                        <li><a href="listecond.php">listes trajets</a></li>
+                        <li><a href="liste_driver.php">listes trajets</a></li>
                         <li><a href="reservation_driver.php">Voir Réservations</a></li>
                         <li><a href="../includes/logout.inc.php" class="logout">Déconnexion</a></li>
                     </ul>
@@ -165,7 +165,7 @@ $conn->close(); // Fermez la connexion après avoir terminé toutes les opérati
             <hr>
         </div>
         <div class="parametre">
-            <a class="edit" href="edit_trip.php?RideID=<?php echo urlencode($RideID); ?>"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Modifier votre trajet</a> 
+            <a class="edit" href="edit_trajet.php?RideID=<?php echo urlencode($RideID); ?>"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Modifier votre trajet</a> 
             <a class="delete" href="#" onclick="confirmDelete('<?php echo urlencode($RideID); ?>')">
                 <i class="fa fa-trash-o" aria-hidden="true"></i> Annuler votre trajet
             </a>

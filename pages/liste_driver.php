@@ -321,7 +321,7 @@ if ($result->num_rows > 0) {
     <div id="myModal" class="modal">
     <div class="modal-content">
         <span class="close">&times;</span>
-        <form id="proposalForm" method="post" action="submit_proposal.php">
+        <form id="proposalForm" method="post" action="add_trajet.php">
             <label for="DepartureLocation">Lieu de départ</label>
             <select id="position">
     <option value="choose option" style="display:none">choose option</option>

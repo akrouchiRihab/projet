@@ -78,7 +78,7 @@ require_once 'includes/search_model.inc.php';
         <?php 
        
          if(isset($_SESSION["UserID"]) && isset($_SESSION["user_role"]) && $_SESSION["user_role"] == 'driver'){ ?>
-             <a href="pages/listecond.php" class="proposer_btn" >proposer un trajet</a>  <?php  echo "User ID in session: " . $_SESSION["UserID"];
+             <a href="pages/liste_driver.php" class="proposer_btn" >proposer un trajet</a>  <?php  echo "User ID in session: " . $_SESSION["UserID"];
              } 
         
          if(isset($_SESSION["UserID"]) && isset($_SESSION["user_role"]) && $_SESSION["user_role"] == 'passenger'){  echo $_SESSION["id"];

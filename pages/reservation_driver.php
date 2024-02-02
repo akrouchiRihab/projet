@@ -177,7 +177,7 @@ require_once('../includes/db_connect.php');
             <nav class="navigation">
                 <ul style="margin-left: 60%;">
                      <li>
-                     <li><a href="listecond.php" class="logout">listes trajets</a></li>
+                     <li><a href="liste_driver.php" class="logout">listes trajets</a></li>
                      <li><a href="../includes/logout.inc.php" class="logout">Déconnexion</a></li>
                     </li>
                 </ul>
