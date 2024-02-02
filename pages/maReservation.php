@@ -109,7 +109,8 @@ if (isset($_GET['RideID'])) {
                     <ul>
                         <li class="nav1"><a href="clientlistes.php">listes trajets</a></li>
                         <li class="nav1"><a href="reservation.php">Mes reservations</a></li>
-                       
+                        <li class="nav1"><a href="../includes/logout.inc.php" ><img class="logout" src="../images/logout.png"></a></li>
+             
                             <?php if(isset($_SESSION["user_id"])){ ?>
                             <form action="../includes/logout.inc.php" method="post">
                                 <button class="logout-icon"><i class="fa-solid fa-right-from-bracket"></i></button>
@@ -118,7 +119,7 @@ if (isset($_GET['RideID'])) {
                         </li>
                     </ul>
                 </nav>
-            </div>
+            </div>   </div>
         </header>
     </div>
     <div class="div-container">

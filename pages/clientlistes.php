@@ -280,6 +280,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     margin-right: 10px;
 }
 
+button:hover{
+    background-color: blue;
+}
 
 
 #bingMap {
@@ -302,7 +305,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                      <li>
                      <li class="nav1"><a href="clientlistes.php">listes trajets</a></li>
                      <li class="nav1"><a href="reservation.php">Mes reservations</a></li>
-                    <?php
+                     <li class="nav1"><a href="../includes/logout.inc.php" ><img class="logout" src="../images/logout.png"></a></li>
+             
+                  <?php
                      $UserID = $_SESSION["UserID"]; 
                     ?>
                     </li>
@@ -328,7 +333,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <label for="seats">Number of Seats:</label>
     <input type="number" id="seats" min="1"  max='4' value="1">
 
-    <button onclick="searchTrips()">Search</button>
+    <button  onclick="searchTrips()">Search</button>
 </div>
 <button id="close-button" onclick="closeMap()">Close Map</button><div id="map"></div>
 </div>
