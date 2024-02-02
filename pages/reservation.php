@@ -1,4 +1,4 @@
-<?php
+<?php 
 session_start();
 require_once('../includes/db_connect.php'); // Inclure votre fichier de connexion à la base de données
 
