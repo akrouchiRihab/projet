@@ -295,7 +295,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <div class="main">
     <header>
         <div class="container">
-            <a href="#"><img class="logo" src="../images/logo2.png"></a>
+            <a href="#"><img class="logo" src="../images/twsil3.png"></a>
     
             <nav class="navigation">
                 <ul>
@@ -337,7 +337,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <div class="col-md-12">
             <div id="trip-list" class="div-content row">
                 <?php
-                   require_once('includes/db_connect.php'); // Include your database connection file
+                   require_once('../includes/db_connect.php'); // Include your database connection file
                     // Fetch data from the database
                     $sql = "SELECT * FROM rides WHERE AvailableSeats > 0";
                     $result = $conn->query($sql);
