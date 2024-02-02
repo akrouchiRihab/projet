@@ -1,6 +1,6 @@
 <?php
 // Include your database connection file
-require_once('includes/db_connect.php');
+require_once('../includes/db_connect.php');
 
 // Check if rideID is provided in the URL for fetching details
 if (isset($_GET['RideID'])) {
@@ -98,20 +98,24 @@ if (isset($_GET['RideID'])) {
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-    <link rel="stylesheet" href="css/plan_route.css">
+    <link rel="stylesheet" href="../css/plan_route.css">
 </head>
 <body>
     <div class="main">
         <header>
             <div class="container">
-                <a href="clientlistes.php"><img class="logo" src="images/logo2.png"></a>
+<<<<<<< HEAD:maReservation.php
+                <a href="clientlistes.php"><img class="logo" src="images/twsil3.png"></a>
+=======
+                <a href="clientlistes.php"><img class="logo" src="../images/logo2.png"></a>
+>>>>>>> 70046dc07ebcf671da27decbcc02f6cf3308952a:pages/maReservation.php
                 <nav class="navigation">
                     <ul>
                         <li class="nav1"><a href="clientlistes.php">listes trajets</a></li>
                         <li class="nav1"><a href="reservation.php">Mes reservations</a></li>
                        
                             <?php if(isset($_SESSION["user_id"])){ ?>
-                            <form action="includes/logout.inc.php" method="post">
+                            <form action="../includes/logout.inc.php" method="post">
                                 <button class="logout-icon"><i class="fa-solid fa-right-from-bracket"></i></button>
                             </form>
                             <?php } ?>
@@ -132,15 +136,15 @@ if (isset($_GET['RideID'])) {
             <p><strong>Nombre de places:<?php echo $availableSeats; ?></strong>
             <br/>
             <hr>
-        </div><br><br>
-        <form action="process_reservation.php" method="post">
+       <br><br>
+        <form action="process_annulation.php" method="post">
     <input type="hidden" name="ride_id" value="<?php echo $RideID; ?>">
-    <button type="submit" class="proposer_btn">Réserver</button>
-</form>
+    <button type='submit' class="annuler_btn">Annuler</button>
+</form> 
 
-</div>
-    <div id="map" style="z-index: -5; display: inline-block; height: 400px; width: 50%; margin-top: 1%;"></div>
- 
+
+   <!-- <div id="map" style=" height: 400px; width: 50%; margin-top: 1%;">
+                            -->
     <script>
         function showMap(location) {
             // Remplacez 'YOUR_GOOGLE_MAPS_API_KEY' par votre clé API Google Maps
@@ -179,5 +183,21 @@ if (isset($_GET['RideID'])) {
         }
     }
 </script>
+</div></div></div>
 </body>
 </html>
+<style> .div-container{
+            display: inline-block;
+            width: 40%;
+            height: 40%;
+        }
+        /* Style for the map container */
+        #map {
+            display : inline-block;
+            height: 400px;
+            width: 40%;
+            position: relative;
+            left: 5%;
+            top: 1%;
+            margin-top : 1%;
+        }</style>

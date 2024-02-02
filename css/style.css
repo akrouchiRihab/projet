@@ -18,12 +18,9 @@
 body{
     font-family: 'Poppins', sans-serif;
     /*background-color:#fafafa;*/
-    
-    background-image: url(../images/herosect.jpg);
+    background-image: url(../images/logoCr.jpg);
     background-size: 100% 100vh;
-    
     background-repeat: no-repeat;
-    
     background-position: top;
    /* overflow-y: scroll;*/
     
@@ -96,7 +93,7 @@ header .container::after{
 }
 .logo{
     height:50px;
-    width:50px;
+    width:100px;
     margin-right: 10px;
 }
 
@@ -105,7 +102,9 @@ a{
     text-decoration: none;
     cursor: pointer;
 }
-
+.navigation ul {
+    margin-left : 50%;
+}
 .navigation ul li{
 
    display:inline-block;

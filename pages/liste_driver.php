@@ -18,8 +18,8 @@ require_once('../includes/db_connect.php'); // Include your database connection 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="../css/style2.css">
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-    <link rel="icon" href="../images/tt.png" type="image/x-icon">
-    <title>Conducteur</title>
+    <link rel="icon" href="../images/logopage.png" type="image/x-icon">
+    <title>Twsila - Conducteur</title>
     <script>
         var scroll = new SmoothScroll('a[href*="#"]');
     </script>
@@ -271,7 +271,7 @@ require_once('../includes/db_connect.php'); // Include your database connection 
             </nav>
         </div>
     </header>
-    </div>
+    </div> 
     <div class="container">
         <div class="col-2">
             <br/>
@@ -304,7 +304,9 @@ if ($result->num_rows > 0) {
         }
         echo '<br/>';
         echo '<span style="color: black; text-decoration: none; font-size: 20px; display: inline-block;" class="fas fa-flag"></span>     <p style=" display: inline-block;"> ' . $row["Destination"] . '</p>';
-        echo '<p style="display: inline-block; font-size: 30px; margin-left: 80%;">' . $row["AvailableSeats"] . '</p><img style="display: inline-block;  width: 7%; height:7%;" src="../images/car-seat.png"/>';
+        echo '<br/>';
+        echo '<br/>';
+        echo '<p style="display: inline-block; margin-left: 32%; font-size: 16px;">Places disponibles ' . $row["AvailableSeats"] . '</p>';
         echo '</div>';
         echo '</a>';
     }
@@ -319,7 +321,7 @@ if ($result->num_rows > 0) {
     <div id="myModal" class="modal">
     <div class="modal-content">
         <span class="close">&times;</span>
-        <form id="proposalForm" method="post" action="submit_proposal.php">
+        <form id="proposalForm" method="post" action="add_trajet.php">
             <label for="DepartureLocation">Lieu de départ</label>
             <select id="position">
     <option value="choose option" style="display:none">choose option</option>

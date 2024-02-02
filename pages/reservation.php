@@ -1,7 +1,33 @@
 <?php
-require_once '../includes/config_session.inc.php';
-require_once('../includes/db_connect.php'); // Include your database connection file
+session_start();
+require_once('../includes/db_connect.php'); // Inclure votre fichier de connexion à la base de données
 
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    if (isset($_SESSION["UserID"])) {
+        $userID = $_SESSION["UserID"];
+        $rideID = $_POST["RideID"];
+        $departureLocation = $_POST["DepartureLocation"];
+        $destination = $_POST["Destination"];
+        $departureTime = $_POST["DepartureTime"];
+        $availableSeats = $_POST["AvailableSeats"];
+        $price = $_POST["price"];
+
+        // Insérer les données dans la table 'trajet' (assuming you have a 'trajet' table)
+        $sql = "INSERT INTO trajet (DepartureLocation, Destination, DepartureTime, AvailableSeats, price) VALUES ('$departureLocation', '$destination', '$departureTime', '$availableSeats', '$price')";
+        mysqli_query($conn, $sql);
+
+        // Fermer la connexion à la base de données
+        mysqli_close($conn);
+
+        // Rediriger vers la page actuelle après la soumission
+        header('Location: ' . $_SERVER['HTTP_REFERER']);
+        exit();
+    } else {
+        // Rediriger vers la page de connexion si l'utilisateur n'est pas connecté
+        header("Location: ../login.php");
+        exit();
+    }
+}
 ?>
 
 <!DOCTYPE html>
@@ -9,7 +35,9 @@ require_once('../includes/db_connect.php'); // Include your database connection 
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">  
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+    <link rel="stylesheet" href="https://www.bing.com/api/maps/mapcontrol?key=ApE-HNGaFCRDs_bsmYj3Dgak-HaLSYWyN7K35FxHQXjQt8ePrxpy8_uvZoXESwIg&callback=loadMapScenario" async defer>
+    <script type='text/javascript' src='https://www.bing.com/api/maps/mapcontrol?key=ApE-HNGaFCRDs_bsmYj3Dgak-HaLSYWyN7K35FxHQXjQt8ePrxpy8_uvZoXESwIg'></script> 
     <script src="https://cdn.jsdelivr.net/npm/smooth-scroll@16.1.3/dist/smooth-scroll.polyfills.min.js"></script>
     <script src='https://kit.fontawesome.com/a076d05399.js' crossorigin='anonymous'></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
@@ -17,8 +45,7 @@ require_once('../includes/db_connect.php'); // Include your database connection 
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="../css/style2.css">
-    <link rel="icon" href="../images/tt.png" type="image/x-icon">
-    <title>Conducteur</title>
+    <title>Client</title>
     <script>
         var scroll = new SmoothScroll('a[href*="#"]');
     </script>
@@ -156,21 +183,37 @@ require_once('../includes/db_connect.php'); // Include your database connection 
     font-weight: bold;
     margin-right: 10px;
 }
-.navigation{
-    margin-left:50%;
+
+
+
+#bingMap {
+    display: flex;
+    flex: 1;
+    height: 400px; 
+    width: 100%;
 }
+
     </style>
 </head>
 <body>
 <div class="main">
     <header>
         <div class="container">
-            <a href="#"><img class="logo" src="../images/twsil3.png"></a>
+<<<<<<< HEAD:reservation.php
+            <a href="clientlistes.php"><img class="logo" src="images/twsil3.png"></a>
+=======
+            <a href="clientlistes.php"><img class="logo" src="../images/logo2.png"></a>
+>>>>>>> 70046dc07ebcf671da27decbcc02f6cf3308952a:pages/reservation.php
     
             <nav class="navigation">
                 <ul>
-                    <li><a href="../reservation.php" class="logout">Voir Réservations</a></li>
-                    <li><a href="../includes/logout.inc.php" class="logout">Déconnexion</a></li>
+                     <li>
+                     <li class="nav1"><a href="clientlistes.php">listes trajets</a></li>
+                     <li class="nav1"><a href="reservation.php">Mes reservations</a></li>
+                    <?php
+                     $userID = $_SESSION["UserID"]; 
+                    ?>
+                    </li>
                 </ul>
             </nav>
         </div>
@@ -179,26 +222,24 @@ require_once('../includes/db_connect.php'); // Include your database connection 
     <div class="container">
         <div class="col-2">
             <br/>
-            <a id="openModal" class="proposer_btn" >+ proposer un trajet</a>
         </div>
         <br/>
         <div>
             <div class="div-content">
             <?php
 // Fetch data from the database
+$sql = "SELECT rides.*, reservations.ReservationID
+            FROM rides
+            INNER JOIN reservations ON rides.RideID = reservations.RideID
+            WHERE reservations.UserID = '$userID'";
 
-/*$result = $conn->query($sql);*/
 
-$DriverID = $_SESSION["UserID"];
-$sql = "SELECT * FROM rides WHERE DriverID = ?";
-$statement = $conn->prepare($sql);
-$statement->bind_param('i', $DriverID);
-$statement->execute();
-$result = $statement->get_result();
+$result = $conn->query($sql);
 
 if ($result->num_rows > 0) {
+    // Output data of each row
     while ($row = $result->fetch_assoc()) {
-        echo '<a style=" height:auto;" href="plan_route.php?RideID=' . urlencode($row["RideID"]) . '">';
+        echo '<a style=" height:auto;" href="maReservation.php?RideID=' . urlencode($row["RideID"]) . '">';
         echo '<div class="station">';
         echo '<p style="font-weight: bold; text-align: center;">' . $row["DepartureTime"] . '</p>';
         echo '<br/>';
@@ -208,7 +249,7 @@ if ($result->num_rows > 0) {
         }
         echo '<br/>';
         echo '<span style="color: black; text-decoration: none; font-size: 20px; display: inline-block;" class="fas fa-flag"></span>     <p style=" display: inline-block;"> ' . $row["Destination"] . '</p>';
-        echo '<p style="display: inline-block; font-size: 30px; margin-left: 80%;">' . $row["AvailableSeats"] . '</p><img style="display: inline-block;  width: 7%; height:7%;" src="../images/car-seat.png"/>';
+        echo '<p style="display: inline-block; font-size: 30px; margin-left: 80%;">' . $row["AvailableSeats"] . '</p><img style="display: inline-block;  width: 7%; height:7%;" src="images/car-seat.png"/>';
         echo '</div>';
         echo '</a>';
     }
@@ -220,38 +261,8 @@ if ($result->num_rows > 0) {
 </div>
         </div>
     </div>
-    <div id="myModal" class="modal">
-    <div class="modal-content">
-        <span class="close">&times;</span>
-        <form id="proposalForm" method="post" action="submit_proposal.php">
-            <label for="DepartureLocation">Lieu de départ</label>
-            <input type="text" placeholder="Saisissez le lieu de départ" name="DepartureLocation" id="departureLocation" required>
-            <button><a alt="votre location" class='fas fa-map-marker-alt'></a></button>
-            <br/>
-
-            <label for="Destination">Destination</label>
-            <input type="text" name="Destination" placeholder="Saisissez la destination" id="destinationLocation" required>
-            <br/>
-
-            <label for="DepartureTime">Date et Heure</label>
-            <input placeholder="Quand partez-vous ?" class="flatpickr" type="datetime-local" name="DepartureTime" required>
-            <br/> 
-            
-            <label for="AvailableSeats">Nombre de places </label>
-            <input placeholder="Combien de passagers pouvez-vous accepter ?" type="number" name="AvailableSeats" required>
-            <br/>
-            <label for="price">Prix </label>
-            <input placeholder="Fixez votre prix par place"  type="text" name="price" required>
-            <br/><br/>
-           
-            <?php if (isset($_SESSION['errorMessages'])): ?>
-                <div style="color: red; width: 80%; margin-bottom: 10px;"><?php echo $_SESSION['errorMessages']; ?></div>
-                <?php unset($_SESSION['errorMessages']); // Effacer les messages après les avoir affichés ?>
-            <?php endif; ?>
-            
-            <input type="submit" value="Proposer">
-        </form>
-    </div>
+   
+    
 </div>
 </div>
 </body>
@@ -278,4 +289,31 @@ if ($result->num_rows > 0) {
             // Ajoutez d'autres options selon vos besoins
         });
 </script>
+<script>
+    function initMap() {
+        var myLatLng;
+
+        // Check if userCoordinates is not empty
+        if (Object.keys(userCoordinates).length !== 0) {
+            myLatLng = [userCoordinates.lat, userCoordinates.lng];
+        }
+
+        // Utiliser Leaflet pour créer une carte
+        var map = L.map('map').setView(myLatLng, 15);
+
+        // Ajouter une couche OpenStreetMap à la carte
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '© OpenStreetMap contributors'
+        }).addTo(map);
+
+        // Ajouter un marqueur à la position de l'utilisateur
+        if (myLatLng) {
+            L.marker(myLatLng).addTo(map)
+                .bindPopup('User Location')
+                .openPopup();
+        }
+    }
+</script>
+
+
 </html>

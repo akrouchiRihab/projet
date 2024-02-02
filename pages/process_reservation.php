@@ -1,7 +1,7 @@
 <?php
 // process_reservation.php
 session_start();
-require('includes/db_connect.php');
+require('../includes/db_connect.php');
 
 // Check if rideID is provided in the form data
 if (isset($_POST['ride_id'])) {
