@@ -34,8 +34,6 @@ require_once 'includes/login_view.inc.php';
             <span id="pwd-error"></span>
          </div>
         
-        
-         <div class="pass"><a>Mot de passe oublié?</a></div>
          <input type="submit" name="" value="Se connecter" onclick="return validateform()">
          <span id="submit-error"></span>
         

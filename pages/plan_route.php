@@ -19,7 +19,7 @@ if (isset($_GET['deleteID'])) {
             // Handle errors
             echo "Error deleting record: " . mysqli_error($conn);
             exit();
-        }
+        } 
     } else {
         // Handle errors
         echo "Error deleting reservations: " . mysqli_error($conn);
@@ -57,13 +57,42 @@ if (isset($_GET['RideID'])) {
     exit();
 }
 ?>
+<?php
+// Assurez-vous de remplacer ces informations par les vôtres
+require_once '../includes/db_connect.php';
 
+$RideID = $_GET['RideID'];  // Assurez-vous de sécuriser cette valeur pour éviter les injections SQL
+
+$sql = "SELECT destinationLatitude, destinationLongitude, positionLatitude, positionLongitude FROM rides WHERE RideID = ?";
+$statement = $conn->prepare($sql);
+$statement->bind_param('i', $RideID);
+$statement->execute();
+$statement->bind_result($destinationLatitude, $destinationLongitude, $positionLatitude, $positionLongitude);
+$statement->fetch();
+$statement->close(); // Fermez la première déclaration ici si vous n'avez plus besoin de travailler avec la base de données
+
+// Assurez-vous de rouvrir la connexion si vous avez fermé la connexion
+// $conn = new mysqli($servername, $username, $password, $dbname);
+
+session_start(); // Assurez-vous que la session utilisateur est active
+
+$UserID = $_SESSION['UserID']; // Assurez-vous que la session utilisateur est active
+
+// Requête pour compter le nombre de réservations pour ce trajet et cet utilisateur
+$reservationCountQuery = "SELECT COUNT(*) AS reservationCount FROM reservations WHERE RideID = ? AND UserID = ?";
+$statement = $conn->prepare($reservationCountQuery);
+$statement->bind_param('ii', $RideID, $UserID);
+$statement->execute();
+$statement->bind_result($reservationCount);
+$statement->fetch();
+$statement->close();
+$conn->close(); // Fermez la connexion après avoir terminé toutes les opérations
+?>
 
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Plan de Route</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -74,23 +103,41 @@ if (isset($_GET['RideID'])) {
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="../css/plan_route.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css">
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+<script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
+<link rel="icon" href="../images/logopage.png" type="image/x-icon">
+    <title>Twsila - Conducteur</title>
+    <style>
+        .div-container{
+            display: inline-block;
+            width: 40%;
+            height: 40%;
+        }
+        /* Style for the map container */
+        #map {
+            display : inline-block;
+            height: 400px;
+            width: 40%;
+            position: relative;
+            left: 5%;
+            top: 1%;
+            margin-top : 1%;
+            z-index: -1;
+        }
+    </style>
 </head>
 <body>
     <div class="main">
         <header>
             <div class="container">
-                <a href="#"><img class="logo" src="../images/logo2.png"></a>
+                <a href="listecond.php"><img class="logo" src="../images/twsil3.png"></a>
                 <nav class="navigation">
-                    <ul>
-                        <li class="nav1"><a href="listecond.php">listes trajets</a></li>
-                        <li class="nav1"><a href="reservation.php">Voir Réservations</a></li>
-                        <li>
-                            <?php if(isset($_SESSION["user_id"])){ ?>
-                            <form action="../includes/logout.inc.php" method="post">
-                                <button class="logout-icon"><i class="fa-solid fa-right-from-bracket"></i></button>
-                            </form>
-                            <?php } ?>
-                        </li>
+                    <ul style="margin-left: 50%;">
+                        <li><a href="liste_driver.php">listes trajets</a></li>
+                        <li><a href="reservation_driver.php">Voir Réservations</a></li>
+                        <li><a href="../includes/logout.inc.php" class="logout">Déconnexion</a></li>
                     </ul>
                 </nav>
             </div>
@@ -106,19 +153,28 @@ if (isset($_GET['RideID'])) {
             <p><strong>Destination:</strong> <a href="#" onclick="showMap('<?php echo $destination; ?>')"><?php echo $destination; ?></a></p>
             <br/>
             <hr>
-            <p style="margin:2%;">Aucun passager pour ce trajet</p>
+            <p style="margin:2%;">
+                <?php
+                if ($reservationCount > 0) {
+                    echo "Nombre de passagers pour ce trajet: " . $reservationCount;
+                } else {
+                    echo "Aucun passager pour ce trajet";
+                }
+                ?>
+            </p>
             <hr>
         </div>
         <div class="parametre">
-            <a class="edit" href="edit_trip.php?RideID=<?php echo urlencode($RideID); ?>"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Modifier votre trajet</a> 
+            <a class="edit" href="edit_trajet.php?RideID=<?php echo urlencode($RideID); ?>"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Modifier votre trajet</a> 
             <a class="delete" href="#" onclick="confirmDelete('<?php echo urlencode($RideID); ?>')">
                 <i class="fa fa-trash-o" aria-hidden="true"></i> Annuler votre trajet
             </a>
         </div>
         <div></div>
         <div></div>
-    </div>
-    <div id="map" style="z-index: -5; display: inline-block; height: 400px; width: 50%; margin-top: 1%;"></div>
+        
+        </div>
+        <div id="map"></div>
     <div class="modal" id="deleteModal">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -169,43 +225,23 @@ if (isset($_GET['RideID'])) {
             }
         };
     </script>
-    <script>
-        function showMap(location) {
-            // Remplacez 'YOUR_GOOGLE_MAPS_API_KEY' par votre clé API Google Maps
-            var apiKey = 'AIzaSyDfYaBDnZ6vo0t_f8ACEzHhJirgcMfwpyI';
-            var mapUrl = 'https://www.google.com/maps/embed/v1/place?key=' + apiKey + '&q=' + encodeURIComponent(location);
-            window.open(mapUrl, '_blank');
-        }
-    </script>
-    <link rel="stylesheet" href="https://www.bing.com/api/maps/mapcontrol?key=ApE-HNGaFCRDs_bsmYj3Dgak-HaLSYWyN7K35FxHQXjQt8ePrxpy8_uvZoXESwIg&callback=loadMapScenario" async defer>
-    
-   <!-- Remplacez le script Google Maps par le script Leaflet -->
-   <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js" integrity="sha256-WBkoXOwTeyKclOHuWtc+i2uENFpDZ9YPdf5Hf+D7ewM=" crossorigin=""></script>
-
 <script>
-    function initMap() {
-        var myLatLng;
+var map = L.map('map').setView([0, 0], 2);
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '© OpenStreetMap contributors'
+}).addTo(map);
 
-        // Check if userCoordinates is not empty
-        if (Object.keys(userCoordinates).length !== 0) {
-            myLatLng = [userCoordinates.lat, userCoordinates.lng];
-        }
+// Ajoutez des marqueurs pour la position et la destination
+L.marker([<?php echo $positionLatitude; ?>, <?php echo $positionLongitude; ?>]).addTo(map).bindPopup('Position');
+L.marker([<?php echo $destinationLatitude; ?>, <?php echo $destinationLongitude; ?>]).addTo(map).bindPopup('Destination');
 
-        // Utiliser Leaflet pour créer une carte
-        var map = L.map('map').setView(myLatLng, 15);
+// Ajoutez une ligne pour représenter le trajet
+var polyline = L.polyline([
+    [<?php echo $positionLatitude; ?>, <?php echo $positionLongitude; ?>],
+    [<?php echo $destinationLatitude; ?>, <?php echo $destinationLongitude; ?>]
+], { color: 'blue' }).addTo(map);
 
-        // Ajouter une couche OpenStreetMap à la carte
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '© OpenStreetMap contributors'
-        }).addTo(map);
-
-        // Ajouter un marqueur à la position de l'utilisateur
-        if (myLatLng) {
-            L.marker(myLatLng).addTo(map)
-                .bindPopup('User Location')
-                .openPopup();
-        }
-    }
+map.fitBounds(polyline.getBounds());
 </script>
 </body>
 </html>

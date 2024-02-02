@@ -29,10 +29,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 }
 }
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-
 <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
@@ -58,17 +58,24 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
     <link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
+    <script>
+        var scroll = new SmoothScroll('a[href*="#"]');
+    </script>
     <style>
 
-    body {
-        background-color: #f0f0f0; /* Couleur de fond blanche */
-        color: #333; /* Couleur du texte principale */
-        font-family: Arial, sans-serif; /* Police par défaut */
-        display: flex;
+
+        
+   .search-div{
+    margin-left:5%;
+    display: flex;
         flex-direction: column;
         align-items: center;
-    }
-
+        width:90%;
+   }
+   .search-div button{
+ margin-left:0px;
+   margin-top: 0px;
+}
     #map {
         height: 300px;
         width:80%;
@@ -122,6 +129,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         padding: 10px 15px;
         border-radius: 3px;
         cursor: pointer;
+        margin-left:0px;
     }
 
     #trip-list {
@@ -138,7 +146,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         box-shadow: 0 0 5px rgba(0, 0, 0, 0.1); /* Ombre des conteneurs de voyage */
     }
     /* new code de   rihab */
-    .main{
+        .main{
     min-height: auto;
     
 }
@@ -235,9 +243,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     font-size: 0; /* Fix pour éliminer l'espace blanc entre les éléments inline-block */
 }
 
-.station {
+#station {
     display: inline-block;
-   
+    width:100%;
     margin-bottom: 20px;
     margin-right: 20px;
     background-color: #f5f5f5;
@@ -281,22 +289,21 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     width: 100%;
 }
 
-   
-</style>
+    </style>
 </head>
 <body>
 <div class="main">
     <header>
         <div class="container">
-            <a href="#"><img class="logo" src="../images/twsil3.png"></a>
+            <a href="#"><img class="logo" src="../images/logo2.png"></a>
     
             <nav class="navigation">
                 <ul>
                      <li>
-                     <li class="nav1"><a href="../clientlistes.php">listes trajets</a></li>
-                     <li class="nav1"><a href="../reservation.php">Mes reservations</a></li>
+                     <li class="nav1"><a href="clientlistes.php">listes trajets</a></li>
+                     <li class="nav1"><a href="reservation.php">Mes reservations</a></li>
                     <?php
-                  
+                     $UserID = $_SESSION["UserID"]; 
                     ?>
                     </li>
                 </ul>
@@ -304,8 +311,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         </div>
     </header>
     </div>
-
-<!-- Modified search form with a select element for position -->
+   <!-- Modified search form with a select element for position -->
+<div class="search-div">
 <div id="search-form">
     <label for="destination">Destination:</label>
     <input type="text" id="destination" onclick="showMap()" readonly>
@@ -324,6 +331,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <button onclick="searchTrips()">Search</button>
 </div>
 <button id="close-button" onclick="closeMap()">Close Map</button><div id="map"></div>
+</div>
 <div class="container">
     <div class="row">
         <div class="col-md-12">
@@ -338,29 +346,24 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         // Output data of each row
                         while ($row = $result->fetch_assoc()) {
                             echo '<div class="col-md-4 mb-4">';
-                            echo '<a style="height:auto;" href="rechercher.php?RideID=' . urlencode($row["RideID"]) . '">';
-                            echo '<div class="card station">';
+                            echo '<a  id="trajet-reserve" style="height:auto;"class="open-modal" data-ride-id="' . $row["RideID"] . '">';
+                            echo '<div id="station" class="card station  ">';
                             echo '<div class="card-body">';
                             echo '<h5 class="card-title font-weight-bold text-center" style="color:black; ">' . $row["DepartureTime"] . '</h5>';
                             echo '<p class="card-text">';
-                            echo '<span class="fas fa-map-marker-alt" style="color: black;"></span> ' . $row["DepartureLocation"] . '<br>';
+                            echo '<span class="fas fa-map-marker-alt" style="color: black;"></span> ' . $row["DepartureLocation"] . '<br/>';
         
                                 echo   '<p style=" font-weight: bold; margin-left: 85% ; display: inline-block;" class="price" style="margin-left: 250px;">' . $row["price"] .'</p>';
                           
                             echo '</p>';
                             echo '<p class="card-text">';
-                            echo '<span class="fas fa-flag" style="color: black;"></span> ' . $row["Destination"] . '<br>';
+                            echo '<span class="fas fa-flag" style="color: black;"></span> ' . $row["Destination"] . '<br/>';
                             echo '<span style="font-size: 30px; margin-left: 60%;">' . $row["AvailableSeats"] . '</span> <img style="width: 15%; height:15%;" src="../images/car-seat.png">';
                             echo '</p>';
                             echo '</div>';
                             echo '</div>';
                             echo '</a>';
-                            echo '</div>';
-
-
-
-
-                           
+                            echo '</div>';                           
                         }
                     } else {
                         echo '<p class="text-center">Error fetching data: ' . $conn->error . '</p>';
@@ -372,9 +375,107 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 </div>
 <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
-<script>
+    <!--<div id="myModal" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <form id="proposalForm" method="post" action="submit_proposal.php">
+            <label for="DepartureLocation">Lieu de départ</label>
+            <input type="text" id="departureInput" placeholder="Saisissez le lieu de départ" />
+            <input type="hidden" name="DepartureLocation" id="departureLocation" required>
+            <br/>
+
+            <label for="Destination">Destination</label>
+            <input type="text" id="destinationInput" placeholder="Saisissez la destination" />
+            <input type="hidden" name="Destination" id="destinationLocation" required>
+            <br/>
+
+            <label for="DepartureTime">Date et Heure</label>
+            <input placeholder="Quand partez-vous ?" class="flatpickr" type="datetime-local" name="DepartureTime" required>
+            <br/>
+            
+            <label for="AvailableSeats">Nombre de places </label>
+            <input placeholder="Combien de passagers pouvez-vous accepter ?" type="number" name="AvailableSeats" required>
+            <br/>
+            <label for="price">Prix </label>
+            <input placeholder="Fixez votre prix par place"  type="text" name="price" required>
+            <br/><br/>
+            <div id="map" style="z-index: 1; display: inline-block; height: 400px; width: 50%; margin-top: 1%;"></div>
     
-    var map = L.map('map').setView([0, 0], 2);
+            <input type="submit" value="Rechecher">
+        </form>
+    </div>
+    
+</div>
+</div>-->
+<!-- Add this modal container with an ID -->
+<div id="myModal" class="modal">
+    <div id="modalContent" class="modal-content">
+        <span id="closeModal" class="close">&times;</span>
+        <h3 id="modalDayOfWeek"></h3>
+        <p id="modalDepartureLocation"><strong>Depart:</strong> </p>
+        <p id="modalDestination" ><strong>Destination:</strong> </p>
+        <p id="modalAvailableSeats" ><strong>Nombre de places:</strong> </p>
+        <hr>
+        <form action="process_reservation.php" method="post">
+         <!-- Hidden input fields to store values -->
+    <input type="hidden" name="departureLocation">
+    <input type="hidden" name="destination">
+    <input type="hidden" name="availableSeats">
+        
+    <input type="hidden" name="ride_id" name="ride_id">
+    <button type="submit" class="proposer_btn">Réserver</button>
+                </form>
+    </div>
+</div>
+</body>
+<script>
+ $(document).ready(function () {
+    $('.open-modal').on('click', function (e) {
+        e.preventDefault();
+        var rideData = $(this).data('ride-id');
+        $('input[name="ride_id"]').val(rideData);
+          console.log(rideData)
+        // AJAX request to fetch additional details
+        $.ajax({
+            url: 'fetch_trip_details.php', // Replace with the actual URL to handle AJAX request
+            method: 'POST',
+            data: { rideData: rideData },
+            success: function (data) {
+                if (data.error) {
+                console.error('Error fetching trip details:', data.error);
+            } else {
+                console.log(data)
+                // Update modal content with the fetched details
+                $('#modalDepartureTime').append(data.departureTime);
+                $('#modalDepartureLocation').append(data.departureLocation);
+                $('#modalDestination').append(data.destination);
+                $('#modalAvailableSeats').append(data.availableSeats);
+                 
+// Set values in hidden input fields for form submission
+
+$('input[name="departureLocation"]').val(data.departureLocation);
+$('input[name="destination"]').val(data.destination);
+$('input[name="availableSeats"]').val(data.availableSeats);
+                // Show the modal
+                $('#myModal').show();
+            }
+        },
+        error: function (xhr, status, error) {
+            console.error('Error fetching trip details. Status:', status, 'Error:', error);
+        }
+    });
+});
+
+
+    $('.close').on('click', function () {
+        $('#myModal').hide();
+    });
+});
+</script>
+<script>
+
+  
+var map = L.map('map').setView([0, 0], 2);
     var destinationInput = document.getElementById('destination');
     var positionSelect = document.getElementById('position');
     var positionNameInput = document.getElementById('positionName');
@@ -488,7 +589,7 @@ function searchTrips()  {
     console.log('Seats:', seats);
         // Use AJAX to send a request to the server
         $.ajax({
-            url: 'searchTrips.php', // The server-side script
+            url: 'pages/searchTrips.php', // The server-side script
             type: 'POST', // Send as a POST request
             data: { destination: destination,seats: seats,destinationLongitude:destinationLongitude,destinationLatitude:destinationLatitude ,positionLongitude :positionLongitude , positionLatitude: positionLatitude}, // Data to send to the server
             dataType: 'json', // Make sure to specify the expected data type
@@ -517,22 +618,31 @@ function searchTrips()  {
 
     // Iterate through the trips and append them to the container
     trips.forEach(function (trip) {
-        var tripHtml = '<a style=" height:auto;" href="rechercher.php?RideID=' + trip.RideID + '">';
-        tripHtml += '<div class="station">';
-        tripHtml += '<p style="font-weight: bold; text-align: center;">' + trip.DepartureTime + '</p>';
-        tripHtml += '<br/>';
-        tripHtml += '<span style="color: black; text-decoration: none; font-size: 20px; display: inline-block;" class="fas fa-map-marker-alt"></span>';
-        tripHtml += '<p style=" display: inline-block;">' + trip.DepartureLocation + '</p>';
-        if (trip.price !== "") {
-            tripHtml += '<p style=" font-weight: bold; margin-left: 85% ; display: inline-block;" class="price" style="margin-left: 250px;">' + trip.price + '</p>';
-        }
-        tripHtml += '<br/>';
-        tripHtml += '<span style="color: black; text-decoration: none; font-size: 20px; display: inline-block;" class="fas fa-flag"></span>';
-        tripHtml += '<p style=" display: inline-block;"> ' + trip.Destination + '</p>';
-        tripHtml += '<p style="display: inline-block; font-size: 30px; margin-left: 70%;">' + trip.AvailableSeats + '</p><img style="display: inline-block;  width: 15%; height:15%;" src="../images/car-seat.png"/>';
+       
+        var tripHtml = '<div class="col-md-4 mb-4">';
+        tripHtml+='<a style=" height:auto;" href="rechercher.php?RideID=' + trip.RideID + '">';
+        tripHtml += '<div id="station" class=" card station ">';
+        tripHtml+= '<div class="card-body">';
+        tripHtml += '<h5 class="card-title font-weight-bold text-center" style="color:black; ">' + trip.DepartureTime + '</h5>';
+        tripHtml += '<p class="card-text">';
+       
+        tripHtml +=  '<span class="fas fa-map-marker-alt" style="color: black;"></span> ' + trip.DepartureLocation + '<br>';
+        
+        tripHtml += '<p style=" font-weight: bold; margin-left: 85% ; display: inline-block;" class="price" style="margin-left: 250px;">' + trip.price + '</p>';
+       
+        tripHtml += '<br>';
+        tripHtml+='<p class="card-text">';
+      
+        tripHtml += '<span class="fas fa-flag" style="color: black;"></span> ' + trip.Destination + '<br>';
+        tripHtml += '<span style="font-size: 30px; margin-left: 60%;">' + trip.AvailableSeats + '</span> <img style="width: 15%; height:15%;" src="../images/car-seat.png">';
+        tripHtml += '</p>';
+        tripHtml += '</div>';
         tripHtml += '</div>';
         tripHtml += '</a>';
+        tripHtml+= '</div>';
 
+
+      
         // Append the generated HTML to the container
         $('#trip-list').append(tripHtml);
     });
@@ -553,7 +663,36 @@ function searchTrips()  {
     function deg2rad(deg) {
         return deg * (Math.PI / 180);
     }
-</script>
 
-</body>
+        flatpickr(".flatpickr", {
+            enableTime: true,
+            dateFormat: "Y-m-d H:i",
+            // Ajoutez d'autres options selon vos besoins
+        });
+</script>
+<script>
+    
+    function initMap() {
+        var myLatLng;
+        // Check if userCoordinates is not empty
+        if (Object.keys(userCoordinates).length !== 0) {
+            myLatLng = [userCoordinates.lat, userCoordinates.lng];
+        }
+
+        // Utiliser Leaflet pour créer une carte
+        var map = L.map('map').setView(myLatLng, 15);
+
+        // Ajouter une couche OpenStreetMap à la carte
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '© OpenStreetMap contributors'
+        }).addTo(map);
+
+        // Ajouter un marqueur à la position de l'utilisateur
+        if (myLatLng) {
+            L.marker(myLatLng).addTo(map)
+                .bindPopup('User Location')
+                .openPopup();
+        }
+    }
+</script>
 </html>

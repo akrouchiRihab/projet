@@ -11,6 +11,24 @@
     <link rel="stylesheet" href="css/signin.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
     <title>S'inscrire</title>
+    <style>
+      .role-select {
+ width: 80%;
+ margin-left: 2%;
+  padding: 8px 12px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: #fff;
+  cursor: pointer;
+}
+
+.role-select:focus {
+  outline: none;
+  border-color: #007bff; /* Couleur de la bordure lorsqu'il est en focus */
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5); /* Ombre lorsqu'il est en focus */
+}
+   </style>
 </head>
 <body>
     <form action="includes/signin.inc.php" name="formfill"  id="my-form" method="post" class="form">
