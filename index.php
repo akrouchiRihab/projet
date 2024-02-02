@@ -28,7 +28,6 @@ require_once 'includes/search_model.inc.php';
     var scroll = new SmoothScroll('a[href*="#"]');
   </script>
 
-
 </head>
 
 <body>
@@ -40,13 +39,12 @@ require_once 'includes/search_model.inc.php';
       <div class="container">
 
 
-        <a href="#"><img class="logo" src="images/logo.png"></a>
+        <a href="#"><img class="logo" style="width:50%; height: 5%;" src="images/twsila.png"></a>
 
 
         <nav class="navigation">
-          <ul>
+          <ul style="margin-left: 60%; margin-top: 3%;">
             <li><a href="#" class="home"> Acceuil</a></li>
-
             <li><a href="#contact">Contact</a></li>
             <li><a href="#about"> À propos</a></li>
             <li>
@@ -129,7 +127,7 @@ require_once 'includes/search_model.inc.php';
     <div class="about-sec">
 
       <h3>
-        AHR a à cœur de <br>
+        twsila a à cœur de <br>
         de contribuer au développement <br>numérique de l’Algérie et de l’Afrique
       </h3>
       <p>nous sommes passionnés par la technologie
@@ -151,7 +149,7 @@ require_once 'includes/search_model.inc.php';
     <div class="container">
       <div class="flex-box">
         <div class="img">
-          <img src="images/logo.png">
+          <img style="width: 80%; height: 50%;" src="images/twsila.png">
         </div>
 
         <div class="contact-foot">

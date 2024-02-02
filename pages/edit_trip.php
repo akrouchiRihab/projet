@@ -77,13 +77,16 @@ if (isset($_GET['RideID'])) {
     
     <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
     <link rel="stylesheet" href="../css/edit_trip.css">
-    <title>Modifier le Trajet</title>
+    <link rel="icon" href="../images/logopage.png" type="image/x-icon">
+    <title>Twsila - Conducteur</title>
     <style>
         #map {
             position: relative;
+            left: -10%;
             height: 300px; /* Ajustez la hauteur selon vos besoins */
-            max-width: 100%; /* Ajustez la largeur maximale */
+            max-width: 90%; /* Ajustez la largeur maximale */
             margin-bottom: 10%;
+           
             display: none;
             background-color: #fff;
             border: 1px solid #ddd;
@@ -137,18 +140,12 @@ if (isset($_GET['RideID'])) {
     <div class="main">
         <header>
             <div class="container">
-                <a href="#"><img class="logo" src="../images/logo2.png"></a>
+                <a href="#"><img class="logo" src="../images/twsil3.png"></a>
                 <nav class="navigation">
-                    <ul>
-                        <li class="nav1"><a href="listecond.php">listes trajets</a></li>
-                        <li class="nav1"><a href="reservation_driver.php">Voir Réservations</a></li>
-                        <li>
-                            <?php if(isset($_SESSION["user_id"])){ ?>
-                                <form action="../includes/logout.inc.php" method="post">
-                                    <button class="logout-icon"><i class="fa-solid fa-right-from-bracket"></i></button>
-                                </form>
-                            <?php } ?>
-                        </li>
+                    <ul style="margin-left: 50%;">
+                        <li><a href="listecond.php">listes trajets</a></li>
+                        <li><a href="reservation_driver.php">Voir Réservations</a></li>
+                        <li><a href="../includes/logout.inc.php" class="logout">Déconnexion</a></li>
                     </ul>
                 </nav>
             </div>

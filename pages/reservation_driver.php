@@ -17,7 +17,8 @@ require_once('../includes/db_connect.php');
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="../css/style2.css">
-    <title>Client</title>
+    <link rel="icon" href="../images/logopage.png" type="image/x-icon">
+    <title>Twsila - Conducteur</title>
     <script>
         var scroll = new SmoothScroll('a[href*="#"]');
     </script>
@@ -171,13 +172,13 @@ require_once('../includes/db_connect.php');
 <div class="main">
     <header>
         <div class="container">
-            <a href="listecond.php"><img class="logo" src="../images/logo2.png"></a>
+            <a href="listecond.php"><img class="logo" src="../images/twsil3.png"></a>
     
             <nav class="navigation">
-                <ul>
+                <ul style="margin-left: 60%;">
                      <li>
-                     <li class="nav1"><a href="listecond.php">listes trajets</a></li>
-                    
+                     <li><a href="listecond.php" class="logout">listes trajets</a></li>
+                     <li><a href="../includes/logout.inc.php" class="logout">Déconnexion</a></li>
                     </li>
                 </ul>
             </nav>
@@ -233,12 +234,13 @@ if (isset($_SESSION['UserID'])) {
                 echo '<div class="station">';
                 echo '<p style="font-weight: bold; text-align: center;">' . $row["DepartureTime"] . '</p>';
                 echo '<span style="color: black; text-decoration: none; font-size: 20px; display: inline-block;" class="fas fa-map-marker-alt"></span>     <p style=" display: inline-block;">' . $row["DepartureLocation"] . '</p>';
-                echo '<br/>';
+                echo '<p style=" font-weight: bold; margin-left: 85% ; display: inline-block;" class="price" style="margin-left: 250px;">' . $row["price"] . '</p>';
                 echo '<span style="color: black; text-decoration: none; font-size: 20px; display: inline-block;" class="fas fa-flag"></span>     <p style=" display: inline-block;"> ' . $row["Destination"] . '</p>';
-                echo '<p>Places disponibles: ' . $row['AvailableSeats'] . '</p>';
-                echo '<p>Prix: ' . $row['price'] . '</p>';
-                echo '<p>Nom du client: ' . $row['FirstName'] . ' ' . $row['LastName'] . '</p>';
-                echo '<p>Numero telephone du client: ' . $row['phonenumber'] . '</p>';
+                echo '<br/>';
+                echo '<br/>';
+                echo '<p style="text-align: center;">Places disponibles: <strong>' . $row['AvailableSeats'] . '</strong></p>';
+                echo '<p style="text-align: center;">Nom du client: <strong>' . $row['FirstName'] . ' ' . $row['LastName'] . '</strong></p>';
+                echo '<p style="text-align: center;">Numero telephone du client: <strong>' . $row['phonenumber'] . '</strong></p>';
                 echo '</div>';
                 echo '</a>';
  
