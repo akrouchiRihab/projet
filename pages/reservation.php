@@ -201,7 +201,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <header>
         <div class="container">
             <a href="clientlistes.php"><img class="logo" src="../images/twsil3.png"></a>
+<<<<<<< HEAD
     
+=======
+
+
+>>>>>>> 526cc0458a2d6c0564822db8e3133b85619867db
             <nav class="navigation">
                 <ul style="margin-left: 30%;">
                      <li>
