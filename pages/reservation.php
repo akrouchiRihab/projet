@@ -257,6 +257,9 @@ if ($result->num_rows > 0) {
         echo '<p style=" font-weight: bold;  " class="price" style="margin-left: 250px;"> numero de telephone : ' . $row["phonenumber"] . '</p>';
         echo '<p style=" font-weight: bold; " class="price" style="margin-left: 250px;">prix : ' . $row["price"] . '</p>';
         echo '<p style="display: inline-block; font-size: 30px; "> places disponibles : ' . $row["AvailableSeats"] . '</p>';
+        echo '<form action="process_annulation.php" method="post">';
+        echo '<input type="hidden" name="ride_id" value=" '. $row["RideID"]. '">';
+        echo '<button type="submit" class="annuler_btn">Annuler</button> </form>'; 
         echo '</div>';
         echo '</a>';
         
