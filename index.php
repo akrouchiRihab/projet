@@ -39,11 +39,11 @@ require_once 'includes/search_model.inc.php';
       <div class="container">
 
 
-        <a href="#"><img class="logo" src="images/twsila.png"></a>
+        <a href="index.php"><img class="logo" src="images/twsila.png"></a>
 
 
         <nav class="navigation">
-          <ul style="margin-left: 60%; margin-top: 3%;">
+          <ul>
             <li><a href="#" class="home"> Acceuil</a></li>
             <li><a href="#contact">Contact</a></li>
             <li><a href="#about"> À propos</a></li>
@@ -78,12 +78,12 @@ require_once 'includes/search_model.inc.php';
         <?php 
        
          if(isset($_SESSION["UserID"]) && isset($_SESSION["user_role"]) && $_SESSION["user_role"] == 'driver'){ ?>
-             <a href="pages/liste_driver.php" class="proposer_btn" >proposer un trajet</a>  <?php  echo "User ID in session: " . $_SESSION["UserID"];
+             <a href="pages/liste_driver.php" class="proposer_btn" >proposer un trajet</a>  <?php  
              } 
         
-         if(isset($_SESSION["UserID"]) && isset($_SESSION["user_role"]) && $_SESSION["user_role"] == 'passenger'){  echo $_SESSION["id"];
+         if(isset($_SESSION["UserID"]) && isset($_SESSION["user_role"]) && $_SESSION["user_role"] == 'passenger'){  
          ?>
-        <a href="clientlistes.php" class="reserver_btn"  >réserver un trajet</a>
+        <a href="pages/clientlistes.php" class="reserver_btn"  >réserver un trajet</a>
         <?php }   ?>
        
       </div>
