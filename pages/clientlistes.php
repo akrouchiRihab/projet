@@ -342,15 +342,15 @@ button:hover{
 <div class="search-div">
 <div id="search-form">
     <!-- Use a select element for the position options -->
-    <label for="position">Position:</label>
-    <select id="position" style="height:43px; border-radius:10px;border-style:bold;">
+    <label for="position" >Position:</label>
+    <select id="position" style="height:43px; border-radius:10px;border-style:bold;" required>
     <option value="choose option" style="display:none ; border-radius:10px;border-style:bold;">choisir un option</option>
         <option value="navigator">choisir ma position automatiquement</option>
         <option value="manual" >choisir depuis le map</option>
     </select>
-    <input type="text" id="positionName" readonly style='display:none; border-radius:10px;';>
+    <input type="text" id="positionName" readonly style='display:none; border-radius:10px;' required>
     <label for="destination">Destination:</label>
-    <input type="text" id="destination" onclick="showMap()" readonly style="border-radius:10px;">
+    <input type="text" id="destination" onclick="showMap()" readonly style="border-radius:10px;" required>
 
     
 
