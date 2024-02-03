@@ -226,40 +226,58 @@ if (isset($_SESSION['UserID'])) {
             $statement->bind_param('i', $userID);
             $statement->execute();
             $result = $statement->get_result();
-
-            // Affichage des résultats
-            while ($row = $result->fetch_assoc()) {
-                // Afficher les informations de réservation, trajet et client
-                echo '<a style=" height:auto;">';
-                echo '<div class="station">';
-                echo '<p style="font-weight: bold; text-align: center;">' . $row["DepartureTime"] . '</p>';
-                echo '<span style="color: black; text-decoration: none; font-size: 20px; display: inline-block;" class="fas fa-map-marker-alt"></span>     <p style=" display: inline-block;">' . $row["DepartureLocation"] . '</p>';
-                echo '<p style=" font-weight: bold; margin-left: 85% ; display: inline-block;" class="price" style="margin-left: 250px;">' . $row["price"] . '</p>';
-                echo '<span style="color: black; text-decoration: none; font-size: 20px; display: inline-block;" class="fas fa-flag"></span>     <p style=" display: inline-block;"> ' . $row["Destination"] . '</p>';
-                echo '<br/>';
-                echo '<br/>';
-                echo '<p style="text-align: center;">Places disponibles: <strong>' . $row['AvailableSeats'] . '</strong></p>';
-                echo '<p style="text-align: center;">Nom du client: <strong>' . $row['FirstName'] . ' ' . $row['LastName'] . '</strong></p>';
-                echo '<p style="text-align: center;">Numero telephone du client: <strong>' . $row['phonenumber'] . '</strong></p>';
+        
+            if ($result->num_rows > 0) {
+                while ($row = $result->fetch_assoc()) {
+                    // Afficher les informations de réservation, trajet et client
+                    echo '<a style=" height:auto;">';
+                    echo '<div class="station">';
+                    echo '<p style="font-weight: bold; text-align: center;">' . $row["DepartureTime"] . '</p>';
+                    echo '<span style="color: black; text-decoration: none; font-size: 20px; display: inline-block;" class="fas fa-map-marker-alt"></span>     <p style=" display: inline-block;">' . $row["DepartureLocation"] . '</p>';
+                    echo '<p style=" font-weight: bold; margin-left: 85% ; display: inline-block;" class="price" style="margin-left: 250px;">' . $row["price"] . '</p>';
+                    echo '<span style="color: black; text-decoration: none; font-size: 20px; display: inline-block;" class="fas fa-flag"></span>     <p style=" display: inline-block;"> ' . $row["Destination"] . '</p>';
+                    echo '<br/>';
+                    echo '<br/>';
+                    echo '<p style="text-align: center;">Places disponibles: <strong>' . $row['AvailableSeats'] . '</strong></p>';
+                    echo '<p style="text-align: center;">Nom du client: <strong>' . $row['FirstName'] . ' ' . $row['LastName'] . '</strong></p>';
+                    echo '<p style="text-align: center;">Numero telephone du client: <strong>' . $row['phonenumber'] . '</strong></p>';
+                    echo '</div>';
+                    echo '</a>';
+                }
+            } else {
+                // Aucun trajet proposé par l'utilisateur
+                echo '<div style="
+                    width: 95%; 
+                    height: 90%;
+                    margin-top: 5%;
+                    margin-left: 2%;
+                    margin-bottom: 20px;
+                    background-color: #f5f5f5;
+                    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+                    padding: 10px;
+                    box-sizing: border-box;
+                    text-align: center;
+                    font-size: 20px;
+                ">';
+                echo 'Aucune réservation pour vous.';
                 echo '</div>';
-                echo '</a>';
- 
             }
-
+        
             // Fermer la connexion et la requête
             $statement->close();
         } else {
             // Gérer l'échec de la préparation de la requête
             echo "Erreur lors de la préparation de la requête.";
         }
-
+        
         $conn->close();
-    } else {
-        // Gérer l'échec de la connexion à la base de données
-        echo "Erreur de connexion à la base de données.";
+        } else {
+            // Gérer l'échec de la connexion à la base de données
+            echo "Erreur de connexion à la base de données.";
+        }
     }
-}
-?>     
+        ?>
+            
 </div>
         </div>
     </div>
@@ -277,4 +295,3 @@ if (isset($_SESSION['UserID'])) {
 </script>
 
 </html>
-
