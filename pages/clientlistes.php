@@ -450,11 +450,10 @@ button:hover{
                 console.error('Error fetching trip details:', data.error);
             } else {
                 console.log(data)
-                // Update modal content with the fetched details
-                $('#modalDepartureTime').append(data.departureTime);
-                $('#modalDepartureLocation').append(data.departureLocation);
-                $('#modalDestination').append(data.destination);
-                $('#modalAvailableSeats').append(data.availableSeats);
+       // Update modal content with the fetched details
+$('#modalDepartureLocation').html('<strong>Depart:</strong> ' + data.departureLocation);
+$('#modalDestination').html('<strong>Destination:</strong> ' + data.destination);
+$('#modalAvailableSeats').html('<strong>Nombre de places:</strong> ' + data.availableSeats);
                  
 // Set values in hidden input fields for form submission
 
