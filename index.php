@@ -163,7 +163,7 @@ require_once 'includes/search_model.inc.php';
           <span>phone</span>
           <p>+0123 4567 8910</p>
           <span>Email</span>
-          <p>pweb@usthb.dz</p>
+          <p>twsila@gmail.com</p>
          
         </div>
        
