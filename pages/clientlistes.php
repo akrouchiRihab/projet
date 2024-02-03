@@ -645,7 +645,7 @@ function searchTrips()  {
                 // Handle the error case
                 
                 
-                $('#trajet_0').html('<p style="color: #3e1f92;font-weight:bold;font-size: 25px;margin-top: 20%; border-style: solid; padding-left: 5%; " > aucune trajet n\'est disponible pour cette destination </p>');
+                $('#trajet_0').html('<p style="color: #3e1f92;font-weight:bold;font-size: 25px;margin-top: 20%; border-style: solid; padding-left: 22%; " > aucune trajet n\'est disponible pour cette destination </p>');
               
             }
         });

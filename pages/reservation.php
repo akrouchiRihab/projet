@@ -192,7 +192,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     height: 400px; 
     width: 100%;
 }
+.ride-container {
+    transition: transform 0.3s ease; /* Add smooth transition for zoom effect */
+}
 
+.ride-container:hover {
+    transform: scale(1.05); /* Scale up by 5% on hover */
+}
     </style>
 </head>
 <body>
@@ -225,13 +231,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         </div>
         <br/>
         <div>
-            <div class="div-content">
+            <div class="div-content " >
             <?php
 // Fetch data from the database
-$sql = "SELECT rides.*, reservations.ReservationID
-            FROM rides
-            INNER JOIN reservations ON rides.RideID = reservations.RideID
-            WHERE reservations.UserID = '$userID'";
+$sql = "SELECT *, ReservationID
+            FROM rides r,users u , reservations res where r.RideID = res.RideID and u.UserID=r.RideID and res.UserID = '$userID'"  ;
 
 
 $result = $conn->query($sql);
@@ -239,19 +243,23 @@ $result = $conn->query($sql);
 if ($result->num_rows > 0) {
     // Output data of each row
     while ($row = $result->fetch_assoc()) {
-        echo '<a style=" height:auto;" href="maReservation.php?RideID=' . urlencode($row["RideID"]) . '">';
+     
+        echo '<a  id="ride-container" style=" height:auto;" href="maReservation.php?RideID=' . urlencode($row["RideID"]) . '">';
         echo '<div class="station">';
         echo '<p style="font-weight: bold; text-align: center;">' . $row["DepartureTime"] . '</p>';
         echo '<br/>';
         echo '<span style="color: black; text-decoration: none; font-size: 20px; display: inline-block;" class="fas fa-map-marker-alt"></span>     <p style=" display: inline-block;">' . $row["DepartureLocation"] . '</p>';
-        if ($row["price"] !== "") {
-            echo '<p style=" font-weight: bold; margin-left: 85% ; display: inline-block;" class="price" style="margin-left: 250px;">' . $row["price"] . '</p>';
-        }
+       
+      
+      
         echo '<br/>';
         echo '<span style="color: black; text-decoration: none; font-size: 20px; display: inline-block;" class="fas fa-flag"></span>     <p style=" display: inline-block;"> ' . $row["Destination"] . '</p>';
-        echo '<p style="display: inline-block; font-size: 30px; margin-left: 80%;">' . $row["AvailableSeats"] . '</p><img style="display: inline-block;  width: 7%; height:7%;" src="images/car-seat.png"/>';
+        echo '<p style=" font-weight: bold;  " class="price" style="margin-left: 250px;"> numero de telephone : ' . $row["phonenumber"] . '</p>';
+        echo '<p style=" font-weight: bold; " class="price" style="margin-left: 250px;">prix : ' . $row["price"] . '</p>';
+        echo '<p style="display: inline-block; font-size: 30px; "> places disponibles : ' . $row["AvailableSeats"] . '</p>';
         echo '</div>';
         echo '</a>';
+        
     }
 } else {
     echo "0 results";
