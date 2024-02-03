@@ -88,7 +88,8 @@ if (isset($_GET['RideID'])) {
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Plan de Route</title>
+<link rel="icon" href="../images/logopage.png" type="image/x-icon">
+    <title>Twsila - Client</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -106,10 +107,10 @@ if (isset($_GET['RideID'])) {
             <div class="container">
                 <a href="clientlistes.php"><img class="logo" src="../images/twsil3.png"></a>
         <nav class="navigation">
-                    <ul>
-                        <li class="nav1"><a href="clientlistes.php">listes trajets</a></li>
-                        <li class="nav1"><a href="reservation.php">Mes reservations</a></li>
-                        <li class="nav1"><a href="../includes/logout.inc.php" ><img class="logout" src="../images/logout.png"></a></li>
+                    <ul style="margin-top: 1%; margin-left: 45%;">
+                        <li><a style="text-decoration: none;" href="clientlistes.php">listes trajets</a></li>
+                        <li><a style="text-decoration: none;" href="reservation.php">Mes reservations</a></li>
+                        <li><a style="text-decoration: none;" href="../includes/logout.inc.php" class="logout">Déconnexion</a></li>
              
                             <?php if(isset($_SESSION["user_id"])){ ?>
                             <form action="../includes/logout.inc.php" method="post">
