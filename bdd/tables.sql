@@ -9,7 +9,7 @@ CREATE TABLE Users (
     LastName VARCHAR(50),
     phonenumber VARCHAR(10),
     Email VARCHAR(100) UNIQUE,
-    Role ENUM('driver', 'passenger') NOT NULL,
+    Role ENUM('driver', 'passenger','admin') NOT NULL,
     Password VARCHAR(255) -- Hashed password
 );
 
@@ -29,15 +29,7 @@ CREATE TABLE Rides (
     FOREIGN KEY (DriverID) REFERENCES Users(UserID) 
 );
 
--- RideProposals table
-CREATE TABLE RideProposals (
-    ProposalID INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
-    ProposerID INT NOT NULL,
-    RideID INT NOT NULL,
-    Status VARCHAR(20), -- e.g., 'Pending', 'Approved', 'Rejected'
-    FOREIGN KEY (ProposerID) REFERENCES Users(UserID) ,
-    FOREIGN KEY (RideID) REFERENCES Rides(RideID)
-);
+
 CREATE TABLE reservations (
     ReservationID INT PRIMARY KEY AUTO_INCREMENT,
     UserID INT, 

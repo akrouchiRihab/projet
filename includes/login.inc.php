@@ -13,6 +13,7 @@ if($_SERVER["REQUEST_METHOD"]==="POST"){
          require_once 'login_contr.inc.php';
         
         
+         
           // ERROR HANDLERS
           $errors = [];
 
@@ -21,6 +22,10 @@ if($_SERVER["REQUEST_METHOD"]==="POST"){
           }
           
           $result=get_email($pdo , $email);
+          if ($result['Role'] === 'admin') {
+            header('Location: ../dashboard.php');
+            exit();
+        }
           
           $id=get_id($pdo , $email);
          
@@ -51,7 +56,7 @@ if($_SERVER["REQUEST_METHOD"]==="POST"){
             if ($result['Role'] === 'driver') {
               header('Location: ../pages/liste_driver.php');
               exit();
-          } elseif ($result['Role'] === 'passenger') {
+          } if ($result['Role'] === 'passenger') {
               header('Location: ../pages/clientlistes.php');
               exit();
           }
