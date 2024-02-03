@@ -18,6 +18,9 @@ require_once('../includes/db_connect.php'); // Include your database connection 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="../css/style2.css">
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
     <link rel="icon" href="../images/logopage.png" type="image/x-icon">
     <title>Twsila - Conducteur</title>
     <script>
@@ -97,20 +100,7 @@ require_once('../includes/db_connect.php'); // Include your database connection 
 .modal-content form input[type="submit"]:hover {
     background-color: #45a049;
 }
-/* Style the button that opens the modal */
-.modal button {
-    background-color: #3e1f92;
-    color: white;
-    padding: 10px 20px;
-    border: none;
-    cursor: pointer;
-    text-align: center;
-    display: inline-block;
-    font-size: 15px;
-    margin: 4px 2px;
-    transition: 0.3s;
-    border-radius: 4px;
-}
+
 
 /* Change the background color of the button on hover */
 .modal button:hover {
@@ -261,7 +251,7 @@ require_once('../includes/db_connect.php'); // Include your database connection 
 <div class="main">
     <header>
         <div class="container">
-            <a href="#"><img class="logo" src="../images/twsil3.png"></a>
+            <a href="liste_driver.php"><img class="logo" src="../images/twsil3.png"></a>
     
             <nav class="navigation">
                 <ul>
@@ -311,7 +301,24 @@ if ($result->num_rows > 0) {
         echo '</a>';
     }
 } else {
-    echo "0 results";
+    echo '<div style="
+    width: 95%; 
+    height: 90%;
+    margin-top: 5%;
+    margin-left: 2%;
+    margin-bottom: 20px;
+    background-color: #f5f5f5;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 10px;
+    box-sizing: border-box;
+    text-align: center;
+    font-size: 20px;
+">';
+echo 'Aucun trajet n\'est proposé par vous.';
+echo '<br/>';
+echo '<a id="openModal" style="text-align: center; font-size: 18px;">Proposer un trajet  dès maintenant en cliquant sur <span style=" color:#3e1f92;">le bouton "proposer trajet" en haut</span></a>';
+echo '</div>';
+
 }
 ?>
       
@@ -349,13 +356,19 @@ if ($result->num_rows > 0) {
             <input type="hidden" name="destinationLongitude" id="destinationLongitude" />
             <input type="hidden" name="positionLatitude" id="positionLatitude" />
             <input type="hidden" name="positionLongitude" id="positionLongitude" />
-            <?php if (isset($_SESSION['errorMessages'])): ?>
-                <div style="color: red; width: 80%; margin-bottom: 10px;"><?php echo $_SESSION['errorMessages']; ?></div>
-                <?php unset($_SESSION['errorMessages']); // Effacer les messages après les avoir affichés ?>
-            <?php endif; ?>
-            
+           
+            <?php
+// Check for stored error messages
+if (isset($_SESSION['ride_creation_errors'])) {
+    // Display errors and then clear the session variable
+    echo '<script>alert("' . str_replace(array("\r", "\n"), '\n', $_SESSION['ride_creation_errors']) . '");</script>';
+    unset($_SESSION['ride_creation_errors']);
+}
+?>
+
             <input type="submit" value="Proposer">
         </form>
+        
     </div>
 </div>
 </div>
@@ -364,6 +377,13 @@ if ($result->num_rows > 0) {
     var modal = document.getElementById("myModal");
     var btn = document.getElementById("openModal");
     var span = document.getElementsByClassName("close")[0];
+    <?php
+// Afficher la modal uniquement si la session des erreurs est définie
+if (isset($_SESSION['ride_creation_errors'])) {
+    echo 'modal.style.display = "block";';
+    unset($_SESSION['ride_creation_errors']);
+}
+?>
     btn.onclick = function() {
         modal.style.display = "block";
     }
@@ -530,4 +550,16 @@ positionSelect.addEventListener('change', function() {
     }
 });
 </script>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    <?php
+    // Vérifiez si des erreurs sont présentes dans la variable PHP
+    if (isset($rideCreationErrors)) {
+        // Affichez la fenêtre modale avec les erreurs
+        echo 'alert("' . str_replace(array("\r", "\n"), '\n', $rideCreationErrors) . '");';
+    }
+    ?>
+});
+</script>
+
 </html>

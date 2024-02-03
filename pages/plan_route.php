@@ -13,7 +13,7 @@ if (isset($_GET['deleteID'])) {
         $deleteRideQuery = "DELETE FROM rides WHERE RideID = '$deleteID'";
         if ($conn->query($deleteRideQuery) === TRUE) {
             // Redirect to the same page after deleting
-            header('Location: listecond.php');
+            header('Location: liste_driver.php');
             exit();
         } else {
             // Handle errors
@@ -86,7 +86,6 @@ $statement->execute();
 $statement->bind_result($reservationCount);
 $statement->fetch();
 $statement->close();
-$conn->close(); // Fermez la connexion après avoir terminé toutes les opérations
 ?>
 
 
@@ -98,7 +97,6 @@ $conn->close(); // Fermez la connexion après avoir terminé toutes les opérati
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css" integrity="sha256-kLaT2GOSpHechhsozzB+flnD+zUyjE2LlfWPgU04xyI=" crossorigin="" />
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDfYaBDnZ6vo0t_f8ACEzHhJirgcMfwpyI&callback=initMap" async defer></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -107,10 +105,15 @@ $conn->close(); // Fermez la connexion après avoir terminé toutes les opérati
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css">
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
 <link rel="icon" href="../images/logopage.png" type="image/x-icon">
     <title>Twsila - Conducteur</title>
     <style>
         .div-container{
+            margin-left: 2%;
             display: inline-block;
             width: 40%;
             height: 40%;
@@ -118,7 +121,7 @@ $conn->close(); // Fermez la connexion après avoir terminé toutes les opérati
         /* Style for the map container */
         #map {
             display : inline-block;
-            height: 400px;
+            height: 330px;
             width: 40%;
             position: relative;
             left: 5%;
@@ -132,12 +135,12 @@ $conn->close(); // Fermez la connexion après avoir terminé toutes les opérati
     <div class="main">
         <header>
             <div class="container">
-                <a href="listecond.php"><img class="logo" src="../images/twsil3.png"></a>
+                <a href="liste_driver.php"><img class="logo" src="../images/twsil3.png"></a>
                 <nav class="navigation">
                     <ul style="margin-left: 50%;">
-                        <li><a href="liste_driver.php">listes trajets</a></li>
-                        <li><a href="reservation_driver.php">Voir Réservations</a></li>
-                        <li><a href="../includes/logout.inc.php" class="logout">Déconnexion</a></li>
+                        <li><a style="text-decoration: none;" href="liste_driver.php">listes trajets</a></li>
+                        <li><a style="text-decoration: none;" href="reservation_driver.php">Voir Réservations</a></li>
+                        <li><a style="text-decoration: none;" href="../includes/logout.inc.php" class="logout">Déconnexion</a></li>
                     </ul>
                 </nav>
             </div>
@@ -153,15 +156,37 @@ $conn->close(); // Fermez la connexion après avoir terminé toutes les opérati
             <p><strong>Destination:</strong> <a href="#" onclick="showMap('<?php echo $destination; ?>')"><?php echo $destination; ?></a></p>
             <br/>
             <hr>
-            <p style="margin:2%;">
-                <?php
-                if ($reservationCount > 0) {
-                    echo "Nombre de passagers pour ce trajet: " . $reservationCount;
-                } else {
-                    echo "Aucun passager pour ce trajet";
-                }
-                ?>
-            </p>
+            <?php
+require_once '../includes/db_connect.php';
+if (isset($_GET['RideID'])) {
+    $RideID = $_GET['RideID'];
+// Perform a simple SELECT query to count the number of reservations
+$sql = "SELECT COUNT(*) AS reservationCount FROM reservations WHERE RideID = '$RideID'";
+
+// Check if the connection is successful before executing the query
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
+
+$result = $conn->query($sql);
+
+if ($result) {
+    $row = $result->fetch_assoc();
+
+    echo '<p style="margin:2%;">';
+    if ($row['reservationCount'] > 0) {
+        echo "Nombre de passagers pour ce trajet : " . $row['reservationCount'];
+    } else {
+        echo "Aucun passager pour ce trajet";
+    }
+    echo '</p>';
+} else {
+    // Handle query error if needed
+    echo "Error executing query: " . $conn->error;
+}
+}
+?>
+
             <hr>
         </div>
         <div class="parametre">
@@ -188,8 +213,8 @@ $conn->close(); // Fermez la connexion après avoir terminé toutes les opérati
                     Voulez-vous vraiment annuler ce trajet?
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Non</button>
-                    <button type="button" class="btn btn-danger" onclick="deleteRide('<?php echo $RideID; ?>')">Oui</button>
+                    <button type="button"  class="btn btn-danger" onclick="deleteRide('<?php echo $RideID; ?>')">Oui</button>
+                    <button type="button" style="margin-left: 1%;" class="btn btn-secondary" data-dismiss="modal">Non</button>
                 </div>
             </div>
         </div>

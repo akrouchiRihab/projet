@@ -91,11 +91,6 @@ header .container::after{
 }
 
 
-a{
-    text-decoration: none;
-    cursor: pointer;
-}
-
 .navigation ul li{
     text-decoration: none;
    display:inline-block;
@@ -220,31 +215,6 @@ nav{
     color: #000;
     text-decoration: none;
     cursor: pointer;
-}
-
-/* Ajouter ces styles pour personnaliser les boutons du modal */
-.btn-secondary, .btn-danger {
-    color: #fff;
-    background-color: #007bff;
-    border: 1px solid #007bff;
-    border-radius: 5px;
-    padding: 8px 16px;
-    cursor: pointer;
-    text-decoration: none;
-    text-align: center;
-    font-size: 16px;
-    margin: 0 10px;
-}
-
-.btn-danger {
-    background-color: #dc3545;
-    border: 1px solid #dc3545;
-}
-
-.btn-secondary:hover, .btn-secondary:focus, .btn-danger:hover, .btn-danger:focus {
-    color: #fff;
-    background-color: #0056b3;
-    border: 1px solid #0056b3;
 }
 
 /* Ajouter ces styles pour régler le problème du positionnement du bouton modal */

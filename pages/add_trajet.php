@@ -27,18 +27,17 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         // Vérifier que la date et l'heure fournies ne sont pas inférieures à la date et à l'heure actuelles
         $currentDateTime = date('Y-m-d H:i:s');
         if ($DepartureTime < $currentDateTime) {
-            $errorMessages .= "La date et l'heure de départ ne peuvent pas être inférieures à la date et à l'heure actuelles.<br>";
+            $errorMessages .= "La date et l'heure de départ ne peuvent pas être inférieures à la date et à l'heure actuelles.";
         }
 
         // Vérifier que le nombre de places est supérieur ou égal à 4
         if ($AvailableSeats > 4) {
-            $errorMessages .= "Le nombre de places doit être au moins 4.<br>";
+            $errorMessages .= "/ Le nombre de places doit être au moins 4.";
         }
 
         // Si des erreurs sont détectées, afficher les messages d'erreur et arrêter l'exécution
         if (!empty($errorMessages)) {
-            echo $errorMessages;
-            exit();
+            $_SESSION['ride_creation_errors'] = $errorMessages;
         }
 
         // Ajouter "DA" après le prix
