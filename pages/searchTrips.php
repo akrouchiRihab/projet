@@ -7,7 +7,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['destination'], $_POST
     $seats = $_POST['seats'];
 
     // Perform database query (modify as per your database schema)
-    $sql = "SELECT *,DepartureLocation FROM rides WHERE Destination = '$destination' AND AvailableSeats >= '$seats'";
+    $sql = "SELECT *,DepartureLocation FROM rides r,users u WHERE Destination = '$destination' AND AvailableSeats >= '$seats' and u.userID=r.driverID";
    $result = $conn->query($sql); // Uncomment and modify according to your database connection
    function fetchCoordinates($cityName) {
     $geocodeUrl = "https://nominatim.openstreetmap.org/search?format=json&q=" . urlencode($cityName);
