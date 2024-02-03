@@ -139,7 +139,10 @@ nav{
     color:#3e1f92;
 
  }
-
+ .container .navigation ul li a:active, .container .navigation ul li a.home {
+    border-bottom: 1px solid #3e1f92;
+    color: #3e1f92;
+ }
  .container .navigation ul li a{
     padding:10px;
     transition: all ease;

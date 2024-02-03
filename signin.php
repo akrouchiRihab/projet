@@ -86,7 +86,7 @@
          </div>
         
         
-         <div class="pass"><a>Mot de passe oublié?</a></div>
+        
          <input type="submit" name="" value="s'inscrire" onclick="return validateform()">
          <span id="submit-error"></span>
          <?php

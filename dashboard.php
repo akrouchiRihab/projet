@@ -106,13 +106,14 @@
                </div>
 
                <div class="card-body">
-                  <h5 class="card-title">Nombre de propositions</span></h5>
+                  <h5 class="card-title">Nombre de clients</span></h5>
                   <div class="d-flex align-items-center">
-                     <div class="card-icon rounded-circle d-flex align-items-center justify-content-center"> <i class="bi bi-map"></i></div>
+                  <div class="card-icon rounded-circle d-flex align-items-center justify-content-center"> <i class="bi bi-people"></i></div>
+                     <!--<div class="card-icon rounded-circle d-flex align-items-center justify-content-center"> <i class="bi bi-map"></i></div>-->
                      <div class="ps-3">
                         <h6>
                            <?php
-                              $sql = "SELECT COUNT(*) as proposal_count FROM rideproposals";
+                              $sql = "SELECT COUNT(*) as proposal_count FROM users where Role='passenger'";
                               $result = $conn->query($sql);
             
                               if ($result === false) {
@@ -144,13 +145,13 @@
                   </ul>
                </div>
                <div class="card-body">
-                  <h5 class="card-title">Nombre d'utilisateurs</span></h5>
+                  <h5 class="card-title">Nombre de conducteurs </span></h5>
                   <div class="d-flex align-items-center">
                      <div class="card-icon rounded-circle d-flex align-items-center justify-content-center"> <i class="bi bi-people"></i></div>
                      <div class="ps-3">
                         <h6> 
                            <?php
-                              $sql = "SELECT COUNT(*) as user_count FROM users";
+                              $sql = "SELECT COUNT(*) as user_count FROM users where Role='driver' ";
                               $result = $conn->query($sql);
             
                               if ($result === false) {

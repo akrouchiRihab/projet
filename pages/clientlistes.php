@@ -112,7 +112,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     #search-form label {
         margin-right: 10px;
-        color: #3498db; /* Couleur du texte des labels */
+        color: #3e1f92;/* Couleur du texte des labels */
+        font-weight: bold; 
     }
 
     #search-form input[type="text"],
@@ -123,7 +124,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     #search-form button {
-        background-color: #3498db; /* Couleur de fond du bouton */
+        background-color:  #3e1f92; /* Couleur de fond du bouton */
         color: #fff; /* Couleur du texte du bouton */
         border: none;
         padding: 10px 15px;
@@ -291,6 +292,27 @@ button:hover{
     height: 400px; 
     width: 100%;
 }
+.ride-container {
+    transition: transform 0.3s ease; /* Add smooth transition for zoom effect */
+}
+
+.ride-container:hover {
+    transform: scale(1.05); /* Scale up by 5% on hover */
+}
+/* Add this to your CSS stylesheet */
+#searchTripBtn{
+    background-color: #3498db; /* Set your button's background color */
+    color: #ffffff; /* Set text color */
+    border: none;
+    padding: 10px 20px; /* Adjust padding as needed */
+    cursor: pointer;
+    transition: background-color 0.3s, box-shadow 0.3s; /* Add smooth transition for color and shadow */
+}
+
+#searchTripBtn:hover {
+    background-color: #2980b9; /* Set the color you want on hover */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3); /* Add a subtle shadow on hover */
+}
 
     </style>
 </head>
@@ -319,52 +341,58 @@ button:hover{
    <!-- Modified search form with a select element for position -->
 <div class="search-div">
 <div id="search-form">
-    <label for="destination">Destination:</label>
-    <input type="text" id="destination" onclick="showMap()" readonly>
-
     <!-- Use a select element for the position options -->
     <label for="position">Position:</label>
-    <select id="position">
-    <option value="choose option" style="display:none">choose option</option>
-        <option value="navigator">Let navigator choose my position automatically</option>
-        <option value="manual" >Choose from the map search</option>
+    <select id="position" style="height:43px; border-radius:10px;border-style:bold;">
+    <option value="choose option" style="display:none ; border-radius:10px;border-style:bold;">choisir un option</option>
+        <option value="navigator">choisir ma position automatiquement</option>
+        <option value="manual" >choisir depuis le map</option>
     </select>
-    <input type="text" id="positionName" readonly style='display:none';>
-    <label for="seats">Number of Seats:</label>
-    <input type="number" id="seats" min="1"  max='4' value="1">
+    <input type="text" id="positionName" readonly style='display:none; border-radius:10px;';>
+    <label for="destination">Destination:</label>
+    <input type="text" id="destination" onclick="showMap()" readonly style="border-radius:10px;">
 
-    <button  onclick="searchTrips()">Search</button>
+    
+
+    <label for="seats">Nombre de places:</label>
+    <input type="number" id="seats" min="1"  max='4' value="1"style="border-radius:10px;border-style:bold;">
+
+    <button  id="searchTripBtn" onclick="searchTrips()">Search</button>
+</div >
+<button style="margin-top:2%" id="close-button" onclick="closeMap()">Close Map</button>
+ <div id="map"></div>
 </div>
-<button id="close-button" onclick="closeMap()">Close Map</button><div id="map"></div>
-</div>
-<div class="container">
+<div  id="trajet_0" class="container">
     <div class="row">
         <div class="col-md-12">
             <div id="trip-list" class="div-content row">
                 <?php
                    require_once('../includes/db_connect.php'); // Include your database connection file
                     // Fetch data from the database
-                    $sql = "SELECT * FROM rides WHERE AvailableSeats > 0";
+                    $sql = "SELECT *  FROM rides r, users u WHERE AvailableSeats > 0 and u.userID=r.driverID";
                     $result = $conn->query($sql);
 
                     if ($result) {
                         // Output data of each row
                         while ($row = $result->fetch_assoc()) {
-                            echo '<div class="col-md-4 mb-4">';
-                            echo '<a  id="trajet-reserve" style="height:auto;"class="open-modal" data-ride-id="' . $row["RideID"] . '">';
+                            echo '<div class="col-md-4 mb-4  ride-container">';
+                            echo '<a  id="trajet-reserve" style="height:auto;" class="open-modal" data-ride-id="' . $row["RideID"] . '">';
                             echo '<div id="station" class="card station  ">';
                             echo '<div class="card-body">';
                             echo '<h5 class="card-title font-weight-bold text-center" style="color:black; ">' . $row["DepartureTime"] . '</h5>';
                             echo '<p class="card-text">';
-                            echo '<span class="fas fa-map-marker-alt" style="color: black;"></span> ' . $row["DepartureLocation"] . '<br/>';
-        
-                                echo   '<p style=" font-weight: bold; margin-left: 85% ; display: inline-block;" class="price" style="margin-left: 250px;">' . $row["price"] .'</p>';
-                          
+                            echo '<span class="fas fa-map-marker-alt" style=" color: #3e1f92;"></span> ' . $row["DepartureLocation"] . '<br/>';  
                             echo '</p>';
                             echo '<p class="card-text">';
-                            echo '<span class="fas fa-flag" style="color: black;"></span> ' . $row["Destination"] . '<br/>';
-                            echo '<span style="font-size: 30px; margin-left: 60%;">' . $row["AvailableSeats"] . '</span> <img style="width: 15%; height:15%;" src="../images/car-seat.png">';
+                            echo '<span class="fas fa-flag" style=" color: #3e1f92;"></span> ' . $row["Destination"] . '<br/>';
                             echo '</p>';
+                            echo '<div class="row"> ';
+                            echo   '<p class="col-md-12" style=" display: inline-block;" class="price" style="margin-left: 250px;">' ."numero de telephone : ". $row["phonenumber"] .'</p>';
+                            echo '<div class="row" style="padding-right:0px;margin-right:0px;">';                          
+                            echo   '<p  class="col-md-4" style=" padding-top:3%; margin-left: 5% ; display: inline-block;" class="price" style="margin-left: 250px;">' ."prix : ". $row["price"] .'</p>';
+                            echo '<p class="col-md-4" style=" color: #3e1f92;font-weight:bold;font-size: 30px; margin-left:22%; padding-right:0px; margin-right:0px;">' . $row["AvailableSeats"] . '<img class="col-md-6" style="margin-left:5%;width: 45%; height:70%; padding-bottom:3%; color: #3e1f92;" src="../images/car-seat.png"></p>';
+                            echo '</div>';
+                            echo '</div>';
                             echo '</div>';
                             echo '</div>';
                             echo '</a>';
@@ -378,6 +406,7 @@ button:hover{
         </div>
     </div>
 </div>
+<div style="display: none"><p>Aucune trajet n'est disponible pour cette destination.</p></div>
 <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
     <!--<div id="myModal" class="modal">
@@ -593,7 +622,7 @@ function searchTrips()  {
     console.log('Seats:', seats);
         // Use AJAX to send a request to the server
         $.ajax({
-            url: 'pages/searchTrips.php', // The server-side script
+            url: 'searchTrips.php', // The server-side script
             type: 'POST', // Send as a POST request
             data: { destination: destination,seats: seats,destinationLongitude:destinationLongitude,destinationLatitude:destinationLatitude ,positionLongitude :positionLongitude , positionLatitude: positionLatitude}, // Data to send to the server
             dataType: 'json', // Make sure to specify the expected data type
@@ -606,51 +635,59 @@ function searchTrips()  {
                     // Display an error message if no results found
                     $('#trip-list').html('<p>' + data.error + '</p>');
                 } else {
+                    
                     // Render the trips dynamically
                     renderTrips(data);
                 }
             },
             error: function () {
+                console.log("here is the problem")
                 // Handle the error case
-                $('#trip-list').html('<p>Error fetching data.</p>');
+                
+                
+                $('#trajet_0').html('<p style="color: #3e1f92;font-weight:bold;font-size: 25px;margin-top: 20%; border-style: solid; padding-left: 5%; " > aucune trajet n\'est disponible pour cette destination </p>');
+              
             }
         });
     }
     function renderTrips(trips) {
     // Clear the existing content in the trips container
     $('#trip-list').html('');
-
+   
     // Iterate through the trips and append them to the container
     trips.forEach(function (trip) {
        
-        var tripHtml = '<div class="col-md-4 mb-4">';
-        tripHtml+='<a style=" height:auto;" href="rechercher.php?RideID=' + trip.RideID + '">';
-        tripHtml += '<div id="station" class=" card station ">';
-        tripHtml+= '<div class="card-body">';
-        tripHtml += '<h5 class="card-title font-weight-bold text-center" style="color:black; ">' + trip.DepartureTime + '</h5>';
+        var tripHtml ='<div class="col-md-4 mb-4  ride-container">';
+        tripHtml+='<a  id="trajet-reserve" style="height:auto;" class="open-modal" data-ride-id="' + trip.RideID + '">';
+        tripHtml+='<div id="station" class="card station  ">';
+        tripHtml += '<div class="card-body">';
+        tripHtml+= '<h5 class="card-title font-weight-bold text-center" style="color:black; ">'  + trip.DepartureTime +  '</h5>';
         tripHtml += '<p class="card-text">';
+        tripHtml += '<span class="fas fa-map-marker-alt" style=" color: #3e1f92;"></span> ' + trip.DepartureLocation + '<br/>';  
        
-        tripHtml +=  '<span class="fas fa-map-marker-alt" style="color: black;"></span> ' + trip.DepartureLocation + '<br>';
-        
-        tripHtml += '<p style=" font-weight: bold; margin-left: 85% ; display: inline-block;" class="price" style="margin-left: 250px;">' + trip.price + '</p>';
-       
-        tripHtml += '<br>';
-        tripHtml+='<p class="card-text">';
-      
-        tripHtml += '<span class="fas fa-flag" style="color: black;"></span> ' + trip.Destination + '<br>';
-        tripHtml += '<span style="font-size: 30px; margin-left: 60%;">' + trip.AvailableSeats + '</span> <img style="width: 15%; height:15%;" src="../images/car-seat.png">';
-        tripHtml += '</p>';
+        tripHtml +=  '</p>'
+        tripHtml +='<p class="card-text">';
+        tripHtml +='<span class="fas fa-flag" style=" color: #3e1f92;"></span> '+ trip.Destination + '<br/>';
+        tripHtml +='</p>'
+        tripHtml += '<div class="row"> ';
+        tripHtml +='<p class="col-md-12" style=" display: inline-block;" class="price" style="margin-left: 250px;"> numero de telephone : ' + trip.phonenumber +'</p>';
+        tripHtml +='<div class="row" style="padding-right:0px;margin-right:0px;">';    
+        tripHtml += '<p  class="col-md-4" style=" padding-top:3%; margin-left: 5% ; display: inline-block;" class="price" style="margin-left: 250px;"> prix : '+ trip.price + '</p>';   
+        tripHtml += '<p class="col-md-4" style=" color: #3e1f92;font-weight:bold;font-size: 30px; margin-left:22%; padding-right:0px; margin-right:0px;">' + trip.AvailableSeats + '<img class="col-md-6" style="margin-left:5%;width: 45%; height:70%; padding-bottom:3%; color: #3e1f92;" src="../images/car-seat.png"></p>';
+        tripHtml += '</div>';
+        tripHtml += '</div>';
         tripHtml += '</div>';
         tripHtml += '</div>';
         tripHtml += '</a>';
         tripHtml+= '</div>';
 
-
+        
       
         // Append the generated HTML to the container
         $('#trip-list').append(tripHtml);
     });
 }
+
 
 
     function haversineDistance(lat1, lon1, lat2, lon2) {
@@ -698,5 +735,6 @@ function searchTrips()  {
                 .openPopup();
         }
     }
+    
 </script>
 </html>
