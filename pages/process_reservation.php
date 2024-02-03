@@ -34,6 +34,9 @@ if (isset($_POST['ride_id'])) {
             // Insert a new row into the reservations table
             $sqlInsertReservation = "INSERT INTO reservations (RideID, UserID) VALUES ('$rideID', '$userID')";
 
+
+// Execute the query
+$conn->query($sqlInsertReservation);
             if ($conn->query($sqlInsertReservation) === TRUE) {
                 // Succès de la réservation
                 echo '<script>alert("Réservé avec succès! ");
