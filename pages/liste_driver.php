@@ -312,7 +312,7 @@ if ($result->num_rows > 0) {
     padding: 10px;
     box-sizing: border-box;
     text-align: center;
-    font-size: 20px;
+    font-size: 20px; 
 ">';
 echo 'Aucun trajet n\'est proposé par vous.';
 echo '<br/>';
