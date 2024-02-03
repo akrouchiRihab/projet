@@ -11,6 +11,8 @@ require_once 'includes/search_model.inc.php';
 <html lang="en">
 
 <head>
+
+
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -22,12 +24,13 @@ require_once 'includes/search_model.inc.php';
   
 
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <link rel="stylesheet" href="css/style.css">
-  <title>Acceuil</title>
+  <link rel="stylesheet" href="css/style3.css">
+  <link rel="icon" href="logopage.png" type="image/x-icon">
+
+  <title>Twsila</title>
   <script>
     var scroll = new SmoothScroll('a[href*="#"]');
   </script>
-
 </head>
 
 <body>
@@ -65,7 +68,7 @@ require_once 'includes/search_model.inc.php';
       </div>
 
     </header>
-    <div class="container">
+    <div class="containerr">
       <div class="col-2">
         <h1><span>Trouvez</span> votre trajet en quelques clics <br>ou proposez votre propre <br>trajet dès maintenant!</h1>
         <!--<p>Des innovations technologiques pour stimuler<br> votre croissance et votre efficacité</p> -->

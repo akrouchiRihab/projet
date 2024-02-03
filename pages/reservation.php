@@ -43,9 +43,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.3/js/all.min.js" crossorigin="anonymous"></script>
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="../css/style2.css">
-    <title>Client</title>
+    <link rel="icon" href="../images/logopage.png" type="image/x-icon">
+    <title>Twsila - Client</title>
     <script>
         var scroll = new SmoothScroll('a[href*="#"]');
     </script>
@@ -210,11 +213,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <a href="clientlistes.php"><img class="logo" src="../images/twsil3.png"></a>
 
             <nav class="navigation">
-                <ul>
+                <ul style="margin-top: 1%; margin-left: 45%;">
                      <li>
-                     <li class="nav1"><a href="clientlistes.php">listes trajets</a></li>
-                     <li class="nav1"><a href="reservation.php">Mes reservations</a></li>
-                     <li class="nav1"><a href="../includes/logout.inc.php" ><img class="logout" src="../images/logout.png"></a></li>
+                     <li><a href="clientlistes.php">listes trajets</a></li>
+                     <li><a href="reservation.php">Mes reservations</a></li>
+                     <li><a href="../includes/logout.inc.php" class="logout">Déconnexion</a></li>
              
                     <?php
                      $userID = $_SESSION["UserID"]; 
@@ -233,7 +236,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <div>
             <div class="div-content " >
             <?php
-// Fetch data from the database
+
 $sql = "SELECT Distinct r.RideID, r.DepartureTime, r.DepartureLocation, r.Destination, r.AvailableSeats, r.price, u.phonenumber
         FROM rides r
         INNER JOIN reservations res ON r.RideID = res.RideID
@@ -241,11 +244,13 @@ $sql = "SELECT Distinct r.RideID, r.DepartureTime, r.DepartureLocation, r.Destin
         WHERE res.UserID = '$userID'
         ORDER BY r.RideID ASC";
 
+
 $result = $conn->query($sql);
 
 if ($result->num_rows > 0) {
     // Output data of each row
     while ($row = $result->fetch_assoc()) {
+
                 echo '<a style="height:auto;" href="maReservation.php?RideID=' . urlencode($row["RideID"]) . '">';
                 echo '<div class="station">';
                 echo '<p style="font-weight: bold; text-align: center;">' . $row["DepartureTime"] . '</p>';
@@ -265,6 +270,7 @@ if ($result->num_rows > 0) {
         } else {
             echo "0 results";
         }
+
 ?>
       
     </div>
