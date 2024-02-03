@@ -344,7 +344,7 @@ button:hover{
                 <?php
                    require_once('../includes/db_connect.php'); // Include your database connection file
                     // Fetch data from the database
-                    $sql = "SELECT * FROM rides WHERE AvailableSeats > 0";
+                    $sql = "SELECT *  FROM rides r, users u WHERE AvailableSeats > 0 and u.userID=r.driverID";
                     $result = $conn->query($sql);
 
                     if ($result) {
@@ -359,6 +359,7 @@ button:hover{
                             echo '<span class="fas fa-map-marker-alt" style="color: black;"></span> ' . $row["DepartureLocation"] . '<br/>';
         
                                 echo   '<p style=" font-weight: bold; margin-left: 85% ; display: inline-block;" class="price" style="margin-left: 250px;">' . $row["price"] .'</p>';
+                                echo   '<p style=" font-weight: bold; margin-left: 85% ; display: inline-block;" class="price" style="margin-left: 250px;">' . $row["phonenumber"] .'</p>';
                           
                             echo '</p>';
                             echo '<p class="card-text">';
@@ -593,7 +594,7 @@ function searchTrips()  {
     console.log('Seats:', seats);
         // Use AJAX to send a request to the server
         $.ajax({
-            url: 'pages/searchTrips.php', // The server-side script
+            url: 'searchTrips.php', // The server-side script
             type: 'POST', // Send as a POST request
             data: { destination: destination,seats: seats,destinationLongitude:destinationLongitude,destinationLatitude:destinationLatitude ,positionLongitude :positionLongitude , positionLatitude: positionLatitude}, // Data to send to the server
             dataType: 'json', // Make sure to specify the expected data type
