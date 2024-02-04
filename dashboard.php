@@ -50,13 +50,13 @@
    }
 </style>
 
-<body style="background: #676B6E;">
+<body>
    <section class="section dashboard container mt-5">
       <div class="row">
          <div class="col-xl-4 col-md-4">
             <div class="card info-card sales-card">
                <div class="filter">
-                  <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
+                
                   <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
                      <li class="dropdown-header text-start">
                         <h6>Filter</h6>
@@ -94,7 +94,7 @@
          <div class="col-xl-4 col-md-4">
             <div class="card info-card revenue-card">
                <div class="filter">
-                  <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
+                 
                   <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
                      <li class="dropdown-header text-start">
                         <h6>Filter</h6>
@@ -134,7 +134,7 @@
          <div class="col-xl-4 col-md-4">
             <div class="card info-card customers-card">
                <div class="filter">
-                  <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
+                  
                   <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
                      <li class="dropdown-header text-start">
                         <h6>Filter</h6>
