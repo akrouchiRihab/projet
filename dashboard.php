@@ -42,6 +42,7 @@
    <link href="./assets/css/simple-datatables.css" rel="stylesheet">
    <link href="./assets/css/style.css" rel="stylesheet">
    <link href="./assets/fonts/bootstrap-icons.woff2" rel="stylesheet">
+   <link rel="stylesheet" href="css/style.css">
 </head>
 <style>
    .canvas {
@@ -50,7 +51,13 @@
    }
 </style>
 
-<body style="background: #676B6E;">
+<body style="background: #f3f3f3;">
+   <header>
+      <div class="container">
+         <a href="index.php"><img class="logo" src="images/twsila.png"></a>
+      </div>
+   </header>
+
    <section class="section dashboard container mt-5">
       <div class="row">
          <div class="col-xl-4 col-md-4">
@@ -167,15 +174,14 @@
                   </div>
                </div>
             </div>
-
          </div>
       </div>
 
 
-      <div class="card-body mt-5" style="background-color:#fff">
-         <h5 class="card-title">Panneau des utilisateurs<span></span></h5>
+      <div class="card-body mt-5 shadow rounded" style="background-color:#fff">
+         <h5 class="card-title">Tableau des utilisateurs<span></span></h5>
 
-         <div class="dataTable-search" style="display:flex;justify-content:space-between">
+         <div class="dataTable-search " style="display:flex;justify-content:space-between">
             <div>
                <form id="role-form" method="post">
                   <select name="role" id="role-select" class="form-select">
@@ -201,9 +207,9 @@
                </div>
             </div>
          </div>
-         <div class="container" id="itemList">
-            <table id="announceTable" class="table table-striped">
-               <thead>
+         <div class="contaainer px-5" id="itemList">
+            <table id="announceTable" class="table ">
+               <thead style="border-bottom: 1px solid #cdbff1">
                   <tr>
                      <th>ID</th>
                      <th>Full Name</th>
@@ -227,71 +233,37 @@
    
    </section>
    <!--FOOTER-->
-   <div class="container-fluid mt-5">
-      <div class="card mx-5" style="    background-color: #184530;">
-         <div class="row mb-4 ">
-            <div class=" col-12  col-md-4    col-sm-11 " style="display:flex;justify-content:center;align-items:end">
-               <div class="footer-text pull-left">
-                  <div class="d-flex">
-                     <h1 class="font-weight-bold mr-2 px-3" style="color:#ffc107; background-color:#16a085ff"> D </h1>
-                     <h1 style="color: #ffc107">CAR</h1>
-                  </div>
-                  <p class="card-text">is the best destination if u're looking for a car in a simple way </p>
-               </div>
-            </div>
-            <div class="col-md-2 col-sm-1 col-xs-1 mb-2"></div>
-            <div id="col-sm-4" class=" text-center col-md-6 col-sm-4 col-xs-4" style="margin-top:5%">
-               <h5 class="heading" style="color:blanchedalmond">Services</h5>
-               <ul style="display:flex; justify-content:center;align-items:end">
-                  <li class="margin: 100px">
-                     <a class="nav-link  " aria-current="page" href="#">Home</a>
-                  </li>
-                  <li>
-                     <a class="nav-link " href="../announces/announces.html">Anounces</a>
-                  </li>
-                  <li>
-                     <a class="nav-link " href="#">About Us</a>
-                  </li>
-                  <li>
-                     <a class="nav-link " href="#">Contact Us</a>
-                  </li>
-               </ul>
-               <div class="d-flex align-items-center icons" style="justify-content:center ;     margin-left: 12%;">
-                  <a href="#" class="fs-5 d-flex align-items-center justify-content-center">
-                     <span class="fab fa-facebook-f"></span>
-                  </a>
-                  <a href="#" class="fs-5 d-flex align-items-center justify-content-center">
-                     <span class="fab fa-twitter"></span>
-                  </a>
-                  <a href="#" class="fs-5 d-flex align-items-center justify-content-center">
-                     <span class="fab fa-instagram"></span>
-                  </a>
-                  <a href="#" class="fs-5 d-flex align-items-center justify-content-center">
-                     <span class="fab fa-whatsapp"></span>
-                  </a>
-                  <a href="#" class="fs-5 d-flex align-items-center justify-content-center">
-                     <span class="fab fa-telegram-plane"></span>
-                  </a>
-               </div>
-            </div>
-         </div>
-         <div class="divider mb-4"></div>
-         <div class="row" style="font-size:10px;">
-            <div class="col-md-6 col-sm-6 col-xs-6">
-               <div class="pull-left">
-                  <p style="    color: #e5dec3;"><i class="fa fa-copyright"></i> 2022-2023 Dream-car</p>
-               </div>
-            </div>
-            <div class="col-md-6 col-sm-6 col-xs-6">
-               <div class="pull-right mr-4 d-flex policy" style="color: #e5dec3;">
-                  <div>Terms of Use</div>
-                  <div>Privacy Policy</div>
-                  <div>Cookie Policy</div>
-               </div>
-            </div>
-         </div>
+   <footer id="contact" class="border-top" style="margin-top: 96px;" >
+    <div class="container ">
+      <div class="flex-box">
+        <div class="img">
+          <img style="width: 80%; height: 50%;" src="images/twsila.png">
+        </div>
+
+        <div class="contact-foot">
+          <h2>Contact</h2>
+          <p>Bonjour, nous sommes toujours
+            ouverts à la coopération et aux suggestions
+            . Contactez-nous de l'une des manières suivantes :
+          </p>
+          <span>Adresse</span>
+          <p>USTHB Bab-zouar</p>
+          <span>phone</span>
+          <p>+0123 4567 8910</p>
+          <span>Email</span>
+          <p>twsila@gmail.com</p>
+         
+        </div>
+       
       </div>
-   </div>
+
+    </div>
+
+    <div class="bottom">
+      <p>Powered by <span>USTHB</span> - Designed by <span>Algerian students</span></p>
+    </div>
+  </footer>
+
 
    <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
    <script src="../assets/js/apexcharts.min.js"></script>
