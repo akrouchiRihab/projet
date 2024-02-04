@@ -226,74 +226,7 @@
       </div>
    
    </section>
-   <!--FOOTER-->
-   <div class="container-fluid mt-5">
-      <div class="card mx-5" style="    background-color: #184530;">
-         <div class="row mb-4 ">
-            <div class=" col-12  col-md-4    col-sm-11 " style="display:flex;justify-content:center;align-items:end">
-               <div class="footer-text pull-left">
-                  <div class="d-flex">
-                     <h1 class="font-weight-bold mr-2 px-3" style="color:#ffc107; background-color:#16a085ff"> D </h1>
-                     <h1 style="color: #ffc107">CAR</h1>
-                  </div>
-                  <p class="card-text">is the best destination if u're looking for a car in a simple way </p>
-               </div>
-            </div>
-            <div class="col-md-2 col-sm-1 col-xs-1 mb-2"></div>
-            <div id="col-sm-4" class=" text-center col-md-6 col-sm-4 col-xs-4" style="margin-top:5%">
-               <h5 class="heading" style="color:blanchedalmond">Services</h5>
-               <ul style="display:flex; justify-content:center;align-items:end">
-                  <li class="margin: 100px">
-                     <a class="nav-link  " aria-current="page" href="#">Home</a>
-                  </li>
-                  <li>
-                     <a class="nav-link " href="../announces/announces.html">Anounces</a>
-                  </li>
-                  <li>
-                     <a class="nav-link " href="#">About Us</a>
-                  </li>
-                  <li>
-                     <a class="nav-link " href="#">Contact Us</a>
-                  </li>
-               </ul>
-               <div class="d-flex align-items-center icons" style="justify-content:center ;     margin-left: 12%;">
-                  <a href="#" class="fs-5 d-flex align-items-center justify-content-center">
-                     <span class="fab fa-facebook-f"></span>
-                  </a>
-                  <a href="#" class="fs-5 d-flex align-items-center justify-content-center">
-                     <span class="fab fa-twitter"></span>
-                  </a>
-                  <a href="#" class="fs-5 d-flex align-items-center justify-content-center">
-                     <span class="fab fa-instagram"></span>
-                  </a>
-                  <a href="#" class="fs-5 d-flex align-items-center justify-content-center">
-                     <span class="fab fa-whatsapp"></span>
-                  </a>
-                  <a href="#" class="fs-5 d-flex align-items-center justify-content-center">
-                     <span class="fab fa-telegram-plane"></span>
-                  </a>
-               </div>
-            </div>
-         </div>
-         <div class="divider mb-4"></div>
-         <div class="row" style="font-size:10px;">
-            <div class="col-md-6 col-sm-6 col-xs-6">
-               <div class="pull-left">
-                  <p style="    color: #e5dec3;"><i class="fa fa-copyright"></i> 2022-2023 Dream-car</p>
-               </div>
-            </div>
-            <div class="col-md-6 col-sm-6 col-xs-6">
-               <div class="pull-right mr-4 d-flex policy" style="color: #e5dec3;">
-                  <div>Terms of Use</div>
-                  <div>Privacy Policy</div>
-                  <div>Cookie Policy</div>
-               </div>
-            </div>
-         </div>
-      </div>
-   </div>
-
-   <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+  
    <script src="../assets/js/apexcharts.min.js"></script>
    <script src="../assets/js/bootstrap.bundle.min.js"></script>
    <script src="../assets/js/chart.min.js"></script>

@@ -236,38 +236,43 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <div>
             <div class="div-content " >
             <?php
-$sql = "SELECT r.*, u.*, res.ReservationID
-FROM rides r
-JOIN users u ON r.DriverID = u.UserID
-JOIN reservations res ON r.RideID = res.RideID
-WHERE res.UserID = '$userID'";
+
+$sql = "SELECT Distinct r.RideID, r.DepartureTime, r.DepartureLocation, r.Destination, r.AvailableSeats, r.price, u.phonenumber
+        FROM rides r
+        INNER JOIN reservations res ON r.RideID = res.RideID
+        INNER JOIN users u ON u.UserID = res.UserID
+        WHERE res.UserID = '$userID'
+        ORDER BY r.RideID ASC";
+
 
 $result = $conn->query($sql);
 
 if ($result->num_rows > 0) {
     // Output data of each row
     while ($row = $result->fetch_assoc()) {
-        echo '<a  id="ride-container" style="height:auto;" href="maReservation.php?RideID=' . urlencode($row["RideID"]) . '">';
-        echo '<div class="station">';
-        echo '<p style="font-weight: bold; text-align: center;">' . $row["DepartureTime"] . '</p>';
-        echo '<br/>';
-        echo '<span style="color: black; text-decoration: none; font-size: 20px; display: inline-block;" class="fas fa-map-marker-alt"></span>     <p style="display: inline-block;">' . $row["DepartureLocation"] . '</p>';
-        echo '<br/>';
-        echo '<span style="color: black; text-decoration: none; font-size: 20px; display: inline-block;" class="fas fa-flag"></span>     <p style="display: inline-block;"> ' . $row["Destination"] . '</p>';
-        echo '<p style="font-weight: bold;  " class="price">Numéro de téléphone : ' . $row["phonenumber"] . '</p>';
-        echo '<p style="font-weight: bold; " class="price">Prix : ' . $row["price"] . '</p>';
-        echo '<p style="display: inline-block; font-size: 20px; ">Places disponibles : ' . $row["AvailableSeats"] . '</p>';
-        echo '</div>';
-        echo '</a>';
-    }
-    
-} else {
-    echo "0 results";
-}
+
+                echo '<a style="height:auto;" href="maReservation.php?RideID=' . urlencode($row["RideID"]) . '">';
+                echo '<div class="station">';
+                echo '<p style="font-weight: bold; text-align: center;">' . $row["DepartureTime"] . '</p>';
+                echo '<br/>';
+                echo '<span style="color: black; text-decoration: none; font-size: 20px; display: inline-block;" class="fas fa-map-marker-alt"></span>     <p style="display: inline-block;">' . $row["DepartureLocation"] . '</p>';
+                echo '<br/>';
+                echo '<span style="color: black; text-decoration: none; font-size: 20px; display: inline-block;" class="fas fa-flag"></span>     <p style="display: inline-block;"> ' . $row["Destination"] . '</p>';
+                echo '<p style="font-weight: bold;" class="price" style="margin-left: 250px;">Numero de telephone : ' . $row["phonenumber"] . '</p>';
+                echo '<p style="font-weight: bold;" class="price" style="margin-left: 250px;">Prix : ' . $row["price"] . '</p>';
+                echo '<p style="display: inline-block; font-size: 30px;">Places disponibles : ' . $row["AvailableSeats"] . '</p>';
+                echo '<form action="process_annulation.php" method="post">';
+                echo '<input type="hidden" name="ride_id" value="' . urlencode($row["RideID"]) . '">';
+                echo '<button type="submit" class="annuler_btn">Annuler</button> </form>';
+                echo '</div>';
+                echo '</a>';
+            }
+        } else {
+            echo "0 results";
+        }
+
 ?>
       
-</div>
-        </div>
     </div>
    
     
