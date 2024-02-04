@@ -51,7 +51,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="../css/style2.css">
-    <title>Client</title>
+    <link rel="icon" href="../images/logopage.png" type="image/x-icon">
+    <title>Twsila - Client</title>
     <script>
         var scroll = new SmoothScroll('a[href*="#"]');
     </script>
@@ -323,11 +324,11 @@ button:hover{
             <a href="#"><img class="logo" src="../images/twsil3.png"></a>
     
             <nav class="navigation">
-                <ul>
+                <ul style="margin-top: 2.5%; margin-left: 35%;">
                      <li>
-                     <li class="nav1"><a href="clientlistes.php">listes trajets</a></li>
-                     <li class="nav1"><a href="reservation.php">Mes reservations</a></li>
-                     <li class="nav1"><a href="../includes/logout.inc.php" ><img class="logout" src="../images/logout.png"></a></li>
+                     <li><a href="clientlistes.php">listes trajets</a></li>
+                     <li><a href="reservation.php">Mes reservations</a></li>
+                     <li><a href="../includes/logout.inc.php" class="logout">Déconnexion</a></li>
              
                   <?php
                      $UserID = $_SESSION["UserID"]; 
@@ -463,12 +464,14 @@ button:hover{
 </div>
 </body>
 <script>
- $(document).ready(function () {
-    $('.open-modal').on('click', function (e) {
+$(document).ready(function () {
+    
+    // Attach click event to existing .open-modal elements
+    $('#trip-list').on('click', '.open-modal', function (e) {
         e.preventDefault();
         var rideData = $(this).data('ride-id');
         $('input[name="ride_id"]').val(rideData);
-          console.log(rideData)
+
         // AJAX request to fetch additional details
         $.ajax({
             url: 'fetch_trip_details.php', // Replace with the actual URL to handle AJAX request
@@ -476,34 +479,33 @@ button:hover{
             data: { rideData: rideData },
             success: function (data) {
                 if (data.error) {
-                console.error('Error fetching trip details:', data.error);
-            } else {
-                console.log(data)
-       // Update modal content with the fetched details
-$('#modalDepartureLocation').html('<strong>Depart:</strong> ' + data.departureLocation);
-$('#modalDestination').html('<strong>Destination:</strong> ' + data.destination);
-$('#modalAvailableSeats').html('<strong>Nombre de places:</strong> ' + data.availableSeats);
-                 
-// Set values in hidden input fields for form submission
+                    console.error('Error fetching trip details:', data.error);
+                } else {
+                    // Update modal content with the fetched details
+                    $('#modalDepartureLocation').html('<strong>Depart:</strong> ' + data.departureLocation);
+                    $('#modalDestination').html('<strong>Destination:</strong> ' + data.destination);
+                    $('#modalAvailableSeats').html('<strong>Nombre de places:</strong> ' + data.availableSeats);
 
-$('input[name="departureLocation"]').val(data.departureLocation);
-$('input[name="destination"]').val(data.destination);
-$('input[name="availableSeats"]').val(data.availableSeats);
-                // Show the modal
-                $('#myModal').show();
+                    // Set values in hidden input fields for form submission
+                    $('input[name="departureLocation"]').val(data.departureLocation);
+                    $('input[name="destination"]').val(data.destination);
+                    $('input[name="availableSeats"]').val(data.availableSeats);
+
+                    // Show the modal
+                    $('#myModal').show();
+                }
+            },
+            error: function (xhr, status, error) {
+                console.error('Error fetching trip details. Status:', status, 'Error:', error);
             }
-        },
-        error: function (xhr, status, error) {
-            console.error('Error fetching trip details. Status:', status, 'Error:', error);
-        }
+        });
     });
-});
-
 
     $('.close').on('click', function () {
         $('#myModal').hide();
     });
 });
+
 </script>
 <script>
 

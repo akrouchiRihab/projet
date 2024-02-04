@@ -15,7 +15,7 @@
          html, body {
                scroll-behavior: auto !important;
          }
-    </style>
+   </style>
    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 
@@ -63,7 +63,7 @@
          <div class="col-xl-4 col-md-4">
             <div class="card info-card sales-card">
                <div class="filter">
-                  <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
+                
                   <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
                      <li class="dropdown-header text-start">
                         <h6>Filter</h6>
@@ -101,7 +101,7 @@
          <div class="col-xl-4 col-md-4">
             <div class="card info-card revenue-card">
                <div class="filter">
-                  <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
+                 
                   <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
                      <li class="dropdown-header text-start">
                         <h6>Filter</h6>
@@ -141,7 +141,7 @@
          <div class="col-xl-4 col-md-4">
             <div class="card info-card customers-card">
                <div class="filter">
-                  <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
+                  
                   <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
                      <li class="dropdown-header text-start">
                         <h6>Filter</h6>

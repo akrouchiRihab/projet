@@ -43,9 +43,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.3/js/all.min.js" crossorigin="anonymous"></script>
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="../css/style2.css">
-    <title>Client</title>
+    <link rel="icon" href="../images/logopage.png" type="image/x-icon">
+    <title>Twsila - Client</title>
     <script>
         var scroll = new SmoothScroll('a[href*="#"]');
     </script>
@@ -210,11 +213,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <a href="clientlistes.php"><img class="logo" src="../images/twsil3.png"></a>
 
             <nav class="navigation">
-                <ul>
+                <ul style="margin-top: 1%; margin-left: 45%;">
                      <li>
-                     <li class="nav1"><a href="clientlistes.php">listes trajets</a></li>
-                     <li class="nav1"><a href="reservation.php">Mes reservations</a></li>
-                     <li class="nav1"><a href="../includes/logout.inc.php" ><img class="logout" src="../images/logout.png"></a></li>
+                     <li><a href="clientlistes.php">listes trajets</a></li>
+                     <li><a href="reservation.php">Mes reservations</a></li>
+                     <li><a href="../includes/logout.inc.php" class="logout">Déconnexion</a></li>
              
                     <?php
                      $userID = $_SESSION["UserID"]; 
@@ -233,9 +236,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <div>
             <div class="div-content " >
             <?php
-// Fetch data from the database
-$sql = "SELECT *, ReservationID
-            FROM rides r,users u , reservations res where r.RideID = res.RideID and u.UserID=r.RideID and res.UserID = '$userID'"  ;
+
+$sql = "SELECT Distinct r.RideID, r.DepartureTime, r.DepartureLocation, r.Destination, r.AvailableSeats, r.price, u.phonenumber
+        FROM rides r
+        INNER JOIN reservations res ON r.RideID = res.RideID
+        INNER JOIN users u ON u.UserID = res.UserID
+        WHERE res.UserID = '$userID'
+        ORDER BY r.RideID ASC";
 
 
 $result = $conn->query($sql);
@@ -243,31 +250,29 @@ $result = $conn->query($sql);
 if ($result->num_rows > 0) {
     // Output data of each row
     while ($row = $result->fetch_assoc()) {
-     
-        echo '<a  id="ride-container" style=" height:auto;" href="maReservation.php?RideID=' . urlencode($row["RideID"]) . '">';
-        echo '<div class="station">';
-        echo '<p style="font-weight: bold; text-align: center;">' . $row["DepartureTime"] . '</p>';
-        echo '<br/>';
-        echo '<span style="color: black; text-decoration: none; font-size: 20px; display: inline-block;" class="fas fa-map-marker-alt"></span>     <p style=" display: inline-block;">' . $row["DepartureLocation"] . '</p>';
-       
-      
-      
-        echo '<br/>';
-        echo '<span style="color: black; text-decoration: none; font-size: 20px; display: inline-block;" class="fas fa-flag"></span>     <p style=" display: inline-block;"> ' . $row["Destination"] . '</p>';
-        echo '<p style=" font-weight: bold;  " class="price" style="margin-left: 250px;"> numero de telephone : ' . $row["phonenumber"] . '</p>';
-        echo '<p style=" font-weight: bold; " class="price" style="margin-left: 250px;">prix : ' . $row["price"] . '</p>';
-        echo '<p style="display: inline-block; font-size: 30px; "> places disponibles : ' . $row["AvailableSeats"] . '</p>';
-        echo '</div>';
-        echo '</a>';
-        
-    }
-} else {
-    echo "0 results";
-}
+
+                echo '<a style="height:auto;" href="maReservation.php?RideID=' . urlencode($row["RideID"]) . '">';
+                echo '<div class="station">';
+                echo '<p style="font-weight: bold; text-align: center;">' . $row["DepartureTime"] . '</p>';
+                echo '<br/>';
+                echo '<span style="color: black; text-decoration: none; font-size: 20px; display: inline-block;" class="fas fa-map-marker-alt"></span>     <p style="display: inline-block;">' . $row["DepartureLocation"] . '</p>';
+                echo '<br/>';
+                echo '<span style="color: black; text-decoration: none; font-size: 20px; display: inline-block;" class="fas fa-flag"></span>     <p style="display: inline-block;"> ' . $row["Destination"] . '</p>';
+                echo '<p style="font-weight: bold;" class="price" style="margin-left: 250px;">Numero de telephone : ' . $row["phonenumber"] . '</p>';
+                echo '<p style="font-weight: bold;" class="price" style="margin-left: 250px;">Prix : ' . $row["price"] . '</p>';
+                echo '<p style="display: inline-block; font-size: 30px;">Places disponibles : ' . $row["AvailableSeats"] . '</p>';
+                echo '<form action="process_annulation.php" method="post">';
+                echo '<input type="hidden" name="ride_id" value="' . urlencode($row["RideID"]) . '">';
+                echo '<button type="submit" class="annuler_btn">Annuler</button> </form>';
+                echo '</div>';
+                echo '</a>';
+            }
+        } else {
+            echo "0 results";
+        }
+
 ?>
       
-</div>
-        </div>
     </div>
    
     
