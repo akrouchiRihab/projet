@@ -53,16 +53,23 @@
 
     $result = $conn->query($sql);
 
-
+    $count = 0;
     if ($result->num_rows > 0) {
         while ($row = $result->fetch_assoc()) {
-        echo "<tr class='align-middle'>";
+        echo "<tr class='align-middle' style='border-bottom: 1px solid #cdbff1; ";
+        if ($count % 2 == 0) {
+            echo "background-color: #f6f4fd; '>";
+        }
+        else {
+            echo "'>";
+        }
         echo "<td>" . $row['UserID'] . "</td>";
         echo "<td>" . $row['FirstName'] . " " . $row['LastName'] . "</td>";
         echo "<td>" . $row['Email'] . "</td>";
         echo "<td>" . $row['Role'] . "</td>";
         echo "<td class='text-center align-middle' ><button class='btn px-2 p-1 btn-outline-danger border-0' onclick='deleteUser(" . $row['UserID'] . ")'><i class='bi bi-trash-fill'></i></button></td>";
         echo "</tr>";
+        $count += 1;
         }
     } else {
         echo "<tr><td colspan='5'>No users found</td></tr>";
@@ -73,23 +80,30 @@
     $totalItems = $result->fetch_assoc()['total'];
     $totalPages = ceil($totalItems / $itemsPerPage);
 
-    echo '<tr><td colspan="5">';
-    echo '<div class="d-flex justify-content-center my-2">';
-    echo '<div>';
-    echo '<span class="mx-2"><strong>page: </strong></span>';
+
+    if ($totalPages >= 2)
+    {
+        echo '<tr style="border-bottom: 1px solid #ffffff;"><td colspan="5">';
+        echo '<div class="d-flex justify-content-center my-2">';
+        echo '<div>';
+        echo '<span class="mx-2"><strong>page: </strong></span>';
+    }
     for ($i = 1; $i <= $totalPages; $i++) {
         echo '<a class="pagination-link rounded p-1 px-2 ';
         if ($currentPage == $i)
         {
-            echo 'bg-success text-white d';
+            echo 'text-white" style="background-color: #3e1f92ec;"';
         }
         else
         {
-            echo 'border bg-white text-black ';
+            echo 'border bg-white text-black"';
         }
-        echo '" href="?page=' . $i . '">' . $i . '</a> ';
+        echo ' href="?page=' . $i . '">' . $i . '</a> ';
     }
-    echo '</div>';
-    echo '</div>';
-    echo '</td></tr>';
+    if ($totalPages >= 2)
+    {
+        echo '</div>';
+        echo '</div>';
+        echo '</td></tr>';
+    }
 ?>

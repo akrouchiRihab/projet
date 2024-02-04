@@ -15,7 +15,7 @@
          html, body {
                scroll-behavior: auto !important;
          }
-    </style>
+   </style>
    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 
@@ -42,6 +42,7 @@
    <link href="./assets/css/simple-datatables.css" rel="stylesheet">
    <link href="./assets/css/style.css" rel="stylesheet">
    <link href="./assets/fonts/bootstrap-icons.woff2" rel="stylesheet">
+   <link rel="stylesheet" href="css/style.css">
 </head>
 <style>
    .canvas {
@@ -50,7 +51,13 @@
    }
 </style>
 
-<body>
+<body style="background: #f3f3f3;">
+   <header>
+      <div class="container">
+         <a href="index.php"><img class="logo" src="images/twsila.png"></a>
+      </div>
+   </header>
+
    <section class="section dashboard container mt-5">
       <div class="row">
          <div class="col-xl-4 col-md-4">
@@ -167,15 +174,14 @@
                   </div>
                </div>
             </div>
-
          </div>
       </div>
 
 
-      <div class="card-body mt-5" style="background-color:#fff">
-         <h5 class="card-title">Panneau des utilisateurs<span></span></h5>
+      <div class="card-body mt-5 shadow rounded" style="background-color:#fff">
+         <h5 class="card-title">Tableau des utilisateurs<span></span></h5>
 
-         <div class="dataTable-search" style="display:flex;justify-content:space-between">
+         <div class="dataTable-search " style="display:flex;justify-content:space-between">
             <div>
                <form id="role-form" method="post">
                   <select name="role" id="role-select" class="form-select">
@@ -201,9 +207,9 @@
                </div>
             </div>
          </div>
-         <div class="container" id="itemList">
-            <table id="announceTable" class="table table-striped">
-               <thead>
+         <div class="contaainer px-5" id="itemList">
+            <table id="announceTable" class="table ">
+               <thead style="border-bottom: 1px solid #cdbff1">
                   <tr>
                      <th>ID</th>
                      <th>Full Name</th>
@@ -226,7 +232,40 @@
       </div>
    
    </section>
-  
+   <!--FOOTER-->
+   <footer id="contact" class="border-top" style="margin-top: 96px;" >
+    <div class="container ">
+      <div class="flex-box">
+        <div class="img">
+          <img style="width: 80%; height: 50%;" src="images/twsila.png">
+        </div>
+
+        <div class="contact-foot">
+          <h2>Contact</h2>
+          <p>Bonjour, nous sommes toujours
+            ouverts à la coopération et aux suggestions
+            . Contactez-nous de l'une des manières suivantes :
+          </p>
+          <span>Adresse</span>
+          <p>USTHB Bab-zouar</p>
+          <span>phone</span>
+          <p>+0123 4567 8910</p>
+          <span>Email</span>
+          <p>twsila@gmail.com</p>
+         
+        </div>
+       
+      </div>
+
+    </div>
+
+    <div class="bottom">
+      <p>Powered by <span>USTHB</span> - Designed by <span>Algerian students</span></p>
+    </div>
+  </footer>
+
+
+   <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
    <script src="../assets/js/apexcharts.min.js"></script>
    <script src="../assets/js/bootstrap.bundle.min.js"></script>
    <script src="../assets/js/chart.min.js"></script>
