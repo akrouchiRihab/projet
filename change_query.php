@@ -80,14 +80,10 @@
     $totalItems = $result->fetch_assoc()['total'];
     $totalPages = ceil($totalItems / $itemsPerPage);
 
-
-    if ($totalPages >= 2)
-    {
-        echo '<tr style="border-bottom: 1px solid #ffffff;"><td colspan="5">';
-        echo '<div class="d-flex justify-content-center my-2">';
-        echo '<div>';
-        echo '<span class="mx-2"><strong>page: </strong></span>';
-    }
+    echo '<tr style="border-bottom: 1px solid #ffffff;"><td colspan="5">';
+    echo '<div class="d-flex justify-content-center my-2">';
+    echo '<div>';
+    echo '<span class="mx-2"><strong>page: </strong></span>';
     for ($i = 1; $i <= $totalPages; $i++) {
         echo '<a class="pagination-link rounded p-1 px-2 ';
         if ($currentPage == $i)
@@ -100,10 +96,7 @@
         }
         echo ' href="?page=' . $i . '">' . $i . '</a> ';
     }
-    if ($totalPages >= 2)
-    {
-        echo '</div>';
-        echo '</div>';
-        echo '</td></tr>';
-    }
+    echo '</div>';
+    echo '</div>';
+    echo '</td></tr>';
 ?>
